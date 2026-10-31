@@ -147,6 +147,18 @@ Synthetic 30-day chat log (283 turns, 50 planted facts) in three groups:
 
 Baseline (`--seed 7`, `companion`):
 
+> Baseline is `companion`. Other profiles on the same probe:
+
+| Profile | recall@6 | fog_accuracy | over_recall |
+|---|---|---|---|
+| `companion` | 0.733 | 1.000 | 0.000 |
+| `support` | 0.800 | 1.000 | 0.000 |
+| `education` | 0.933 | 0.929 | 0.000 |
+| `knowledge` | 0.933 | 0.000 | 0.000 |
+
+`knowledge` is configured not to forget, so `fog_accuracy = 0` is by design,
+not a regression.
+
 | Metric | Value | Target |
 |---|---|---|
 | `recall@6` (clarity ≤ L1) | **0.733** | ≥ 0.85 |
@@ -177,6 +189,8 @@ in a visibly degraded form. That is the whole thesis of the project.
   of creating five copies that trivially survive.
 - **Cooldown penalty.** Without it, an agent mentions the same memory three
   times in twenty minutes and the illusion dies.
+- **Decay thresholds are per profile.** A knowledge base and a companion
+  must not share the same forgetting curve (`Profile.level_thresholds`).
 - **No domain words in `hippocampus/`.** If you need `if profile == "vip"`,
   the abstraction is wrong.
 

@@ -231,7 +231,10 @@ class Hippocampus:
                 engram.active_age_days + delta_days * factor, cap
             )
             r = decay.retrievability(engram.active_age_days, engram.stability)
-            target = decay.target_level(r, engram.importance, self.max_level)
+            target = decay.target_level(
+                r, engram.importance, self.max_level,
+                self.profile.level_thresholds,
+            )
             # Forgetting is one-way on tick: a memory does not un-forget itself
             # just because it has been left alone.
             engram.level = max(engram.level, target)
@@ -256,7 +259,10 @@ class Hippocampus:
 
         for engram in self.store.list(self.scope):
             r = decay.retrievability(engram.active_age_days, engram.stability)
-            target = decay.target_level(r, engram.importance, self.max_level)
+            target = decay.target_level(
+                r, engram.importance, self.max_level,
+                self.profile.level_thresholds,
+            )
             if target > engram.level:
                 engram.level = target
                 changed += 1

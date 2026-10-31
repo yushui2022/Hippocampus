@@ -23,6 +23,9 @@ class Profile:
     # Near-identical text above this similarity is treated as a re-telling of
     # the same event (rehearsal), not a new one (pattern separation).
     merge_threshold: float = 0.85
+    # Retrievability thresholds for L1..L4. A knowledge base and a companion
+    # must not share the same curve.
+    level_thresholds: Tuple[float, ...] = (0.75, 0.45, 0.22, 0.10)
 
     @property
     def max_level(self) -> int:
@@ -129,6 +132,7 @@ PRESETS: Dict[str, Profile] = {
         cooldown_hours=0.0,
         idle_ratio=0.01,
         gist_style="factual",
+        level_thresholds=(0.05,),
     ),
 }
 

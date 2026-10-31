@@ -24,6 +24,7 @@ recalled -- R falls, S stays. That asymmetry is the whole point.
 from __future__ import annotations
 
 import math
+from typing import Tuple
 
 FACTOR = 19.0 / 81.0
 DECAY = -0.5
@@ -81,10 +82,19 @@ def floor_level(importance: float, max_level: int) -> int:
     return min(floor, max_level)
 
 
-def target_level(r: float, importance: float, max_level: int) -> int:
-    """Which level the trace should be at, given its retrievability."""
+def target_level(
+    r: float,
+    importance: float,
+    max_level: int,
+    thresholds: Tuple[float, ...] = LEVEL_THRESHOLDS,
+) -> int:
+    """Which level the trace should be at, given its retrievability.
+
+    `thresholds` is per-profile: a knowledge base must not use the same
+    curve as a companion.
+    """
     level = 0
-    for i, threshold in enumerate(LEVEL_THRESHOLDS):
+    for i, threshold in enumerate(thresholds):
         if r < threshold:
             level = i + 1
     level = min(level, floor_level(importance, max_level))
