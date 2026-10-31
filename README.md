@@ -4,8 +4,8 @@
 > trivia fades, and recall strengthens what it touches.
 
 Most memory libraries optimise for **recall**. This one optimises for **forgetting
-correctly** — because for a companion, support bot or idol, remembering every
-detail verbatim is not "smart", it is uncanny.
+correctly** — because for a companion, a support desk, or any long-running
+assistant, remembering every detail verbatim is not "smart", it is uncanny.
 
 ```
 L0  verbatim      "3月2日她说数学考砸了，哭了很久"
@@ -32,6 +32,24 @@ L4  archived      not volunteered, still reachable by keyword
 | Semantic distillation (`涟漪` with an LLM) | ❌ v1 |
 | Embedding retrieval | ❌ v1 (bigram index for now) |
 | Async / HTTP service | ❌ v1 |
+
+## Scope
+
+This is a **general** memory kernel. It does not assume a channel, a product or
+a tone. Anything scenario-specific lives outside the kernel:
+
+| Scenario-specific thing | Lives in |
+| --- | --- |
+| Decay rhythm (minutes / hours / days / weeks) | `Profile.idle_ratio` + time scale |
+| Number of degradation levels (2–5) | `Profile.levels` |
+| Whether emotion affects ranking | `Profile.importance_weights["emotion"] = 0` disables it |
+| Relationship / intimacy | optional extension (`scope_state.relationship`, off by default) |
+| Persona, tone, boundaries | caller's prompt — **not here** |
+| Channel (chat, ticket, live comments) | adapter — just build an `Event` |
+| Voice, avatar, rendering | **not here** |
+
+If a requirement cannot be expressed in one of those columns, it is not a memory
+problem.
 
 ## Install
 
@@ -159,7 +177,7 @@ in a visibly degraded form. That is the whole thesis of the project.
   of creating five copies that trivially survive.
 - **Cooldown penalty.** Without it, an agent mentions the same memory three
   times in twenty minutes and the illusion dies.
-- **No domain words in `hippocampus/`.** If you need `if profile == "idol"`,
+- **No domain words in `hippocampus/`.** If you need `if profile == "vip"`,
   the abstraction is wrong.
 
 ## Layout
@@ -188,7 +206,7 @@ tests/
 | P1 | LLM importance scorer, semantic distillation, embedding retrieval |
 | P2 | three profiles pass the benchmark; forgetting benchmark published |
 | P3 | IM adapter, HTTP service |
-| P4 | live-stream adapter (danmaku, avatars) |
+| P4 | channel adapters (IM, tickets) |
 
 ## Naming
 

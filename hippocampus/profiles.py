@@ -33,7 +33,7 @@ class Profile:
 
 
 PRESETS: Dict[str, Profile] = {
-    # AI companion / idol: emotions and self-relevance dominate, 5 levels.
+    # AI companion: emotions and self-relevance dominate, 5 levels.
     "companion": Profile(
         name="companion",
         levels=5,
