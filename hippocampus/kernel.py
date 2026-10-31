@@ -21,6 +21,7 @@ from . import decay
 from .models import Engram, Event, RecallHit, new_id, utcnow
 from .profiles import Profile, get_profile
 from .scoring import (
+    NEGATIVE_EMOTIONS,
     RetrievalSignals,
     detect_emotion,
     recency_factor,
@@ -157,7 +158,15 @@ class Hippocampus:
         kinds: Optional[Iterable[str]] = None,
         now: Optional[datetime] = None,
         reinforce: bool = True,
+        spontaneous: bool = False,
     ) -> List[RecallHit]:
+        """Recall memories.
+
+        `spontaneous=True` models the agent bringing something up on its own.
+        Humans remember far more than they choose to say: a fuzzy memory or a
+        painful one is not volunteered unprompted. `spontaneous=False` means
+        the user asked, so the agent may answer from a degraded trace.
+        """
         at = _aware(now) if now else self.now()
         query_tokens = tokenize(query)
 
@@ -176,6 +185,15 @@ class Hippocampus:
                 continue
             if wanted and engram.kind not in wanted:
                 continue
+
+            if spontaneous:
+                # Not volunteered: only clear memories, no raw wounds.
+                if engram.level >= 2:
+                    continue
+                if engram.emotion in NEGATIVE_EMOTIONS and self._intimacy() < 0.7:
+                    continue
+                if self._cooldown(engram, at) > 0:
+                    continue
 
             r = decay.retrievability(engram.active_age_days, engram.stability)
             signals = RetrievalSignals(
@@ -372,6 +390,13 @@ class Hippocampus:
             return 0.0
         hours = (at - _aware(engram.last_mention_at)).total_seconds() / 3600.0
         return 1.0 if hours < self.profile.cooldown_hours else 0.0
+
+    def _intimacy(self) -> float:
+        rel = self._state.get("relationship", {}) or {}
+        try:
+            return float(rel.get("intimacy", 0.0) or 0.0)
+        except (TypeError, ValueError):
+            return 0.0
 
     def _relationship_boost(self, engram: Engram) -> float:
         if not self.profile.enable_relationship:

@@ -97,7 +97,7 @@ This single branch is what separates "companion" from "database".
 | Method | Notes |
 |---|---|
 | `remember(event)` | Returns the `Engram`. Near-identical text is treated as rehearsal. |
-| `recall(query, budget=6)` | Returns `RecallHit` with `score`, `level`, `refs`. Reinforces by default. |
+| `recall(query, budget=6, spontaneous=False)` | Returns `RecallHit` with `score`, `level`, `refs`. `spontaneous=True` models her bringing something up unprompted: hides foggy and painful memories. |
 | `tick(now, active=True)` | Advances the clock. Idempotent and replayable. **First call only sets the baseline.** |
 | `consolidate()` | Nightly pass: settle levels, fill gists. |
 | `forget(id, hard=True)` | `hard=True` deletes rows, tokens and logs. |
@@ -187,6 +187,10 @@ in a visibly degraded form. That is the whole thesis of the project.
 - **Recall sharpens one level, never fully restores.** No perfect reconstructions.
 - **Rehearsal merges.** Re-telling the same event strengthens one trace instead
   of creating five copies that trivially survive.
+- **Remembering is not saying.** `spontaneous=True` filters fuzzy memories,
+  raw wounds (unless intimacy is high) and anything recently mentioned. Humans
+  suppress most of what they recall; an agent that dumps everything is the
+  clearest tell that it is a database.
 - **Cooldown penalty.** Without it, an agent mentions the same memory three
   times in twenty minutes and the illusion dies.
 - **Decay thresholds are per profile.** A knowledge base and a companion

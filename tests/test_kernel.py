@@ -154,3 +154,25 @@ def test_decay_curve_monotonic() -> None:
         r = decay.retrievability(day, 2.0)
         assert r <= prev
         prev = r
+
+
+def test_spontaneous_recall_hides_wounds_and_fog() -> None:
+    hippo = make()
+    hippo.remember(Event(text="我确诊焦虑症了，医生让我吃药", at=at()), importance=0.9)
+    hippo.remember(Event(text="我拿到offer了，开心到睡不着", at=at()), importance=0.9)
+
+    # She can answer when asked...
+    asked = hippo.recall("焦虑症", now=at(30), reinforce=False)
+    assert asked, "a direct question must reach even a painful memory"
+
+    # ...but will not bring the painful one up by herself.
+    unbidden = hippo.recall("焦虑症", now=at(30), reinforce=False, spontaneous=True)
+    assert all("确诊" not in hit.text for hit in unbidden)
+
+
+def test_intimacy_unlocks_spontaneous_mention() -> None:
+    hippo = make()
+    hippo.remember(Event(text="我爸妈离婚了，我不知道跟谁", at=at()), importance=0.9)
+    hippo.set_relationship(intimacy=0.9)
+    hits = hippo.recall("爸妈", now=at(30), reinforce=False, spontaneous=True)
+    assert any("离婚" in hit.text for hit in hits)

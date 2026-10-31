@@ -32,6 +32,8 @@ EMOTION_LEXICON: Dict[str, tuple] = {
     "疲惫": ("累", "疲倦", "撑不住", "没力气", "加班", "熬夜"),
 }
 
+NEGATIVE_EMOTIONS = frozenset({"难过", "焦虑", "愤怒", "孤独", "疲惫"})
+
 _EMOTION_INDEX = {}
 for _label, _words in EMOTION_LEXICON.items():
     for _w in _words:
