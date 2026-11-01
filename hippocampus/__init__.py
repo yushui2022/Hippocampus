@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from .episode import Episode, WindowSegmenter
 from .facts import FactCandidate, NullFactExtractor, RuleFactExtractor
+from .indexer import AsyncIndexer
 from .kernel import Hippocampus
 from .models import Engram, Event, Fact, RecallHit, Summary, TickReport
 from .ops import backup_database, restore_database, snapshot
@@ -31,10 +32,11 @@ from .retrieval import (
 )
 from .store import Store
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 __all__ = [
     "Hippocampus",
+    "AsyncIndexer",
     "Event",
     "Engram",
     "Fact",

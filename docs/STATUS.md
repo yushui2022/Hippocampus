@@ -49,6 +49,7 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 - [x] backup via SQLite online API
 - [x] hard-delete cascade (engram / tokens / vectors / facts / audit)
 - [x] `rebuild_vectors()` + `python -m hippocampus.rebuild` CLI
+- [x] async embedding indexer (`async_index=True`, drain on recall/close)
 - [x] `eval.false_memory`
 - [x] README + `docs/INVARIANTS.md`
 
@@ -57,7 +58,6 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 - [x] importance/stability calibration (`importance_gain=14`, re-telling recovery)
 - [ ] graph memory (`graph_nodes` / `graph_edges`) — feature-flagged, after facts
 - [ ] shadow index rebuild + progress reporting
-- [ ] async embedding queue (writes are synchronous today)
 - [ ] observatory page (only the read-only snapshot API exists)
 - [ ] blind test harness (A/B plastic vs verbatim)
 - [ ] IM adapter (`AstrBot` / `NapCat`)
@@ -80,6 +80,6 @@ Latency at 500 engrams, pure Python: remember p50 ≈ 10 ms, recall p50 ≈ 15 m
 
 ## Three next tasks (in order)
 
-1. Add an async embedding queue so `remember()` never blocks on the network.
-2. Add topic-level mention budget and a 24h repetition test.
-3. Run the blind test (plastic vs verbatim) and record the result.
+1. Add topic-level mention budget and a 24h repetition test.
+2. Run the blind test (plastic vs verbatim) and record the result.
+3. Add the AstrBot / NapCat adapter so the kernel can run in QQ.

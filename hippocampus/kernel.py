@@ -22,6 +22,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set,
 
 from . import decay
 from .episode import Episode, WindowSegmenter
+from .indexer import AsyncIndexer
 from .facts import (
     FactCandidate,
     FactExtractor,
@@ -60,6 +61,7 @@ class Hippocampus:
         fact_extractor: Optional[FactExtractor] = None,
         auto_index: bool = True,
         auto_facts: bool = True,
+        async_index: Optional[bool] = None,
     ) -> None:
         self.scope = scope
         self.profile: Profile = get_profile(profile) if isinstance(profile, str) else profile
@@ -82,6 +84,14 @@ class Hippocampus:
         )
         self._bm25 = BM25Index(self.store)
         self._segmenters: Dict[str, WindowSegmenter] = {}
+        if async_index is None:
+            # In-memory databases stay synchronous so tests and evals are
+            # deterministic; file-backed stores get non-blocking writes.
+            async_index = embedder is not None and str(self.store.path) != ":memory:"
+        self._async_index = bool(async_index and embedder is not None)
+        self._indexer: Optional[AsyncIndexer] = None
+        if self._async_index and self._vectors is not None:
+            self._indexer = AsyncIndexer(self._embedder, self._apply_async_vector)
 
         state = self.store.get_state(scope)
         state.setdefault("profile", self.profile.name)
@@ -98,6 +108,10 @@ class Hippocampus:
 
     # -- lifecycle -----------------------------------------------------------
     def close(self) -> None:
+        if self._indexer is not None:
+            self._indexer.close()
+            self._drain_index()
+            self._indexer = None
         if self._owns_store:
             self.store.close()
 
@@ -346,6 +360,7 @@ class Hippocampus:
         at = _aware(now) if now else self.now()
         if budget <= 0:
             return []
+        self._drain_index()
         query_tokens = tokenize(query)
         if not query_tokens:
             # Proactive recall has no query: use salience instead of token match.
@@ -720,6 +735,9 @@ class Hippocampus:
         """
         if self._embedder is None or self._vectors is None:
             raise ValueError("rebuild_vectors needs an embedder")
+        if self._indexer is not None:
+            self._indexer.flush()
+            self._drain_index()
         target = scope or self.scope
         all_engrams = self.store.list(target)
         engrams = [e for e in all_engrams if e.raw_text.strip()]
@@ -794,6 +812,8 @@ class Hippocampus:
             else 0.0,
             "facts": self.store.count_facts(self.scope),
             "recall": self.store.recall_stats(self.scope),
+            "index_pending": self._indexer.pending if self._indexer else 0,
+            "index_dropped": self._indexer.dropped if self._indexer else 0,
             "schema_version": self.store.schema_version(),
         }
 
@@ -827,6 +847,11 @@ class Hippocampus:
         return list(fused.keys()), relevance
 
     def _embed_query(self, text: str) -> Optional[List[float]]:
+        # With a background indexer we deliberately skip the synchronous query
+        # embedding for merge detection. Merging falls back to token overlap;
+        # retrieval still embeds the query because it cannot be deferred.
+        if self._indexer is not None:
+            return None
         if self._vectors is None or self._embedder is None or not text.strip():
             return None
         return self._embedder.embed([text])[0]
@@ -834,9 +859,34 @@ class Hippocampus:
     def _index(self, engram: Engram, vec: Optional[List[float]] = None) -> None:
         if not self._auto_index or self._vectors is None or self._embedder is None:
             return
+        if self._indexer is not None:
+            if not self._indexer.submit(self.scope, engram.engram_id, engram.raw_text):
+                self._state["needs_vector_rebuild"] = True
+                self.store.set_state(self.scope, self.profile.name, self._state)
+            return
         if vec is None:
             vec = self._embedder.embed([engram.raw_text])[0]
         self._vectors.upsert(self.scope, engram.engram_id, vec)
+
+    def _apply_async_vector(
+        self, scope: str, engram_id: str, text: str, vector: List[float]
+    ) -> None:
+        engram = self.store.get(engram_id)
+        # The memory may have been deleted or corrected while the worker ran.
+        if engram is None or engram.raw_text != text:
+            return
+        if self._vectors is not None:
+            self._vectors.upsert(scope, engram_id, vector)
+
+    def _drain_index(self) -> int:
+        if self._indexer is None:
+            return 0
+        written = self._indexer.drain()
+        errors = self._indexer.take_errors()
+        if errors:
+            self._state["needs_vector_rebuild"] = True
+            self.store.set_state(self.scope, self.profile.name, self._state)
+        return written
 
     def _rehearse(
         self,

@@ -4,6 +4,7 @@ import math
 import os
 import sqlite3
 import tempfile
+import time
 import unittest
 from datetime import datetime, timedelta, timezone
 
@@ -42,6 +43,20 @@ def make(profile: str = "companion", embedder=None) -> Hippocampus:
         path=":memory:",
         embedder=embedder,
     )
+
+
+class SlowEmbedder:
+    """Deterministic embedder with a configurable delay."""
+
+    model = "slow-test"
+    dim = 4
+
+    def __init__(self, delay: float = 0.05) -> None:
+        self.delay = delay
+
+    def embed(self, texts):
+        time.sleep(self.delay)
+        return [[1.0, 0.0, 0.0, 0.0] for _ in texts]
 
 
 class SynonymEmbedder:
@@ -447,10 +462,51 @@ class TestTimeAndOps(unittest.TestCase):
         self.assertEqual(h.salient(budget=0), [])
 
 
+class TestAsyncIndex(unittest.TestCase):
+    def test_remember_does_not_block_and_close_flushes(self):
+        path = tempfile.mktemp(suffix=".db")
+        h = Hippocampus(
+            scope="s",
+            path=path,
+            embedder=SlowEmbedder(delay=0.08),
+            async_index=True,
+        )
+        started = time.perf_counter()
+        h.remember(Event("我数学考砸了，哭了好久", at=at(0)))
+        elapsed = time.perf_counter() - started
+        self.assertLess(elapsed, 0.05)  # embedding happens in the background
+        h.close()
+
+        store = Store(path)
+        self.assertEqual(store.vector_count("s"), 1)
+        store.close()
+        os.unlink(path)
+
+    def test_async_recall_drains_finished_vectors(self):
+        path = tempfile.mktemp(suffix=".db")
+        h = Hippocampus(
+            scope="s",
+            path=path,
+            embedder=SlowEmbedder(delay=0.01),
+            async_index=True,
+        )
+        e = h.remember(Event("我养了一只猫叫团子", at=at(0)))
+        deadline = time.time() + 2
+        while h.store.vector_count("s") == 0 and time.time() < deadline:
+            h._drain_index()
+            time.sleep(0.01)
+        self.assertEqual(h.store.vector_count("s"), 1)
+        self.assertTrue(h.recall("猫", now=at(0)))
+        h.close()
+        os.unlink(path)
+
+
 class TestRebuild(unittest.TestCase):
     def test_rebuild_after_model_change(self):
         path = tempfile.mktemp(suffix=".db")
-        old = Hippocampus(scope="s", path=path, embedder=HashingEmbedder(dim=8))
+        old = Hippocampus(
+            scope="s", path=path, embedder=HashingEmbedder(dim=8), async_index=False
+        )
         ids = [
             old.remember(Event("我数学考砸了，哭了好久", at=at(0))).engram_id,
             old.remember(Event("我养了一只猫叫团子", at=at(1))).engram_id,
@@ -459,7 +515,9 @@ class TestRebuild(unittest.TestCase):
         self.assertEqual(old.store.vector_dim(ids[0]), 8)
         old.close()
 
-        new = Hippocampus(scope="s", path=path, embedder=HashingEmbedder(dim=16))
+        new = Hippocampus(
+            scope="s", path=path, embedder=HashingEmbedder(dim=16), async_index=False
+        )
         self.assertTrue(new._state.get("needs_vector_rebuild"))
         report = new.rebuild_vectors(batch_size=2)
         self.assertEqual(report["vectors"], 3)

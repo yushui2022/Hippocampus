@@ -31,13 +31,15 @@ L4  archived      not volunteered, still reachable by keyword
 | Rehearsal merge (re-telling strengthens, does not duplicate) | ✅ |
 | Mention cooldown + proactive/vs-passive recall | ✅ |
 | Read-only `peek()` (never strengthens, never logs) | ✅ |
+| Async embedding indexer (writes never block on the model) | ✅ |
 | Hybrid retrieval: BM25 + vectors + RRF + MMR | ✅ |
 | Episode builder (turns → episodes) | ✅ |
 | Fine-grained facts with TTL / supersede / source | ✅ |
 | Read-only inspection + backup | ✅ |
 | Real embedding provider (bge-m3 via OpenAI-compatible API) | ✅ adapter |
 | Graph memory | ❌ later |
-| Async write / HTTP service | ❌ later |
+| Async embedding writes | ✅ |
+| HTTP service | ❌ later |
 
 ### What changed in v2
 
@@ -52,6 +54,8 @@ L4  archived      not volunteered, still reachable by keyword
   permanently unforgettable.
 - **Hybrid retrieval** replaced raw token-hit counting.
 - **Episodes** prevent 283 turns from becoming 283 separate traces.
+- **Async indexing**: file-backed stores can embed in the background; five
+  writes went from 78 ms to 2 ms with local bge-m3.
 
 ---
 
@@ -188,6 +192,26 @@ Each fact carries:
 A new value for the same `(subject, predicate)` supersedes the old one; the
 history stays queryable with `include_inactive=True`.
 
+### Async indexing
+
+Embedding is the only write path that blocks on a model. Pass
+`async_index=True` (or use a file-backed DB, where it is the default) and the
+worker computes vectors while `remember()` returns:
+
+```python
+hippo = Hippocampus(..., embedder=LocalEmbedder(), async_index=True)
+hippo.remember(event)      # ~0.3 ms
+hippo.close()              # flushes pending vectors
+```
+
+The worker never touches SQLite. Finished vectors are drained on the main
+thread by `recall()`, `close()` or an explicit `hippo._drain_index()`.
+`stats()["index_pending"]` shows the queue depth. In-memory databases stay
+synchronous so tests and evals are deterministic.
+
+Trade-off: merge detection falls back to token overlap while indexing is
+async, because the query vector would require a blocking call.
+
 ### Proactive speech
 
 `salient()` answers "what is worth bringing up?" without a query:
@@ -218,7 +242,7 @@ history stays queryable with `include_inactive=True`.
 | `mark_mentioned(ids)` | ✅ | record what was said |
 | `forget(id, hard=...)` | ✅ | soft or hard delete |
 | `facts(...)` | ❌ | active facts |
-| `stats()` | ❌ | levels, fidelity, stability, facts |
+| `stats()` | ❌ | levels, fidelity, stability, facts, index queue |
 
 Full signatures live in `hippocampus/kernel.py`.
 
@@ -311,6 +335,7 @@ hippocampus/
   tokens.py          CJK bigrams, BM25 helper
   episode.py         window segmenter
   facts.py           extractor + TTL builder
+  indexer.py         async embedding worker
   retrieval/         embeddings · BM25 · vector index · RRF/MMR
   ops/               read-only snapshot · backup
 eval/                replay · paraphrase · bench
@@ -324,7 +349,7 @@ tests/               invariants and behaviour
 - **P1.5** — real bge-m3 baseline, candidate union tuning, rerank provider.
 - **P2** — graph memory (feature-flagged), read-only observatory UI, shadow
   index rebuild, mention budget per topic.
-- **P3** — IM adapter, async write queue, blind test harness.
+- **P3** — IM adapter, HTTP service, blind test harness.
 
 See the design notes in `docs/` for the full plan.
 

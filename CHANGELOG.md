@@ -1,5 +1,28 @@
 # Changelog
 
+## v0.4.0 — 2026-11-01
+
+Non-blocking writes.
+
+### Added
+
+- `indexer.py`: background embedding worker (`AsyncIndexer`) with a bounded
+  queue, result draining on the main thread, error capture and flush-on-close.
+- `Hippocampus(async_index=True)`; defaults to on for file-backed stores when
+  an embedder is configured, off for `:memory:`.
+- `stats()["index_pending"]` / `["index_dropped"]`.
+
+### Changed
+
+- Async mode skips the synchronous query embedding for merge detection:
+  merging falls back to token overlap. Retrieval still embeds the query.
+- `close()` flushes pending vectors before closing SQLite.
+- Stale results are ignored when the memory was deleted or corrected while the
+  worker was running.
+
+Measured with local bge-m3: five writes 78 ms → 1.7 ms; vectors flush on close.
+41 unittest cases.
+
 ## v0.3.0 — 2026-11-01
 
 Local embeddings, measured calibration, and model-change support.

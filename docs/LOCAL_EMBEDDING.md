@@ -49,6 +49,7 @@ hippo = Hippocampus(
     scope="user_42",
     path="memory.db",
     embedder=LocalEmbedder(),   # http://127.0.0.1:11434/v1, model=bge-m3
+    async_index=True,           # non-blocking writes (default for file DBs)
 )
 ```
 
@@ -98,7 +99,9 @@ bge-m3 buys.
 ## 5. Cost, privacy, and consistency
 
 - **Cost**: one embedding per new memory and one per user turn. On this machine
-  a query takes ~15–20 ms; no tokens are billed.
+  a query takes ~15–20 ms; no tokens are billed. Writes are backgrounded:
+  five `remember()` calls took 78 ms synchronously and 1.7 ms with
+  `async_index=True` (vectors flush on `close()`).
 - **Privacy**: text goes to `127.0.0.1` only.
 - **Memory**: the model needs roughly 1.2 GB of disk and about 1–2 GB of RAM
   while loaded.
