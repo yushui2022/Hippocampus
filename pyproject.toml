@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hippocampus-memory"
-version = "0.6.0"
+version = "0.7.0"
 description = "A memory kernel that forgets like a human: graded forgetting, plasticity, hybrid recall, and sourced facts."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -31,6 +31,9 @@ hippo-false-memory = "eval.false_memory:main"
 hippo-rebuild = "hippocampus.rebuild:main"
 hippo-observe = "hippocampus.observatory:main"
 hippo-blind = "eval.blind_test:main"
+
+[tool.setuptools.package-data]
+hippocampus = ["prompts/*.txt"]
 
 [tool.setuptools.packages.find]
 include = ["hippocampus*", "eval*"]

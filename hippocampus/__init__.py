@@ -31,8 +31,15 @@ from .retrieval import (
     cosine,
 )
 from .store import Store
+from .summarizer import (
+    AsyncSummarizer,
+    LLMSummarizer,
+    SummaryError,
+    format_dialogue,
+    parse_summary,
+)
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 
 __all__ = [
     "Hippocampus",
@@ -62,5 +69,10 @@ __all__ = [
     "snapshot",
     "backup_database",
     "restore_database",
+    "LLMSummarizer",
+    "AsyncSummarizer",
+    "SummaryError",
+    "parse_summary",
+    "format_dialogue",
     "__version__",
 ]

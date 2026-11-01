@@ -1,5 +1,32 @@
 # Changelog
 
+## v0.7.0 — 2026-11-01
+
+LLM memory summarizer.
+
+### Added
+
+- `LLMSummarizer` for any OpenAI-compatible chat endpoint; default DeepSeek
+  (`deepseek-chat`, `https://api.deepseek.com/v1`).
+- `prompts/summarize.txt`: first person, specific nickname, absolute time, no
+  invention, fixed JSON schema.
+- `parse_summary()` with fence stripping, validation, clamping and
+  `SummaryError`.
+- `AsyncSummarizer` worker: `remember_episode()` returns in ~0.4 ms; results are
+  drained on `recall()` / `close()`.
+- `Hippocampus(persona=..., async_summary=...)`; `gist_source="llm"`;
+  `meta["topics"]` / `meta["key_facts"]` / `meta["sentiment"]`.
+- `examples/deepseek_summary.py`, `docs/SUMMARIZER.md`.
+
+### Measured (DeepSeek, 4-turn episode)
+
+- synchronous call: ~1.4 s
+- async perceived write: ~0.4 ms
+- gist: first-person, uses the sender name, keeps emotion and the promise
+- fallback: API error / invalid JSON / no key → extractive gist
+
+51 unittest cases.
+
 ## v0.6.0 — 2026-11-01
 
 Latency work.

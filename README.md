@@ -21,7 +21,7 @@ L4  archived      not volunteered, still reachable by keyword
 
 ## Status
 
-**v0.6.0 — v2 core complete.** Runnable, tested, benchmarked. Not yet wired to a channel.
+**v0.7.0 — v2 core complete.** Runnable, tested, benchmarked. Not yet wired to a channel.
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ L4  archived      not volunteered, still reachable by keyword
 | Real embedding provider (local bge-m3 / OpenAI-compatible) | ✅ |
 | Async embedding writes | ✅ |
 | Topic-level mention budget | ✅ |
+| LLM summarizer (first-person gist, DeepSeek/Ollama) | ✅ optional |
 | Shadow (zero-downtime) vector rebuild | ✅ |
 | Read-only observatory (HTTP + page) | ✅ |
 | Graph memory (opt-in) | ✅ flag |
@@ -233,6 +234,33 @@ the summarizer, or `meta["topics"]`, or its fact key) was already surfaced in
 the last `topic_cooldown_hours` (default 24h), `salient()` skips it. This stops
 "she brings up the same thing three times" even when the daily budget allows it.
 
+### LLM summarizer (optional)
+
+Without a summarizer, L1 is an extractive truncation. With one, the memory is
+written by a chat model in the character's voice:
+
+```python
+from hippocampus import LLMSummarizer
+
+summarizer = LLMSummarizer.from_env()   # DEEPSEEK_API_KEY
+hippo = Hippocampus(
+    ..., summarizer=summarizer, async_summary=True,
+    persona="温柔、嘴硬、爱吃白饭的蓝色鲸鱼娘",
+)
+```
+
+Input: 4 turns. Output gist:
+
+> 三月二日晚上，阿澈跟我说数学考砸了，哭了好久，觉得自己特别没用……
+> 我告诉她一次考试说明不了什么，愿意一起看看错在哪。
+
+Compare with the extractive path: `我数学考砸了`.
+
+The call happens at episode write / consolidation, runs in the background
+(~1.4 s for a 4-turn episode on DeepSeek), and falls back to extractive on any
+error. Facts still come only from user utterances. See
+[`docs/SUMMARIZER.md`](docs/SUMMARIZER.md).
+
 ### Graph (opt-in)
 
 Set `enable_graph=True` on a profile to store `(subject, predicate, object)`
@@ -380,6 +408,8 @@ hippocampus/
   episode.py         window segmenter
   facts.py           extractor + TTL builder
   indexer.py         async embedding worker
+  summarizer.py      LLM summarizer + async worker
+  prompts/           summarize.txt
   observatory.py     read-only HTTP page/API
   rebuild.py         vector rebuild CLI
   retrieval/         embeddings · BM25 · vector index · RRF/MMR
@@ -394,6 +424,8 @@ tests/               invariants and behaviour
 
 - **P3** — IM adapter (AstrBot / NapCat), long-running HTTP service, real-log
   holdout set, multi-process write coordination.
+
+Summarizer details: [`docs/SUMMARIZER.md`](docs/SUMMARIZER.md).
 
 Performance details: [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md).
 

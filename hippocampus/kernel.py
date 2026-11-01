@@ -24,6 +24,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set,
 from . import decay
 from .episode import Episode, WindowSegmenter
 from .indexer import AsyncIndexer
+from .summarizer import AsyncSummarizer
 from .facts import (
     FactCandidate,
     FactExtractor,
@@ -63,6 +64,8 @@ class Hippocampus:
         auto_index: bool = True,
         auto_facts: bool = True,
         async_index: Optional[bool] = None,
+        persona: str = "",
+        async_summary: Optional[bool] = None,
     ) -> None:
         self.scope = scope
         self.profile: Profile = get_profile(profile) if isinstance(profile, str) else profile
@@ -74,6 +77,8 @@ class Hippocampus:
         self._embedder = embedder
         self._auto_index = bool(auto_index and embedder is not None)
         self._auto_facts = bool(auto_facts)
+        self._persona = persona or ""
+        self._pending_summaries: Set[str] = set()
         self._fact_extractor = (
             fact_extractor if fact_extractor is not None else RuleFactExtractor()
         )
@@ -94,6 +99,13 @@ class Hippocampus:
         self._indexer: Optional[AsyncIndexer] = None
         if self._async_index and self._vectors is not None:
             self._indexer = AsyncIndexer(self._embedder, self._apply_async_vector)
+        if async_summary is None:
+            async_summary = summarizer is not None and str(self.store.path) != ":memory:"
+        self._summary_worker: Optional[AsyncSummarizer] = None
+        if async_summary and summarizer is not None:
+            self._summary_worker = AsyncSummarizer(
+                summarizer, self._apply_async_summary
+            )
 
         state = self.store.get_state(scope)
         state.setdefault("profile", self.profile.name)
@@ -110,6 +122,10 @@ class Hippocampus:
 
     # -- lifecycle -----------------------------------------------------------
     def close(self) -> None:
+        if self._summary_worker is not None:
+            self._summary_worker.close()
+            self._drain_summary()
+            self._summary_worker = None
         if self._indexer is not None:
             self._indexer.close()
             self._drain_index()
@@ -220,13 +236,12 @@ class Hippocampus:
             },
         )
 
-        if summarize and self._summarizer is not None:
-            self._apply_summary(engram, [event])
-
         self.store.insert(engram)
         self._index(engram, query_vec)
         if self._auto_facts:
             self._ingest_facts(engram, [event], at)
+        if summarize and self._summarizer is not None:
+            self._request_summary(engram, [event])
         return engram
 
     def remember_episode(
@@ -314,13 +329,12 @@ class Hippocampus:
                 "span": [_dt(events[0].resolved_at()), _dt(at)],
             },
         )
-        if summarize and self._summarizer is not None:
-            self._apply_summary(engram, list(events))
-
         self.store.insert(engram)
         self._index(engram, query_vec)
         if self._auto_facts:
             self._ingest_facts(engram, list(events), at)
+        if summarize and self._summarizer is not None:
+            self._request_summary(engram, list(events))
         return engram
 
     def feed_episode(self, event: Event, *, max_turns: int = 10, gap_minutes: float = 180.0) -> List[Engram]:
@@ -363,6 +377,7 @@ class Hippocampus:
         if budget <= 0:
             return []
         self._drain_index()
+        self._drain_summary()
         query_tokens = tokenize(query)
         if not query_tokens:
             # Proactive recall has no query: use salience instead of token match.
@@ -591,7 +606,10 @@ class Hippocampus:
                 engram.level = target
             if engram.level >= 1 and not engram.gist:
                 if self._summarizer is not None:
-                    self._apply_summary(engram, [Event(text=engram.raw_text, at=engram.created_at)])
+                    self._request_summary(
+                        engram,
+                        [Event(text=engram.raw_text, at=engram.created_at)],
+                    )
                     changed += 1
                 else:
                     engram.gist = first_clause(engram.raw_text, max_chars=48)
@@ -628,7 +646,7 @@ class Hippocampus:
             engram.tokens = tokenize(text)
             self.store.replace_tokens(engram_id, engram.tokens)
             if self._summarizer is not None:
-                self._apply_summary(engram, [Event(text=text, at=engram.created_at)])
+                self._summarize_sync(engram, [Event(text=text, at=engram.created_at)])
             else:
                 engram.gist = first_clause(text, max_chars=48)
                 engram.gist_source = "extractive"
@@ -859,6 +877,7 @@ class Hippocampus:
             "recall": self.store.recall_stats(self.scope),
             "index_pending": self._indexer.pending if self._indexer else 0,
             "index_dropped": self._indexer.dropped if self._indexer else 0,
+            "summary_pending": self._summary_worker.pending if self._summary_worker else 0,
             "schema_version": self.store.schema_version(),
         }
 
@@ -1040,28 +1059,76 @@ class Hippocampus:
         intimacy = self._intimacy()
         return min(1.0, intimacy * (0.5 + engram.importance))
 
-    def _apply_summary(self, engram: Engram, events: Sequence[Event]) -> None:
+    def _apply_summary_obj(self, engram: Engram, summary: Summary) -> None:
+        if summary.gist:
+            engram.gist = summary.gist
+            engram.gist_source = "llm"
+        if summary.emotion:
+            engram.emotion = summary.emotion
+        if summary.topics:
+            engram.meta["topics"] = list(summary.topics)[:6]
+        if summary.key_facts:
+            engram.meta["key_facts"] = list(summary.key_facts)[:8]
+        engram.meta["sentiment"] = summary.sentiment
+        engram.importance = max(engram.importance, _clamp(summary.importance))
+
+    def _summarize_sync(self, engram: Engram, events: Sequence[Event]) -> None:
         if self._summarizer is None:
             return
         try:
             if hasattr(self._summarizer, "summarize"):
-                summary = self._summarizer.summarize(list(events), persona=None)
+                summary = self._summarizer.summarize(
+                    list(events), persona=self._persona or None
+                )
             else:
                 summary = self._summarizer(list(events))
         except Exception:
             return
         if isinstance(summary, Summary):
-            if summary.gist:
-                engram.gist = summary.gist
-                engram.gist_source = "llm"
-            if summary.emotion:
-                engram.emotion = summary.emotion
-            if summary.topics:
-                engram.meta["topics"] = list(summary.topics)[:6]
-            engram.importance = max(engram.importance, _clamp(summary.importance))
+            self._apply_summary_obj(engram, summary)
         elif isinstance(summary, str) and summary.strip():
             engram.gist = summary.strip()
             engram.gist_source = "llm"
+        self.store.update(engram)
+
+    def _request_summary(self, engram: Engram, events: Sequence[Event]) -> None:
+        if self._summarizer is None:
+            return
+        if engram.engram_id in self._pending_summaries:
+            return
+        if self._summary_worker is None:
+            self._summarize_sync(engram, events)
+            return
+        self._pending_summaries.add(engram.engram_id)
+        if not self._summary_worker.submit(
+            engram.engram_id,
+            engram.raw_text,
+            list(events),
+            self._persona or None,
+        ):
+            self._pending_summaries.discard(engram.engram_id)
+
+    def _apply_async_summary(
+        self, engram_id: str, text: str, summary: Optional[Summary]
+    ) -> None:
+        self._pending_summaries.discard(engram_id)
+        if summary is None:
+            return
+        engram = self.store.get(engram_id)
+        if engram is None or engram.raw_text != text:
+            return
+        self._apply_summary_obj(engram, summary)
+        self.store.update(engram)
+
+    def _drain_summary(self) -> int:
+        if self._summary_worker is None:
+            return 0
+        applied = self._summary_worker.drain()
+        errors = self._summary_worker.take_errors()
+        if errors:
+            self._state["summary_errors"] = errors[-5:]
+            self.store.set_state(self.scope, self.profile.name, self._state)
+        return applied
 
     def _ingest_facts(
         self, engram: Engram, events: Sequence[Event], at: datetime

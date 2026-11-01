@@ -14,8 +14,10 @@ from hippocampus import (
     HashingEmbedder,
     Hippocampus,
     Store,
+    Summary,
     snapshot,
 )
+from hippocampus.summarizer import LLMSummarizer, SummaryError, parse_summary
 from hippocampus.decay import S_MAX
 
 T0 = datetime(2026, 1, 1, 20, 0, tzinfo=timezone.utc)
@@ -43,6 +45,27 @@ def make(profile: str = "companion", embedder=None) -> Hippocampus:
         path=":memory:",
         embedder=embedder,
     )
+
+
+class FakeSummarizer:
+    def __init__(self, delay: float = 0.0) -> None:
+        self.delay = delay
+        self.calls = 0
+        self.persona = None
+
+    def summarize(self, events, persona=None):
+        self.calls += 1
+        self.persona = persona
+        if self.delay:
+            time.sleep(self.delay)
+        return Summary(
+            gist="三月那次数学考砸，我哭了好久，觉得自己特别没用。",
+            key_facts=["数学考砸", "哭了很久"],
+            topics=["数学", "情绪"],
+            sentiment="negative",
+            importance=0.8,
+            emotion="难过",
+        )
 
 
 class SlowEmbedder:
@@ -646,3 +669,81 @@ class TestBlindHarness(unittest.TestCase):
         ]
         self.assertEqual(run(pairs, lambda _p: "A")["plastic_win_rate"], 1.0)
         self.assertEqual(run(pairs, lambda _p: "skip")["plastic_win_rate"], 0.0)
+
+
+class TestSummarizer(unittest.TestCase):
+    def test_parse_summary_handles_fences_and_clamps(self):
+        raw = """```json
+        {"gist":"我很难过","key_facts":["数学考砸"],"topics":["数学"],
+         "sentiment":"negative","importance":1.7,"emotion":"难过"}
+        ```"""
+        summary = parse_summary(raw)
+        self.assertEqual(summary.gist, "我很难过")
+        self.assertEqual(summary.importance, 1.0)
+        self.assertEqual(summary.topics, ["数学"])
+        with self.assertRaises(SummaryError):
+            parse_summary("not json")
+        with self.assertRaises(SummaryError):
+            parse_summary('{"topics": []}')
+
+    def test_llm_summarizer_uses_transport(self):
+        captured = []
+
+        def transport(messages):
+            captured.append(messages)
+            return '{"gist":"我记得那次考试","key_facts":["考试"],"topics":["考试"],"sentiment":"negative","importance":0.7,"emotion":"难过"}'
+
+        client = LLMSummarizer(api_key="test", transport=transport)
+        summary = client.summarize(
+            [Event("我数学考砸了", at=at(0))], persona="温柔、嘴硬的鲸鱼娘"
+        )
+        self.assertEqual(summary.gist, "我记得那次考试")
+        self.assertIn("第一人称", captured[0][0]["content"])
+        self.assertIn("鲸鱼娘", captured[0][0]["content"])
+        self.assertIn("数学考砸", captured[0][1]["content"])
+
+    def test_failed_summarizer_falls_back_to_extractive(self):
+        class Broken:
+            def summarize(self, events, persona=None):
+                raise RuntimeError("api down")
+
+        h = Hippocampus(
+            scope="s", path=":memory:", summarizer=Broken(), async_summary=False
+        )
+        e = h.remember_episode([Event("我数学考砸了，哭了好久", at=at(0))], summarize=True)
+        self.assertEqual(e.gist_source, "extractive")
+        self.assertTrue(e.gist)
+
+    def test_sync_summarizer_applies_first_person_gist(self):
+        fake = FakeSummarizer()
+        h = Hippocampus(
+            scope="s",
+            path=":memory:",
+            summarizer=fake,
+            async_summary=False,
+            persona="温柔、嘴硬的鲸鱼娘",
+        )
+        e = h.remember_episode(
+            [Event("我数学考砸了，哭了好久", at=at(0))], summarize=True
+        )
+        stored = h.store.get(e.engram_id)
+        self.assertEqual(stored.gist_source, "llm")
+        self.assertIn("数学考砸", stored.gist)
+        self.assertEqual(stored.meta["topics"], ["数学", "情绪"])
+        self.assertEqual(fake.persona, "温柔、嘴硬的鲸鱼娘")
+
+    def test_async_summarizer_flushes_on_close(self):
+        path = tempfile.mktemp(suffix=".db")
+        fake = FakeSummarizer(delay=0.05)
+        h = Hippocampus(
+            scope="s", path=path, summarizer=fake, async_summary=True
+        )
+        e = h.remember_episode(
+            [Event("我数学考砸了，哭了好久", at=at(0))], summarize=True
+        )
+        self.assertEqual(h.store.get(e.engram_id).gist_source, "extractive")
+        h.close()
+        store = Store(path)
+        self.assertEqual(store.get(e.engram_id).gist_source, "llm")
+        store.close()
+        os.unlink(path)

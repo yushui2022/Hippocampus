@@ -99,9 +99,13 @@ class Engram:
         if self.level <= 0:
             return self.raw_text
         if self.level == 1:
-            return self._summary(limit=48)
+            # An LLM gist is already compressed; allow it room. The extractive
+            # fallback stays short because it is only a truncation.
+            return self._summary(limit=160 if self.gist_source == "llm" else 48)
         if self.level == 2:
-            return _short(self._summary(limit=48), 16)
+            return _short(
+                self._summary(limit=160 if self.gist_source == "llm" else 48), 40
+            )
         if self.level == 3:
             when = _vague_period(self.created_at, now or utcnow())
             mood = self.emotion or "你状态不太一样"

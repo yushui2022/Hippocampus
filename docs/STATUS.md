@@ -56,6 +56,7 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 - [x] shadow (zero-downtime) vector rebuild
 - [x] read-only observatory (`hippocampus.observatory`, HTTP + page)
 - [x] graph memory behind `Profile.enable_graph` (opt-in)
+- [x] LLM summarizer (`LLMSummarizer`, async, DeepSeek/Ollama, extractive fallback)
 - [x] blind A/B harness (`eval.blind_test`)
 - [x] README + `docs/INVARIANTS.md`
 
@@ -86,4 +87,5 @@ Latency with NumPy, 1 000 engrams: recall p50 4.4 ms (BM25) / 20.4 ms
 
 1. Run the interactive blind test with a human judge and record the result.
 2. Add the AstrBot / NapCat adapter so the kernel can run in QQ.
-3. Add a long-running HTTP API and a real-log holdout set.
+3. Add a long-running HTTP API and a real-log holdout set, then re-run the
+   summarizer on real conversations.
