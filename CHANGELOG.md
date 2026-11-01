@@ -29,8 +29,8 @@ The v2 core: fix the invariants first, then add retrieval, episodes and facts.
 ### Added
 
 - Hybrid retrieval: BM25 + vector search + RRF + MMR + character budget.
-- `HashingEmbedder` (zero-dependency, deterministic) and `OpenAIEmbedder`
-  (bge-m3 / any OpenAI-compatible endpoint).
+- `HashingEmbedder` (zero-dependency, deterministic), `LocalEmbedder`
+  (Ollama bge-m3) and `OpenAIEmbedder` (any OpenAI-compatible endpoint).
 - `VectorIndex` with optional NumPy acceleration; vectors persisted in SQLite.
 - `Episode` / `WindowSegmenter` and `remember_episode()` / `feed_episode()`.
 - Facts table with typed TTL, `valid_from/valid_to`, supersede semantics and
@@ -50,6 +50,8 @@ The v2 core: fix the invariants first, then add retrieval, episodes and facts.
 - `recall()` accepts `max_chars`, `spontaneous`, `kinds`.
 - `tick()` accepts `active_days` and returns `TickReport`.
 - `Store` API extended (`match_stats`, vectors, facts, meta, `consistency_report`).
+- Companion retrieval weights moved toward relevance (0.50) after hybrid
+  candidates were measured to be crowded out by salient-but-unrelated memories.
 - README rewritten for v2; old pytest-style `tests/test_kernel.py` replaced by
   `tests/test_v2.py` plus a shallow `tests/test_legacy_api.py`.
 

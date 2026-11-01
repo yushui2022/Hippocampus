@@ -25,7 +25,7 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 
 ### P1 — retrieval and write pipeline
 
-- [x] `Embedder` protocol; `HashingEmbedder`; `OpenAIEmbedder` (bge-m3)
+- [x] `Embedder` protocol; `HashingEmbedder`; `LocalEmbedder`; `OpenAIEmbedder`
 - [x] `VectorIndex` with SQLite persistence and optional NumPy
 - [x] `engram_vectors` + provider fingerprint
 - [x] BM25 over the persisted token index
@@ -53,7 +53,7 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 
 ## Not done (next)
 
-- [ ] real bge-m3 baseline and threshold tuning (needs `HIPPO_EMBED_KEY`)
+- [ ] importance/stability calibration to lift `recall@6` (bge-m3 baseline is done locally)
 - [ ] graph memory (`graph_nodes` / `graph_edges`) — feature-flagged, after facts
 - [ ] shadow index rebuild + progress reporting
 - [ ] async embedding queue (writes are synchronous today)
@@ -64,21 +64,22 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 
 ## Current numbers
 
-| Mode | recall@6 | fog | over_recall | false memory |
+| Mode | recall@6 | fog | fog_missing | over_recall |
 | --- | --- | --- | --- | --- |
-| token baseline | 0.733 | 1.000 | 0.100 | — |
-| hashing vectors | 0.800 | 1.000 | 0.000 | run `eval.false_memory` |
-| bge-m3 | needs key | — | — | — |
+| token baseline | 0.733 | 1.000 | 0.000 | 0.100 |
+| hashing vectors | 0.800 | 1.000 | 0.267 | 0.000 |
+| local bge-m3 (Ollama) | 0.733 | 1.000 | 0.133 | 0.050 |
 
-`eval.paraphrase --embedder lexicon`: 1.000 on 10 bundled pairs (pipeline
-check, not a model benchmark).
+`eval.paraphrase --embedder openai`: 1.000 on 10 bundled pairs with local
+bge-m3 (0.600 with hashing). `recall@6` is a forgetting-calibration metric, not
+a retrieval metric.
 
 Latency at 500 engrams, pure Python: remember p50 ≈ 10 ms, recall p50 ≈ 15 ms,
 30-day catch-up ≈ 30 ms. Install NumPy for vector search at larger scales.
 
 ## Three next tasks (in order)
 
-1. Run `eval.replay_30d --embedder openai` and `eval.paraphrase --embedder openai`
-   with a real bge-m3 key; record numbers in the README.
+1. Calibrate rule-based importance / stability so the `remember` group stays
+   at L0/L1 after 30 days (target `recall@6 ≥ 0.90`).
 2. Add an async embedding queue so `remember()` never blocks on the network.
 3. Add topic-level mention budget and a 24h repetition test.

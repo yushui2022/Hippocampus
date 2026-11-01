@@ -110,6 +110,25 @@ class OpenAIEmbedder:
         raise RuntimeError("embedding request failed: {}".format(last_error))
 
 
+class LocalEmbedder(OpenAIEmbedder):
+    """bge-m3 served by a local Ollama instance (no API key, no cloud)."""
+
+    def __init__(
+        self,
+        base_url: str = "http://127.0.0.1:11434/v1",
+        model: str = "bge-m3",
+        dim: int = 1024,
+        timeout: float = 60.0,
+    ) -> None:
+        super().__init__(
+            api_key="ollama",
+            model=model,
+            base_url=base_url,
+            dim=dim,
+            timeout=timeout,
+        )
+
+
 def cosine(a: Sequence[float], b: Sequence[float]) -> float:
     if not a or not b:
         return 0.0

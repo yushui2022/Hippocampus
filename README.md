@@ -95,6 +95,16 @@ for fact in hippo.facts():
 
 ### Real semantics (bge-m3)
 
+Local, no API key, no text leaving the machine:
+
+```python
+from hippocampus import LocalEmbedder
+
+embedder = LocalEmbedder()   # http://127.0.0.1:11434/v1, model=bge-m3
+```
+
+Cloud (any OpenAI-compatible endpoint):
+
 ```python
 from hippocampus import OpenAIEmbedder
 
@@ -106,7 +116,8 @@ embedder = OpenAIEmbedder(
 )
 ```
 
-Any OpenAI-compatible `/embeddings` endpoint works. The core has **no**
+Setup: `ollama pull bge-m3 && ollama serve`, then see
+[`docs/LOCAL_EMBEDDING.md`](docs/LOCAL_EMBEDDING.md). The core has **no**
 required third-party dependency; NumPy is used automatically when present.
 
 ---
@@ -226,15 +237,18 @@ python -m eval.false_memory
 
 Current numbers on the 283-turn synthetic replay (seed 7, budget 6):
 
-| Embedder | recall@6 | fog_accuracy | over_recall |
-| --- | --- | --- | --- |
-| none (token baseline) | 0.733 | 1.000 | 0.100 |
-| hashing (token vectors) | 0.800 | 1.000 | 0.000 |
-| bge-m3 (expected) | ≥ 0.90 | ≥ 0.60 | ≤ 0.15 |
+| Embedder | recall@6 | fog_accuracy | fog_missing | over_recall |
+| --- | --- | --- | --- | --- |
+| none (token baseline) | 0.733 | 1.000 | 0.000 | 0.100 |
+| hashing (token vectors) | 0.800 | 1.000 | 0.267 | 0.000 |
+| **local bge-m3 (Ollama)** | 0.733 | 1.000 | 0.133 | 0.050 |
 
-The first two are reproducible offline; the third requires
-`HIPPO_EMBED_KEY`. `eval/paraphrase.py --embedder lexicon` validates the
-pipeline (1.000 on the bundled pairs) but is **not** a model benchmark.
+`para_recall@6`: 0.600 with hashing, **1.000 with local bge-m3** (10/10).
+
+`recall@6` counts memories still at L0/L1 after 30 days, so it measures
+forgetting calibration, not retrieval. bge-m3's win is paraphrase recall;
+lifting `recall@6` is an importance/stability tuning task. See
+`docs/LOCAL_EMBEDDING.md` for the full table and caveats.
 
 > The benchmark is retrieval-level, not answer accuracy. A separate blind test
 > (plastic memory vs verbatim memory) is the real acceptance test.

@@ -64,12 +64,15 @@ PRESETS: Dict[str, Profile] = {
             "explicit": 0.08,
         },
         retrieval_weights={
-            "similarity": 0.30,
-            "retrievability": 0.20,
-            "importance": 0.20,
-            "recency": 0.10,
+            # Hybrid candidates need relevance to dominate; salient-but-
+            # unrelated memories otherwise crowd out the thing being asked
+            # about (measured on the 283-turn replay).
+            "similarity": 0.50,
+            "retrievability": 0.15,
+            "importance": 0.15,
+            "recency": 0.05,
             "relationship": 0.10,
-            "emotion": 0.10,
+            "emotion": 0.05,
         },
         enable_relationship=True,
         gist_style="warm",

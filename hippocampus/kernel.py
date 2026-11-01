@@ -744,7 +744,11 @@ class Hippocampus:
         if bm:
             rankings.append([doc_id for doc_id, _ in bm])
 
-        if self._vectors is not None and self._embedder is not None and query.strip():
+        if (
+            self._vectors is not None
+            and self._embedder is not None
+            and query.strip()
+        ):
             vec = self._embedder.embed([query])[0]
             ann = self._vectors.search(self.scope, vec, k=limit, allowed=active)
             if ann:
