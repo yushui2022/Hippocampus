@@ -50,18 +50,19 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 - [x] hard-delete cascade (engram / tokens / vectors / facts / audit)
 - [x] `rebuild_vectors()` + `python -m hippocampus.rebuild` CLI
 - [x] async embedding indexer (`async_index=True`, drain on recall/close)
+- [x] importance/stability calibration (`importance_gain=14`, re-telling recovery)
 - [x] `eval.false_memory`
 - [x] README + `docs/INVARIANTS.md`
 
 ## Not done (next)
 
-- [x] importance/stability calibration (`importance_gain=14`, re-telling recovery)
 - [ ] graph memory (`graph_nodes` / `graph_edges`) — feature-flagged, after facts
-- [ ] shadow index rebuild + progress reporting
+- [ ] shadow (zero-downtime) index rebuild + progress reporting
 - [ ] observatory page (only the read-only snapshot API exists)
 - [ ] blind test harness (A/B plastic vs verbatim)
 - [ ] IM adapter (`AstrBot` / `NapCat`)
 - [ ] topic-level mention budget (currently global per day)
+- [ ] HTTP service / long-running daemon
 
 ## Current numbers
 
