@@ -325,6 +325,7 @@ python -m eval.paraphrase --embedder openai   # HIPPO_EMBED_KEY=...
 python -m eval.bench --n 500
 python -m eval.false_memory
 python -m eval.blind_test --auto A
+DEEPSEEK_API_KEY=... python -m eval.summarizer_ab   # LLM-judged A/B
 ```
 
 Current numbers on the 283-turn synthetic replay (seed 7, budget 6):

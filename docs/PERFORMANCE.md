@@ -49,6 +49,17 @@ memory recall (5–30 ms) + LLM generation (300–3000 ms) + transport
 Memory is usually **1–5%** of the user-visible latency. Optimising it further
 has diminishing returns unless the LLM is local and fast.
 
+## Summarizer (optional)
+
+| Mode | Perceived write | Background |
+| --- | ---: | ---: |
+| synchronous | ~1.4 s (4 turns, DeepSeek) | — |
+| `async_summary=True` | **~0.4 ms** | ~1.4 s per episode |
+
+Summaries run at episode write / consolidation, not per message. They do not
+affect recall latency; the gist is ready for the next recall that drains the
+worker.
+
 ## Knobs
 
 | Knob | Default | Effect |

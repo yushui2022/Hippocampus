@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.7.1 — 2026-11-01
+
+Summarizer evaluation.
+
+### Added
+
+- `eval.summarizer_ab`: LLM-judged summarized-vs-verbatim A/B.
+- `remember_episode()` records `meta["facts"]` for evaluation/provenance.
+- `TestDialogueFormat` and `episode records fact keys` tests (53 total).
+
+### Measured
+
+30 probes, DeepSeek judge: A wins 18/30 (0.600); remember 0.667, fog 0.533.
+The loss mode is coarse 10-turn episodes bundling 3–5 unrelated facts, not the
+summary prompt. See `docs/SUMMARIZER.md`.
+
 ## v0.7.0 — 2026-11-01
 
 LLM memory summarizer.
@@ -17,6 +33,8 @@ LLM memory summarizer.
 - `Hippocampus(persona=..., async_summary=...)`; `gist_source="llm"`;
   `meta["topics"]` / `meta["key_facts"]` / `meta["sentiment"]`.
 - `examples/deepseek_summary.py`, `docs/SUMMARIZER.md`.
+- `eval.summarizer_ab`: LLM-judged summarized-vs-verbatim A/B.
+- `remember_episode()` records `meta["facts"]` for evaluation/provenance.
 
 ### Measured (DeepSeek, 4-turn episode)
 
@@ -25,7 +43,7 @@ LLM memory summarizer.
 - gist: first-person, uses the sender name, keeps emotion and the promise
 - fallback: API error / invalid JSON / no key → extractive gist
 
-51 unittest cases.
+52 unittest cases.
 
 ## v0.6.0 — 2026-11-01
 

@@ -31,6 +31,7 @@ hippo-false-memory = "eval.false_memory:main"
 hippo-rebuild = "hippocampus.rebuild:main"
 hippo-observe = "hippocampus.observatory:main"
 hippo-blind = "eval.blind_test:main"
+hippo-summarizer-ab = "eval.summarizer_ab:main"
 
 [tool.setuptools.package-data]
 hippocampus = ["prompts/*.txt"]

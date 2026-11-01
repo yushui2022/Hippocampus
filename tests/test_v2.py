@@ -732,6 +732,16 @@ class TestSummarizer(unittest.TestCase):
         self.assertEqual(stored.meta["topics"], ["数学", "情绪"])
         self.assertEqual(fake.persona, "温柔、嘴硬的鲸鱼娘")
 
+    def test_episode_records_fact_keys(self):
+        h = make()
+        e = h.remember_episode(
+            [
+                Event("我数学考砸了", at=at(0), meta={"fact": "数学"}),
+                Event("嗯嗯", actor="assistant", at=at(0, hours=0.02)),
+            ]
+        )
+        self.assertIn("数学", e.meta["facts"])
+
     def test_async_summarizer_flushes_on_close(self):
         path = tempfile.mktemp(suffix=".db")
         fake = FakeSummarizer(delay=0.05)
@@ -747,3 +757,18 @@ class TestSummarizer(unittest.TestCase):
         self.assertEqual(store.get(e.engram_id).gist_source, "llm")
         store.close()
         os.unlink(path)
+
+
+class TestDialogueFormat(unittest.TestCase):
+    def test_sender_name_is_used(self):
+        from hippocampus.summarizer import format_dialogue
+
+        text = format_dialogue(
+            [
+                Event("我数学考砸了", at=at(0), meta={"sender_name": "阿澈"}),
+                Event("别难过", actor="assistant", at=at(0, hours=0.02)),
+            ]
+        )
+        self.assertIn("阿澈: 我数学考砸了", text)
+        self.assertIn("我: 别难过", text)
+        self.assertNotIn("对方", text)

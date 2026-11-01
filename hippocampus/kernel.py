@@ -327,6 +327,9 @@ class Hippocampus:
                 "scene": events[0].scene,
                 "turns": len(events),
                 "span": [_dt(events[0].resolved_at()), _dt(at)],
+                "facts": [
+                    e.meta["fact"] for e in events if e.meta.get("fact")
+                ],
             },
         )
         self.store.insert(engram)

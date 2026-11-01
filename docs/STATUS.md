@@ -57,6 +57,7 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 - [x] read-only observatory (`hippocampus.observatory`, HTTP + page)
 - [x] graph memory behind `Profile.enable_graph` (opt-in)
 - [x] LLM summarizer (`LLMSummarizer`, async, DeepSeek/Ollama, extractive fallback)
+- [x] LLM-judged summarizer A/B (`eval.summarizer_ab`)
 - [x] blind A/B harness (`eval.blind_test`)
 - [x] README + `docs/INVARIANTS.md`
 

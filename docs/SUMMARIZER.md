@@ -103,6 +103,44 @@ Input (4 turns, sender name 阿澈):
 
 Compare with the extractive path: `我数学考砸了`.
 
+## LLM-judged A/B
+
+```bash
+DEEPSEEK_API_KEY=... python -m eval.summarizer_ab --json /tmp/ab.json
+```
+
+A = the summarized gist, B = the exact original sentence; a separate DeepSeek
+call picks which reads more like a human recollection. This is **LLM-as-judge**
+(not a human blind test); use `eval.blind_test` for the human version.
+
+## Measured A/B (LLM judge)
+
+`eval.summarizer_ab` on the 283-turn synthetic log, 30 probes, DeepSeek as
+judge:
+
+| Group | A (summarized) wins | B (verbatim) wins | A rate |
+| --- | ---: | ---: | ---: |
+| remember | 10 | 5 | 0.667 |
+| fog | 8 | 7 | 0.533 |
+| **all** | **18** | **12** | **0.600** |
+
+Target is > 0.60; this is only just above it.
+
+The main loss mode is **episode granularity**, not the prompt: a 10-turn
+"day" episode often contains 3–5 unrelated facts, so the gist becomes a diary
+paragraph while B is one focused sentence. Example A:
+
+> 一月二十五号晚上，你跟我说拿到 offer，开心到睡不着；又说奶奶住院……
+> 还提起抑郁症复发……后来你说失眠、快递到了、刚下班……
+
+The judge prefers B's single targeted sentence. When the input is one focused
+topic (the 4-turn demo), the gist is clearly better.
+
+Caveats: this is LLM-as-judge, not a human blind test; a few judge reasons are
+internally inconsistent, so treat the exact number as directional. The next
+fix is topic-aware episode segmentation, then a fair A/B (same target) and the
+human `eval.blind_test`.
+
 ## Security
 
 - Never commit the key; `.env` is ignored.
