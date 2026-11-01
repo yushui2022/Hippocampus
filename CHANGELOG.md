@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.6.0 — 2026-11-01
+
+Latency work.
+
+### Added
+
+- `docs/PERFORMANCE.md` with measured tables and scaling estimates.
+- `eval.bench --embedder local` for the Ollama path.
+- Query embedding cache (`Profile.query_cache_size = 128`).
+- Batch candidate hydration (`Store.get_many`).
+- BM25 postings index: score only documents containing query tokens.
+- NumPy vector matrix cached per scope and row-normalised at build time.
+
+### Measured
+
+| N | Retrieval | recall p50 |
+| ---: | --- | ---: |
+| 1 000 | BM25 | 4.4 ms |
+| 1 000 | hashing 256d | 7.6 ms |
+| 1 000 | local bge-m3, distinct | 20.4 ms |
+
+The 1 000-memory bge path went from 96.5 ms to 20.4 ms after the matrix cache,
+batch hydration and postings index (5×). 46 tests.
+
 ## v0.5.0 — 2026-11-01
 
 The v2 architecture is complete. Schema v5.

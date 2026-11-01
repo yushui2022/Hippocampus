@@ -78,8 +78,9 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 bge-m3 (0.600 with hashing). `recall@6` is a forgetting-calibration metric, not
 a retrieval metric.
 
-Latency at 500 engrams, pure Python: remember p50 ≈ 10 ms, recall p50 ≈ 15 ms,
-30-day catch-up ≈ 30 ms. Install NumPy for vector search at larger scales.
+Latency with NumPy, 1 000 engrams: recall p50 4.4 ms (BM25) / 20.4 ms
+(local bge-m3, distinct queries); writes ~0.3 ms with async indexing. See
+`docs/PERFORMANCE.md`.
 
 ## Three next tasks (in order)
 

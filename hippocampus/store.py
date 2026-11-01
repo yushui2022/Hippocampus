@@ -360,6 +360,17 @@ class Store:
             return None
         return self._hydrate([row])[0]
 
+    def get_many(self, engram_ids: Iterable[str]) -> Dict[str, Engram]:
+        ids = [i for i in dict.fromkeys(engram_ids) if i]
+        if not ids:
+            return {}
+        placeholders = ",".join("?" for _ in ids)
+        rows = self._conn.execute(
+            "SELECT * FROM engrams WHERE engram_id IN ({})".format(placeholders),
+            ids,
+        ).fetchall()
+        return {e.engram_id: e for e in self._hydrate(rows)}
+
     def list(self, scope: str, limit: Optional[int] = None) -> List[Engram]:
         sql = "SELECT * FROM engrams WHERE scope=? ORDER BY created_at"
         params: List[object] = [scope]

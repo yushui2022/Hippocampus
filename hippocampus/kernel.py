@@ -17,6 +17,7 @@ Profile or an adapter.
 
 from __future__ import annotations
 
+from collections import OrderedDict
 from datetime import date, datetime, time as dtime, timedelta, timezone
 from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
@@ -83,6 +84,7 @@ class Hippocampus:
             else None
         )
         self._bm25 = BM25Index(self.store)
+        self._query_cache: "OrderedDict[str, List[float]]" = OrderedDict()
         self._segmenters: Dict[str, WindowSegmenter] = {}
         if async_index is None:
             # In-memory databases stay synchronous so tests and evals are
@@ -374,9 +376,10 @@ class Hippocampus:
         wanted = set(kinds) if kinds else None
         query_emotion = detect_emotion(query)
 
+        loaded = self.store.get_many(list(relevance.keys()))
         scored: List[Tuple[str, float, Engram, Dict[str, float]]] = []
         for engram_id, rel in relevance.items():
-            engram = self.store.get(engram_id)
+            engram = loaded.get(engram_id)
             if engram is None or engram.level >= self.max_level:
                 continue
             if wanted and engram.kind not in wanted:
@@ -876,7 +879,9 @@ class Hippocampus:
             and self._embedder is not None
             and query.strip()
         ):
-            vec = self._embedder.embed([query])[0]
+            vec = self._embed_text(query)
+            if vec is None:
+                return [], {}
             ann = self._vectors.search(self.scope, vec, k=limit, allowed=active)
             if ann:
                 rankings.append([doc_id for doc_id, _ in ann])
@@ -895,15 +900,27 @@ class Hippocampus:
         relevance = normalize(fused)
         return list(fused.keys()), relevance
 
+    def _embed_text(self, text: str) -> Optional[List[float]]:
+        if self._vectors is None or self._embedder is None or not text.strip():
+            return None
+        key = text.strip()
+        cached = self._query_cache.get(key)
+        if cached is not None:
+            self._query_cache.move_to_end(key)
+            return cached
+        vector = self._embedder.embed([text])[0]
+        self._query_cache[key] = vector
+        while len(self._query_cache) > self.profile.query_cache_size:
+            self._query_cache.popitem(last=False)
+        return vector
+
     def _embed_query(self, text: str) -> Optional[List[float]]:
         # With a background indexer we deliberately skip the synchronous query
         # embedding for merge detection. Merging falls back to token overlap;
         # retrieval still embeds the query because it cannot be deferred.
         if self._indexer is not None:
             return None
-        if self._vectors is None or self._embedder is None or not text.strip():
-            return None
-        return self._embedder.embed([text])[0]
+        return self._embed_text(text)
 
     def _index(self, engram: Engram, vec: Optional[List[float]] = None) -> None:
         if not self._auto_index or self._vectors is None or self._embedder is None:

@@ -59,13 +59,19 @@ class VectorIndex:
         if not items:
             return []
         if _np is not None and len(items) >= 64:
-            ids = list(items.keys())
-            matrix = _np.array([items[i] for i in ids], dtype="float32")
-            q = _np.array(list(query), dtype="float32")
+            ids, matrix = self._matrix_for(scope, items)
+            q = _np.array(list(query), dtype="float64")
             if matrix.shape[1] != q.shape[0]:
                 return []
-            norms = _np.linalg.norm(matrix, axis=1) * (_np.linalg.norm(q) or 1.0)
-            scores = (matrix @ q) / _np.maximum(norms, 1e-9)
+            q = _np.nan_to_num(q, nan=0.0, posinf=0.0, neginf=0.0)
+            with _np.errstate(all="ignore"):
+                q_norm = float(_np.linalg.norm(q))
+                if not _np.isfinite(q_norm) or q_norm <= 1e-12:
+                    return []
+                scores = matrix @ (q / q_norm)
+            scores = _np.nan_to_num(
+                scores, nan=-1.0, posinf=0.0, neginf=0.0
+            )
             pairs = list(zip(ids, scores.tolist()))
         else:
             pairs = [(i, cosine(query, v)) for i, v in items.items()]
@@ -82,6 +88,23 @@ class VectorIndex:
         else:
             self._cache.pop(scope, None)
             self._matrix.pop(scope, None)
+
+    def _matrix_for(self, scope: str, items: Dict[str, List[float]]):
+        cached = self._matrix.get(scope)
+        if cached is not None:
+            return cached
+        ids = list(items.keys())
+        matrix = _np.nan_to_num(
+            _np.array([items[i] for i in ids], dtype="float64"),
+            nan=0.0,
+            posinf=0.0,
+            neginf=0.0,
+        )
+        with _np.errstate(all="ignore"):
+            norms = _np.linalg.norm(matrix, axis=1, keepdims=True)
+            matrix = matrix / _np.maximum(norms, 1e-12)
+        self._matrix[scope] = (ids, matrix)
+        return ids, matrix
 
     def remove_scope(self, scope: str) -> None:
         for engram_id in list(self._cache.get(scope, {})):

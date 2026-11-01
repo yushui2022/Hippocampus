@@ -47,6 +47,7 @@ class Profile:
     fidelity_policy: str = "strict"
     # Hybrid retrieval candidate window (per route).
     candidate_limit: int = 50
+    query_cache_size: int = 128
 
     @property
     def max_level(self) -> int:

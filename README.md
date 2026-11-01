@@ -21,7 +21,7 @@ L4  archived      not volunteered, still reachable by keyword
 
 ## Status
 
-**v0.5.0 — v2 core complete.** Runnable, tested, benchmarked. Not yet wired to a channel.
+**v0.6.0 — v2 core complete.** Runnable, tested, benchmarked. Not yet wired to a channel.
 
 | | |
 |---|---|
@@ -394,6 +394,8 @@ tests/               invariants and behaviour
 
 - **P3** — IM adapter (AstrBot / NapCat), long-running HTTP service, real-log
   holdout set, multi-process write coordination.
+
+Performance details: [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md).
 
 See the design notes in `docs/` for the full plan.
 

@@ -15,10 +15,10 @@ from pathlib import Path
 from typing import List, Optional
 
 try:
-    from hippocampus import Event, HashingEmbedder, Hippocampus
+    from hippocampus import Event, HashingEmbedder, Hippocampus, LocalEmbedder
 except ImportError:  # pragma: no cover
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from hippocampus import Event, HashingEmbedder, Hippocampus
+    from hippocampus import Event, HashingEmbedder, Hippocampus, LocalEmbedder
 
 UTC = timezone.utc
 T0 = datetime(2026, 1, 1, tzinfo=UTC)
@@ -33,7 +33,12 @@ def _pct(values: List[float], p: float) -> float:
 
 
 def run(n: int = 1000, embedder_name: str = "hashing") -> dict:
-    embedder = HashingEmbedder() if embedder_name == "hashing" else None
+    if embedder_name == "hashing":
+        embedder = HashingEmbedder()
+    elif embedder_name == "local":
+        embedder = LocalEmbedder()
+    else:
+        embedder = None
     h = Hippocampus(scope="bench", path=":memory:", embedder=embedder)
     remember_ms: List[float] = []
     recall_ms: List[float] = []
@@ -72,7 +77,9 @@ def run(n: int = 1000, embedder_name: str = "hashing") -> dict:
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Hippocampus latency benchmark")
     parser.add_argument("--n", type=int, default=1000)
-    parser.add_argument("--embedder", choices=["hashing", "none"], default="hashing")
+    parser.add_argument(
+        "--embedder", choices=["hashing", "local", "none"], default="hashing"
+    )
     args = parser.parse_args(argv)
     result = run(n=args.n, embedder_name=args.embedder)
     for key, value in result.items():

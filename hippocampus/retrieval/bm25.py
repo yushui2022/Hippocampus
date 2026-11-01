@@ -19,18 +19,21 @@ class BM25Index:
         self.store = store
         self.k1 = k1
         self.b = b
-        self._cache: Dict[Tuple[str, int], Tuple[int, List[Tuple[str, int, Set[str]]], Dict[str, int], float]] = {}
+        self._cache: Dict[Tuple[str, int], Tuple[int, Dict[str, Tuple[int, Set[str]]], Dict[str, int], float, Dict[str, Set[str]]]] = {}
 
     def _build(self, scope: str, max_level: int):
         docs = self.store.token_docs(scope, max_level)
         lengths = [len(tokens) for _, tokens in docs]
         avg_len = (sum(lengths) / float(len(lengths))) if lengths else 1.0
         df: Dict[str, int] = {}
-        for _, tokens in docs:
+        doc_map: Dict[str, Tuple[int, Set[str]]] = {}
+        postings: Dict[str, Set[str]] = {}
+        for doc_id, tokens in docs:
+            doc_map[doc_id] = (len(tokens), tokens)
             for token in tokens:
                 df[token] = df.get(token, 0) + 1
-        rows = [(doc_id, len(tokens), tokens) for doc_id, tokens in docs]
-        return self.store.version, rows, df, avg_len
+                postings.setdefault(token, set()).add(doc_id)
+        return self.store.version, doc_map, df, avg_len, postings
 
     def _ensure(self, scope: str, max_level: int):
         key = (scope, max_level)
@@ -46,12 +49,18 @@ class BM25Index:
     ) -> List[Tuple[str, float]]:
         if not query:
             return []
-        _version, rows, df, avg_len = self._ensure(scope, max_level)
-        n_docs = len(rows)
+        _version, doc_map, df, avg_len, postings = self._ensure(scope, max_level)
+        n_docs = len(doc_map)
         if not n_docs:
             return []
+        candidates: Set[str] = set()
+        for token in query:
+            candidates.update(postings.get(token, ()))
+        if not candidates:
+            return []
         scored: List[Tuple[str, float]] = []
-        for doc_id, doc_len, tokens in rows:
+        for doc_id in candidates:
+            doc_len, tokens = doc_map[doc_id]
             score = bm25_score(
                 query,
                 tokens,
