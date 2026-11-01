@@ -21,11 +21,11 @@ from typing import Dict, List, Optional, Tuple
 
 try:  # running as a module
     from eval import synth
-    from hippocampus import Event, Hippocampus
+    from hippocampus import Event, HashingEmbedder, Hippocampus, OpenAIEmbedder
 except ImportError:  # running as a script
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from eval import synth
-    from hippocampus import Event, Hippocampus
+    from hippocampus import Event, HashingEmbedder, Hippocampus, OpenAIEmbedder
 
 UTC = timezone.utc
 
@@ -36,10 +36,12 @@ def run(
     budget: int = 6,
     profile: str = "companion",
     db: str = ":memory:",
+    embedder_name: str = "none",
 ) -> Dict[str, object]:
     turns, facts = synth.build(days=days, seed=seed)
 
-    hippo = Hippocampus(scope="eval", profile=profile, path=db)
+    embedder = _build_embedder(embedder_name)
+    hippo = Hippocampus(scope="eval", profile=profile, path=db, embedder=embedder)
 
     by_day: Dict[object, List[synth.Turn]] = {}
     for turn in turns:
@@ -116,6 +118,7 @@ def run(
             "seed": seed,
             "budget": budget,
             "profile": profile,
+            "embedder": embedder_name,
             "turns": len(turns),
             "engrams": hippo.count(),
         },
@@ -155,7 +158,7 @@ def report(result: Dict[str, object], stream=sys.stdout) -> None:
     out.append("")
     out.append("metric              value    target")
     out.append(
-        "recall@{} (clear)    {:.3f}    >= 0.85".format(
+        "recall@{} (clear)    {:.3f}    >= 0.90".format(
             cfg["budget"], m["recall_at_k"]
         )
     )
@@ -236,6 +239,23 @@ def _samples(hippo, facts, queries, now, budget):
     return out
 
 
+def _build_embedder(name: str):
+    if name == "hashing":
+        return HashingEmbedder()
+    if name == "openai":
+        import os
+
+        key = os.environ.get("HIPPO_EMBED_KEY") or os.environ.get("OPENAI_API_KEY")
+        if not key:
+            raise SystemExit("HIPPO_EMBED_KEY is not set")
+        return OpenAIEmbedder(
+            api_key=key,
+            model=os.environ.get("HIPPO_EMBED_MODEL", "BAAI/bge-m3"),
+            base_url=os.environ.get("HIPPO_EMBED_BASE", "https://api.siliconflow.cn/v1"),
+        )
+    return None
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="30-day memory replay benchmark")
     parser.add_argument("--days", type=int, default=30)
@@ -243,10 +263,15 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--budget", type=int, default=6)
     parser.add_argument("--profile", default="companion")
     parser.add_argument("--json", default="")
+    parser.add_argument("--embedder", choices=["none", "hashing", "openai"], default="none")
     args = parser.parse_args(argv)
 
     result = run(
-        days=args.days, seed=args.seed, budget=args.budget, profile=args.profile
+        days=args.days,
+        seed=args.seed,
+        budget=args.budget,
+        profile=args.profile,
+        embedder_name=args.embedder,
     )
     report(result)
     if args.json:

@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hippocampus-memory"
-version = "0.0.1"
-description = "A memory kernel that forgets like a human: importance decay, plasticity, and graded forgetting."
+version = "0.2.0"
+description = "A memory kernel that forgets like a human: graded forgetting, plasticity, hybrid recall, and sourced facts."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [{ name = "Orlando" }]
-keywords = ["memory", "llm", "agents", "forgetting", "fsrs"]
+keywords = ["memory", "llm", "agents", "forgetting", "fsrs", "rag"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -19,10 +19,17 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
+numpy = ["numpy>=1.23"]
+faiss = ["faiss-cpu>=1.7"]
 dev = ["pytest>=7"]
 
 [project.scripts]
 hippo-eval = "eval.replay_30d:main"
+hippo-bench = "eval.bench:main"
+hippo-paraphrase = "eval.paraphrase:main"
 
-[tool.setuptools]
-packages = ["hippocampus", "eval"]
+[tool.setuptools.packages.find]
+include = ["hippocampus*", "eval*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

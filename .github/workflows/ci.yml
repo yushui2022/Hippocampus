@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: python -m pip install -e .
+      - name: Unit tests
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Replay benchmark
+        run: python -m eval.replay_30d --days 30 --seed 7
+      - name: Paraphrase pipeline
+        run: python -m eval.paraphrase --embedder lexicon
+      - name: Latency smoke
+        run: python -m eval.bench --n 200

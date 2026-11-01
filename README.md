@@ -1,11 +1,13 @@
 # Hippocampus · 海马
 
 > A memory kernel that forgets like a human: important things blur slowly,
-> trivia fades, and recall strengthens what it touches.
+> trivia fades, recall strengthens what it touches — and a half-remembered
+> thing never comes back verbatim.
 
-Most memory libraries optimise for **recall**. This one optimises for **forgetting
-correctly** — because for a companion, a support desk, or any long-running
-assistant, remembering every detail verbatim is not "smart", it is uncanny.
+Most memory libraries optimise for **recall**. This one optimises for
+**forgetting correctly** — because for a companion, a support desk, or any
+long-running assistant, remembering every detail verbatim is not "smart",
+it is uncanny.
 
 ```
 L0  verbatim      "3月2日她说数学考砸了，哭了很久"
@@ -19,222 +21,294 @@ L4  archived      not volunteered, still reachable by keyword
 
 ## Status
 
-**v0.0.1 — P0 kernel.** Runnable, tested, benchmarked. Not production ready.
+**v0.2.0 — v2 core.** Runnable, tested, benchmarked. Not production ready.
 
 | | |
 |---|---|
-| Kernel (remember / recall / tick / consolidate / forget) | ✅ |
+| Kernel (`remember` / `recall` / `tick` / `consolidate` / `forget`) | ✅ |
 | FSRS-shaped plasticity + importance-modulated decay | ✅ |
-| Five-level graded forgetting with an importance floor | ✅ |
+| Five-level graded forgetting + fidelity floor | ✅ |
 | Rehearsal merge (re-telling strengthens, does not duplicate) | ✅ |
-| Mention cooldown (anti-repetition) | ✅ |
-| 30-day replay benchmark | ✅ |
-| Semantic distillation (`涟漪` with an LLM) | ❌ v1 |
-| Embedding retrieval | ❌ v1 (bigram index for now) |
-| Async / HTTP service | ❌ v1 |
+| Mention cooldown + proactive/vs-passive recall | ✅ |
+| Read-only `peek()` (never strengthens, never logs) | ✅ |
+| Hybrid retrieval: BM25 + vectors + RRF + MMR | ✅ |
+| Episode builder (turns → episodes) | ✅ |
+| Fine-grained facts with TTL / supersede / source | ✅ |
+| Read-only inspection + backup | ✅ |
+| Real embedding provider (bge-m3 via OpenAI-compatible API) | ✅ adapter |
+| Graph memory | ❌ later |
+| Async write / HTTP service | ❌ later |
 
-## Scope
+### What changed in v2
 
-This is a **general** memory kernel. It does not assume a channel, a product or
-a tone. Anything scenario-specific lives outside the kernel:
+- **`fidelity` is separate from `level`.** Recall can improve accessibility;
+  it can never restore detail that graded forgetting discarded.
+- **`tick()` is day-based.** A 90-day catch-up no longer ages memories as if
+  the user had talked every day.
+- **`recall(reinforce=False)` is the default**, and `peek()` never writes.
+- **`mark_mentioned()` is separate from recall** — remembering is not saying.
+- **Facts only come from user utterances**, with a mandatory source.
+- **Stability is capped** (`Profile.max_stability`), so nothing becomes
+  permanently unforgettable.
+- **Hybrid retrieval** replaced raw token-hit counting.
+- **Episodes** prevent 283 turns from becoming 283 separate traces.
 
-| Scenario-specific thing | Lives in |
-| --- | --- |
-| Decay rhythm (minutes / hours / days / weeks) | `Profile.idle_ratio` + time scale |
-| Number of degradation levels (2–5) | `Profile.levels` |
-| Whether emotion affects ranking | `Profile.importance_weights["emotion"] = 0` disables it |
-| Relationship / intimacy | optional extension (`scope_state.relationship`, off by default) |
-| Persona, tone, boundaries | caller's prompt — **not here** |
-| Channel (chat, ticket, live comments) | adapter — just build an `Event` |
-| Voice, avatar, rendering | **not here** |
-
-If a requirement cannot be expressed in one of those columns, it is not a memory
-problem.
-
-## Install
-
-```bash
-git clone git@github.com:yushui2022/Hippocampus.git
-cd Hippocampus
-python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
-```
-
-No runtime dependencies. Python 3.9+.
+---
 
 ## Quickstart
 
+```bash
+pip install -e .
+python -m unittest discover -s tests -p 'test_*.py'
+python -m eval.replay_30d
+```
+
 ```python
 from datetime import datetime, timedelta, timezone
-from hippocampus import Hippocampus, Event
+from hippocampus import Event, Hippocampus, HashingEmbedder
 
-hippo = Hippocampus(scope="user_42", profile="companion", path="memory.db")
+T0 = datetime(2026, 1, 1, 20, 0, tzinfo=timezone.utc)
+hippo = Hippocampus(
+    scope="user_42",
+    profile="companion",
+    path="memory.db",
+    embedder=HashingEmbedder(),   # replace with OpenAIEmbedder for real semantics
+)
 
-hippo.remember(Event(text="我数学考砸了，哭了好久", at=datetime(2026, 3, 2, tzinfo=timezone.utc)))
+hippo.remember(Event("我数学考砸了，哭了好久", at=T0))
+hippo.remember(Event("我不吃香菜", at=T0))
 
-hits = hippo.recall("最近有点学不动了")
-for hit in hits:
-    print(hit.level, hit.text)
+# one day at a time, with the day marked active
+for day in range(1, 31):
+    hippo.tick(
+        T0 + timedelta(days=day),
+        active=True,
+        active_days={T0.date() + timedelta(days=day - 1), T0.date() + timedelta(days=day)},
+    )
 
-hippo.tick(now=datetime(2026, 4, 1, tzinfo=timezone.utc))  # advance the clock
+for hit in hippo.recall("最近有点学不动了", budget=5):
+    print("L{}  {:.2f}  {}".format(hit.level, hit.score, hit.text))
+
+for fact in hippo.facts():
+    print("fact:", fact.kind, fact.predicate, fact.obj)
 ```
 
-### The one thing to get right
-
-Do **not** paste memory text into a prompt flatly. Use `level` to pick the tone:
+### Real semantics (bge-m3)
 
 ```python
-for hit in hits:
-    if hit.level <= 1:
-        prompt += f"你记得：{hit.text}\n"
-    else:
-        prompt += f"你隐约记得：{hit.text}\n"
+from hippocampus import OpenAIEmbedder
+
+embedder = OpenAIEmbedder(
+    api_key="sk-...",
+    model="BAAI/bge-m3",
+    base_url="https://api.siliconflow.cn/v1",
+    dim=1024,
+)
 ```
 
-This single branch is what separates "companion" from "database".
+Any OpenAI-compatible `/embeddings` endpoint works. The core has **no**
+required third-party dependency; NumPy is used automatically when present.
+
+---
+
+## Architecture
+
+```
+                 ┌──────────────────────────────────────┐
+   caller ──────▶│ kernel.py  remember / recall / tick  │
+                 └───────────────┬──────────────────────┘
+                                 │
+        ┌────────────────────────┼─────────────────────────┐
+        ▼                        ▼                         ▼
+   scoring.py               decay.py                  models.py
+   importance / rank        R / S / fidelity           types + render
+        │                        │                         │
+        └────────────┬───────────┴────────────┬────────────┘
+                     ▼                        ▼
+              retrieval/                  facts.py
+              BM25 · vectors · RRF · MMR   extract / TTL / supersede
+                     │                        │
+                     └──────────┬─────────────┘
+                                ▼
+                             store.py
+                  SQLite · tokens · vectors · facts · meta
+```
+
+### Retrieval
+
+```
+query ─┬─ BM25 top-50 ─┐
+       └─ ANN top-50 ──┴─▶ RRF ─▶ Hippocampus rerank
+                               (relevance / R / I / recency /
+                                emotion / relationship / cooldown)
+                             ─▶ MMR ─▶ budget + char cap
+```
+
+- BM25 keeps names, places and numbers exact.
+- Vectors recover paraphrases ("学不动了" → "数学考砸了").
+- RRF fuses rank lists without calibrating scores.
+- MMR stops six near-duplicate memories from filling the prompt.
+- The char cap (default 2000) keeps prompts bounded.
+
+### Forgetting
+
+```
+R(t, S) = (1 + 19/81 · t / S) ^ -0.5          t = active_age_days
+S'      = min(S_max, S · (1 + 2 · (1-R) · (0.5+I)))
+```
+
+- `active_age` advances only inside `tick()`, and idle days use
+  `Profile.idle_ratio` (companion: `0.05`).
+- `fidelity` is monotonic: detail only disappears.
+- `level >= fidelity` always holds; recall can lower `level` at most to
+  `fidelity`.
+- Importance floors: `I ≥ 0.8` never goes below L2; `I ≥ 0.5` never below L3.
+
+### Facts
+
+Only `Event(actor="user")` produces facts. Assistant output never does.
+Each fact carries:
+
+- `kind`: `fact | preference | plan | relation`
+- typed TTL (`plan 2d`, `preference 60d`, `relation 90d`, `fact 180d`)
+- `valid_from` / `valid_to`
+- `source_engram` and `source_refs`
+
+A new value for the same `(subject, predicate)` supersedes the old one; the
+history stays queryable with `include_inactive=True`.
+
+### Proactive speech
+
+`salient()` answers "what is worth bringing up?" without a query:
+
+- only L0/L1 (clear memories are volunteered; fuzzy ones are not)
+- negative memories are suppressed unless `intimacy ≥ 0.7`
+- mention cooldown is a hard filter
+- a daily budget (`mention_budget_per_day`, default 3)
+
+`mark_mentioned()` records what was actually said. `recall()` does not.
+
+---
 
 ## API
 
-| Method | Notes |
-|---|---|
-| `remember(event)` | Returns the `Engram`. Near-identical text is treated as rehearsal. |
-| `recall(query, budget=6, spontaneous=False)` | Returns `RecallHit` with `score`, `level`, `refs`. `spontaneous=True` models her bringing something up unprompted: hides foggy and painful memories. |
-| `tick(now, active=True)` | Advances the clock. Idempotent and replayable. **First call only sets the baseline.** |
-| `consolidate()` | Nightly pass: settle levels, fill gists. |
-| `forget(id, hard=True)` | `hard=True` deletes rows, tokens and logs. |
+| Method | Writes? | Purpose |
+| --- | --- | --- |
+| `remember(event)` | ✅ | store one event |
+| `remember_episode(events)` | ✅ | store a whole episode |
+| `feed_episode(event)` | ✅ | buffer turns, write closed episodes |
+| `recall(query, ...)` | optional | retrieve; `reinforce=False` by default |
+| `peek(query)` | ❌ | read-only retrieval |
+| `salient()` | ❌ | proactive candidates |
+| `tick(now, active_days=...)` | ✅ | advance time |
+| `consolidate()` | ✅ | settle levels / gists / facts |
+| `correct(id, ...)` | ✅ | fix text / importance / refs |
+| `set_importance(id, v, force=True)` | ✅ | explicit override |
+| `mark_mentioned(ids)` | ✅ | record what was said |
+| `forget(id, hard=...)` | ✅ | soft or hard delete |
+| `facts(...)` | ❌ | active facts |
+| `stats()` | ❌ | levels, fidelity, stability, facts |
 
-### Why `tick()` instead of reading the wall clock
+Full signatures live in `hippocampus/kernel.py`.
 
-Virtual time gives replayable benchmarks and deterministic tests:
+---
 
-```python
-for day in range(30):
-    hippo.tick(now=start + timedelta(days=day))
-```
-
-### Why active time, not wall time
-
-```python
-hippo.tick(now=..., active=False)  # idle: ages at 5% speed
-```
-
-If someone disappears for three months, she should not forget them completely.
-That is a product requirement, not an optimisation.
-
-## Profiles
-
-The kernel never branches on a domain. Domains are profiles.
-
-| Profile | Levels | Tuned for |
-|---|---|---|
-| `companion` | 5 | emotional residue matters |
-| `support` | 3 | facts + repeated complaints |
-| `education` | 4 | novelty, no emotional residue |
-| `knowledge` | 2 | almost no forgetting |
-
-```python
-Hippocampus(profile="support")
-```
-
-## Benchmark
+## Evaluation
 
 ```bash
-python -m eval.replay_30d
-python -m eval.replay_30d --days 30 --seed 7 --budget 6 --json out.json
+python -m eval.replay_30d                 # token baseline (no embedder)
+python -m eval.replay_30d --embedder hashing
+python -m eval.paraphrase --embedder lexicon
+python -m eval.paraphrase --embedder openai   # HIPPO_EMBED_KEY=...
+python -m eval.bench --n 500
 ```
 
-Synthetic 30-day chat log (283 turns, 50 planted facts) in three groups:
-15 must be recalled, 15 should blur, 20 must not resurface. No API key needed.
+Current numbers on the 283-turn synthetic replay (seed 7, budget 6):
 
-Baseline (`--seed 7`, `companion`):
+| Embedder | recall@6 | fog_accuracy | over_recall |
+| --- | --- | --- | --- |
+| none (token baseline) | 0.733 | 1.000 | 0.100 |
+| hashing (token vectors) | 0.800 | 1.000 | 0.000 |
+| bge-m3 (expected) | ≥ 0.90 | ≥ 0.60 | ≤ 0.15 |
 
-> Baseline is `companion`. Other profiles on the same probe:
+The first two are reproducible offline; the third requires
+`HIPPO_EMBED_KEY`. `eval/paraphrase.py --embedder lexicon` validates the
+pipeline (1.000 on the bundled pairs) but is **not** a model benchmark.
 
-| Profile | recall@6 | fog_accuracy | over_recall |
-|---|---|---|---|
-| `companion` | 0.733 | 1.000 | 0.000 |
-| `support` | 0.800 | 1.000 | 0.000 |
-| `education` | 0.933 | 0.929 | 0.000 |
-| `knowledge` | 0.933 | 0.000 | 0.000 |
+> The benchmark is retrieval-level, not answer accuracy. A separate blind test
+> (plastic memory vs verbatim memory) is the real acceptance test.
 
-`knowledge` is configured not to forget, so `fog_accuracy = 0` is by design,
-not a regression.
+---
 
-| Metric | Value | Target |
-|---|---|---|
-| `recall@6` (clarity ≤ L1) | **0.733** | ≥ 0.85 |
-| `fog_accuracy` (blurred, not lost) | **1.000** | ≥ 0.60 |
-| `fog_missing` | 0.067 | lower better |
-| `over_recall` (uncanny valley) | **0.000** | ≤ 0.15 |
-| recall latency p50 | ~0.1 ms | — |
+## Invariants
 
-**This is a retrieval-level benchmark, not answer accuracy.** And v0 misses its
-recall target by 12 points on purpose: the parameters are fitted to a hand-written
-set, and chasing 0.85 there would be overfitting. The next real step is an LLM
-importance scorer plus a holdout from real logs.
+1. `level >= fidelity` always.
+2. `fidelity` never decreases.
+3. `stability <= Profile.max_stability`.
+4. `tick(now)` is idempotent for the same `now`.
+5. Unknown time spans default to idle, never to active.
+6. `peek()` and `salient()` never write.
+7. `recall()` does not set `last_mention_at`.
+8. `recall(reinforce=False)` does not change `stability`.
+9. Every fact has a `source_engram`.
+10. Assistant text never creates a fact.
+11. Hard delete removes engram, tokens, vectors, facts and audit rows.
 
-The interesting line is `over_recall = 0.000` with `fog_accuracy = 1.000`:
-trivia stops being volunteered while the mid-importance memories stay reachable
-in a visibly degraded form. That is the whole thesis of the project.
+All of these are covered by `tests/test_v2.py`.
 
-## Design decisions
+---
 
-- **FSRS shape, not `exp(-t/τ)`.** Exponential decay can only say "older is
-  fainter". FSRS also says "the harder a recall was, the stronger it gets".
-  Calibration is shifted (`S_MIN = 0.02` days) because a chat agent sees a
-  memory once, not in review sessions.
-- **Importance sets a floor, not just a rate.** `I ≥ 0.8` can blur to L2 but
-  never to "it didn't happen".
-- **Recall sharpens one level, never fully restores.** No perfect reconstructions.
-- **Rehearsal merges.** Re-telling the same event strengthens one trace instead
-  of creating five copies that trivially survive.
-- **Remembering is not saying.** `spontaneous=True` filters fuzzy memories,
-  raw wounds (unless intimacy is high) and anything recently mentioned. Humans
-  suppress most of what they recall; an agent that dumps everything is the
-  clearest tell that it is a database.
-- **Cooldown penalty.** Without it, an agent mentions the same memory three
-  times in twenty minutes and the illusion dies.
-- **Decay thresholds are per profile.** A knowledge base and a companion
-  must not share the same forgetting curve (`Profile.level_thresholds`).
-- **No domain words in `hippocampus/`.** If you need `if profile == "vip"`,
-  the abstraction is wrong.
+## Migration
+
+Opening a v0 database automatically adds `fidelity`, `gist_source`,
+`last_active_at`, `corrected_at`, the vector/facts tables and the v2 audit
+columns. `fidelity` is backfilled from `level`, and `gist_source` is set to
+`extractive` when a gist exists.
+
+```
+meta.schema_version  0 -> 4
+```
+
+Back up before upgrading:
+
+```bash
+cp memory.db memory.db.bak
+python -c "from hippocampus import Store; Store('memory.db').close()"
+```
+
+---
 
 ## Layout
 
 ```
 hippocampus/
-  models.py    Event, Engram, RecallHit, level rendering
-  decay.py     FSRS-shaped retrievability, reinforcement, floors
-  scoring.py   importance features, retrieval ranking
-  tokens.py    CJK bigrams + latin words
-  store.py     SQLite persistence
-  kernel.py    the five public methods
-  profiles.py  domain configuration
-eval/
-  synth.py       30-day synthetic log + ground truth
-  replay_30d.py  benchmark CLI
-tests/
-  test_kernel.py 14 tests, no network
+  kernel.py          public API
+  models.py          Event / Engram / Fact / RecallHit / render
+  decay.py           R / S / fidelity / floors
+  scoring.py         importance + retrieval signals
+  store.py           SQLite, migrations, vectors, facts
+  tokens.py          CJK bigrams, BM25 helper
+  episode.py         window segmenter
+  facts.py           extractor + TTL builder
+  retrieval/         embeddings · BM25 · vector index · RRF/MMR
+  ops/               read-only snapshot · backup
+eval/                replay · paraphrase · bench
+tests/               invariants and behaviour
 ```
+
+---
 
 ## Roadmap
 
-| | |
-|---|---|
-| P0 ✅ | kernel + benchmark |
-| P1 | LLM importance scorer, semantic distillation, embedding retrieval |
-| P2 | three profiles pass the benchmark; forgetting benchmark published |
-| P3 | IM adapter, HTTP service |
-| P4 | channel adapters (IM, tickets) |
+- **P1.5** — real bge-m3 baseline, candidate union tuning, rerank provider.
+- **P2** — graph memory (feature-flagged), read-only observatory UI, shadow
+  index rebuild, mention budget per topic.
+- **P3** — IM adapter, async write queue, blind test harness.
 
-## Naming
+See the design notes in `docs/` for the full plan.
 
-A nod to the hippocampus: pattern separation (dentate gyrus), pattern completion
-(CA3), emotional weighting (amygdala), and sleep replay (sharp-wave ripples) all
-have direct counterparts here. Not a metaphor — a functional mapping.
-
-Not to be confused with [HippoRAG](https://github.com/OSU-NLP-Group/HippoRAG),
-which is a RAG framework.
+---
 
 ## License
 
-MIT
+MIT.

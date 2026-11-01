@@ -27,6 +27,20 @@ class Profile:
     # must not share the same curve.
     level_thresholds: Tuple[float, ...] = (0.75, 0.45, 0.22, 0.10)
 
+    # -- v2 --------------------------------------------------------------
+    # Stability is "difficulty of forgetting"; even the most important memory
+    # must be able to blur, so the growth is capped.
+    max_stability: float = 45.0
+    mmr_lambda: float = 0.7
+    max_chars: int = 2000
+    max_item_chars: int = 500
+    mention_budget_per_day: int = 3
+    negative_intimacy_threshold: float = 0.7
+    # "strict" forbids a recall from restoring detail beyond fidelity.
+    fidelity_policy: str = "strict"
+    # Hybrid retrieval candidate window (per route).
+    candidate_limit: int = 50
+
     @property
     def max_level(self) -> int:
         return self.levels - 1
