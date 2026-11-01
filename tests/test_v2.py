@@ -320,7 +320,7 @@ class TestRetrieval(unittest.TestCase):
         conn.commit()
         conn.close()
         store = Store(path)
-        self.assertEqual(store.schema_version(), 4)
+        self.assertEqual(store.schema_version(), 5)
         old = store.get("old1")
         self.assertEqual(old.fidelity, 2)
         self.assertEqual(old.gist_source, "none")
@@ -527,3 +527,122 @@ class TestRebuild(unittest.TestCase):
         self.assertTrue(new.recall("数学考砸了", now=at(2)))
         new.close()
         os.unlink(path)
+
+
+class TestTopicBudget(unittest.TestCase):
+    def test_same_topic_is_not_volunteered_twice(self):
+        h = make()
+        cat = h.remember(
+            Event("我养了一只猫叫团子", at=at(0), meta={"topics": ["猫"]}),
+            importance=0.8,
+        )
+        work = h.remember(
+            Event("我拿到 offer 了，下周入职", at=at(0), meta={"topics": ["工作"]}),
+            importance=0.8,
+        )
+        h.tick(at(0))
+        h.tick(at(1), active=True)
+        h.mark_mentioned([cat.engram_id], now=at(1))
+        hits = h.salient(now=at(1))
+        ids = [hit.engram.engram_id for hit in hits]
+        self.assertNotIn(cat.engram_id, ids)
+        self.assertIn(work.engram_id, ids)
+        # After the topic cooldown, it may surface again.
+        later = h.salient(now=at(1) + timedelta(hours=25))
+        self.assertIn(cat.engram_id, [hit.engram.engram_id for hit in later])
+
+
+class TestGraph(unittest.TestCase):
+    def test_graph_edges_are_optional(self):
+        off = make()
+        off.remember(Event("我养了一只猫叫团子", at=at(0)))
+        self.assertEqual(off.store.count_edges("test"), 0)
+
+        import dataclasses
+        from hippocampus import get_profile
+
+        profile = dataclasses.replace(get_profile("companion"), enable_graph=True)
+        on = Hippocampus(scope="test", profile=profile, path=":memory:")
+        e = on.remember(Event("我养了一只猫叫团子", at=at(0)))
+        self.assertGreaterEqual(on.store.count_edges("test"), 1)
+        ids = on.store.graph_candidates("test", {"猫"}, on.max_level)
+        self.assertIn(e.engram_id, ids)
+
+
+class TestShadowRebuild(unittest.TestCase):
+    def test_failed_shadow_rebuild_keeps_old_vectors(self):
+        path = tempfile.mktemp(suffix=".db")
+        old = Hippocampus(
+            scope="s", path=path, embedder=HashingEmbedder(dim=8), async_index=False
+        )
+        ids = [
+            old.remember(Event("我数学考砸了，哭了好久", at=at(0))).engram_id,
+            old.remember(Event("我养了一只猫叫团子", at=at(1))).engram_id,
+        ]
+        old.close()
+
+        class BrokenEmbedder:
+            model = "broken"
+            dim = 8
+
+            def embed(self, texts):
+                raise RuntimeError("provider down")
+
+        new = Hippocampus(
+            scope="s", path=path, embedder=BrokenEmbedder(), async_index=False
+        )
+        with self.assertRaises(RuntimeError):
+            new.rebuild_vectors()
+        self.assertEqual(new.store.vector_count("s"), 2)
+        self.assertEqual(new.store.vector_dim(ids[0]), 8)
+        new.close()
+        os.unlink(path)
+
+
+class TestObservatory(unittest.TestCase):
+    def test_read_only_http_surface(self):
+        import json
+        import threading
+        import urllib.request
+
+        from hippocampus.observatory import create_server
+
+        path = tempfile.mktemp(suffix=".db")
+        h = Hippocampus(scope="s", path=path)
+        h.remember(Event("我不吃香菜", at=at(0)))
+        h.close()
+
+        server = create_server(path, port=0)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        base = "http://127.0.0.1:{}".format(server.server_address[1])
+        try:
+            with urllib.request.urlopen(base + "/api/snapshot", timeout=5) as resp:
+                data = json.load(resp)
+            self.assertTrue(data["read_only"])
+            self.assertEqual(data["counts"]["engrams"], 1)
+            with urllib.request.urlopen(base + "/", timeout=5) as resp:
+                page = resp.read().decode("utf-8")
+            self.assertIn("只读", page)
+        finally:
+            server.shutdown()
+            server.server_close()
+            os.unlink(path)
+
+
+class TestBlindHarness(unittest.TestCase):
+    def test_vote_counting(self):
+        from eval.blind_test import run
+
+        pairs = [
+            {
+                "id": "remember:x",
+                "group": "remember",
+                "query": "你还记得吗",
+                "a": "模糊版本",
+                "b": "原文",
+                "a_first": True,
+            }
+        ]
+        self.assertEqual(run(pairs, lambda _p: "A")["plastic_win_rate"], 1.0)
+        self.assertEqual(run(pairs, lambda _p: "skip")["plastic_win_rate"], 0.0)

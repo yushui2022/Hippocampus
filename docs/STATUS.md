@@ -52,17 +52,19 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 - [x] async embedding indexer (`async_index=True`, drain on recall/close)
 - [x] importance/stability calibration (`importance_gain=14`, re-telling recovery)
 - [x] `eval.false_memory`
+- [x] topic-level mention budget (`topic_cooldown_hours=24`)
+- [x] shadow (zero-downtime) vector rebuild
+- [x] read-only observatory (`hippocampus.observatory`, HTTP + page)
+- [x] graph memory behind `Profile.enable_graph` (opt-in)
+- [x] blind A/B harness (`eval.blind_test`)
 - [x] README + `docs/INVARIANTS.md`
 
 ## Not done (next)
 
-- [ ] graph memory (`graph_nodes` / `graph_edges`) — feature-flagged, after facts
-- [ ] shadow (zero-downtime) index rebuild + progress reporting
-- [ ] observatory page (only the read-only snapshot API exists)
-- [ ] blind test harness (A/B plastic vs verbatim)
 - [ ] IM adapter (`AstrBot` / `NapCat`)
-- [ ] topic-level mention budget (currently global per day)
-- [ ] HTTP service / long-running daemon
+- [ ] long-running HTTP API service / daemon
+- [ ] real-log holdout set (current numbers are synthetic)
+- [ ] multi-process write coordination and auth
 
 ## Current numbers
 
@@ -81,6 +83,6 @@ Latency at 500 engrams, pure Python: remember p50 ≈ 10 ms, recall p50 ≈ 15 m
 
 ## Three next tasks (in order)
 
-1. Add topic-level mention budget and a 24h repetition test.
-2. Run the blind test (plastic vs verbatim) and record the result.
-3. Add the AstrBot / NapCat adapter so the kernel can run in QQ.
+1. Run the interactive blind test with a human judge and record the result.
+2. Add the AstrBot / NapCat adapter so the kernel can run in QQ.
+3. Add a long-running HTTP API and a real-log holdout set.

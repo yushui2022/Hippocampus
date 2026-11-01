@@ -1,5 +1,33 @@
 # Changelog
 
+## v0.5.0 — 2026-11-01
+
+The v2 architecture is complete. Schema v5.
+
+### Added
+
+- Topic-level mention budget: `topic_cooldown_hours=24`,
+  `topic_repeat_limit=1`; `recall_log.topic` records what was surfaced.
+- Shadow vector rebuild: `engram_vectors_shadow` plus an atomic swap;
+  `rebuild_vectors(shadow=True)` and `--no-shadow` on the CLI.
+- Read-only observatory: `python -m hippocampus.observatory --db ...`
+  with `/api/snapshot`, `/api/engrams`, `/api/facts` and a plain HTML page.
+- Opt-in graph memory: `Profile.enable_graph=True` writes
+  `(subject, predicate, object)` edges from user facts and adds a graph route
+  to the candidate union.
+- Blind A/B harness: `python -m eval.blind_test` (interactive) and
+  `--auto` for smoke tests.
+- `docs/ARCHITECTURE.md` with the module map and paths.
+
+### Changed
+
+- Migration target is now schema v5 (`recall_log.topic`, graph table,
+  shadow vector table).
+- `stats()` exposes graph edge count.
+- `ops` exports `list_engrams` / `list_facts` for the observatory.
+
+46 unittest cases.
+
 ## v0.4.0 — 2026-11-01
 
 Non-blocking writes.

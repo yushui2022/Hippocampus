@@ -49,6 +49,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--dim", type=int, default=0)
     parser.add_argument("--api-key", default="")
     parser.add_argument("--batch-size", type=int, default=16)
+    parser.add_argument("--no-shadow", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
 
@@ -72,6 +73,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             result = hippo.rebuild_vectors(
                 scope=scope,
                 batch_size=args.batch_size,
+                shadow=not args.no_shadow,
                 progress=lambda done, total: print(
                     "\r  {}: {}/{}".format(scope, done, total), end="", flush=True
                 ),

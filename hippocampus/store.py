@@ -16,10 +16,10 @@ from array import array
 from datetime import datetime, timezone
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
-from .models import Engram, Fact
+from .models import Engram, Fact, new_id
 from .tokens import jaccard
 
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS engrams (
@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS recall_log (
     scope       TEXT NOT NULL,
     engram_id   TEXT NOT NULL,
     query       TEXT,
+    topic       TEXT,
     spontaneous INTEGER NOT NULL DEFAULT 0,
     surfaced    INTEGER NOT NULL DEFAULT 0,
     level       INTEGER,
@@ -72,6 +73,21 @@ CREATE TABLE IF NOT EXISTS engram_vectors (
     model     TEXT NOT NULL,
     dim       INTEGER NOT NULL,
     vec       BLOB NOT NULL
+);
+CREATE TABLE IF NOT EXISTS engram_vectors_shadow (
+    engram_id TEXT PRIMARY KEY,
+    model     TEXT NOT NULL,
+    dim       INTEGER NOT NULL,
+    vec       BLOB NOT NULL
+);
+CREATE TABLE IF NOT EXISTS graph_edges (
+    edge_id       TEXT PRIMARY KEY,
+    scope         TEXT NOT NULL,
+    subject       TEXT NOT NULL,
+    predicate     TEXT NOT NULL,
+    object        TEXT NOT NULL,
+    source_engram TEXT NOT NULL,
+    created_at    TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS facts (
     fact_id       TEXT PRIMARY KEY,
@@ -103,6 +119,10 @@ CREATE INDEX IF NOT EXISTS idx_tokens_token ON engram_tokens(token);
 CREATE INDEX IF NOT EXISTS idx_recall_scope ON recall_log(scope, at);
 CREATE INDEX IF NOT EXISTS idx_facts_scope ON facts(scope, status, kind);
 CREATE INDEX IF NOT EXISTS idx_facts_exp ON facts(expires_at);
+CREATE INDEX IF NOT EXISTS idx_graph_subject ON graph_edges(scope, subject);
+CREATE INDEX IF NOT EXISTS idx_graph_object ON graph_edges(scope, object);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_graph_unique
+    ON graph_edges(scope, subject, predicate, object, source_engram);
 CREATE INDEX IF NOT EXISTS idx_vec_model ON engram_vectors(model);
 """
 
@@ -114,6 +134,7 @@ _ENGRAM_COLUMNS_V2 = {
 }
 
 _RECALL_COLUMNS_V2 = {
+    "topic": "TEXT",
     "spontaneous": "INTEGER NOT NULL DEFAULT 0",
     "surfaced": "INTEGER NOT NULL DEFAULT 0",
     "level": "INTEGER",
@@ -306,12 +327,18 @@ class Store:
             self._conn.execute(
                 "DELETE FROM facts WHERE source_engram=?", (engram_id,)
             )
+            self._conn.execute(
+                "DELETE FROM graph_edges WHERE source_engram=?", (engram_id,)
+            )
         self._bump()
 
     def delete_facts_for_engram(self, engram_id: str) -> None:
         with self._conn:
             self._conn.execute(
                 "DELETE FROM facts WHERE source_engram=?", (engram_id,)
+            )
+            self._conn.execute(
+                "DELETE FROM graph_edges WHERE source_engram=?", (engram_id,)
             )
 
     def mark_mentioned(self, engram_ids: Iterable[str], at: datetime) -> None:
@@ -445,6 +472,42 @@ class Store:
                 (engram_id, model, int(dim), blob),
             )
 
+    def begin_shadow_vectors(self) -> None:
+        with self._conn:
+            self._conn.execute("DELETE FROM engram_vectors_shadow")
+
+    def upsert_shadow_vector(
+        self, engram_id: str, model: str, dim: int, vec: Sequence[float]
+    ) -> None:
+        blob = array("f", [float(x) for x in vec]).tobytes()
+        with self._conn:
+            self._conn.execute(
+                """INSERT INTO engram_vectors_shadow (engram_id, model, dim, vec)
+                   VALUES (?,?,?,?)
+                   ON CONFLICT(engram_id) DO UPDATE SET
+                     model=excluded.model, dim=excluded.dim, vec=excluded.vec""",
+                (engram_id, model, int(dim), blob),
+            )
+
+    def commit_shadow_vectors(self) -> int:
+        with self._conn:
+            row = self._conn.execute(
+                "SELECT COUNT(*) FROM engram_vectors_shadow"
+            ).fetchone()
+            count = int(row[0])
+            self._conn.execute("DELETE FROM engram_vectors")
+            self._conn.execute(
+                "INSERT INTO engram_vectors (engram_id, model, dim, vec) "
+                "SELECT engram_id, model, dim, vec FROM engram_vectors_shadow"
+            )
+            self._conn.execute("DELETE FROM engram_vectors_shadow")
+        self._bump()
+        return count
+
+    def drop_shadow_vectors(self) -> None:
+        with self._conn:
+            self._conn.execute("DELETE FROM engram_vectors_shadow")
+
     def get_vector(self, engram_id: str) -> Optional[List[float]]:
         row = self._conn.execute(
             "SELECT dim, vec FROM engram_vectors WHERE engram_id=?", (engram_id,)
@@ -502,6 +565,53 @@ class Store:
                    JOIN engrams e ON e.engram_id=v.engram_id WHERE e.scope=?""",
                 (scope,),
             ).fetchone()
+        return int(row[0])
+
+    # -- graph ---------------------------------------------------------------
+    def insert_edge(
+        self,
+        scope: str,
+        subject: str,
+        predicate: str,
+        obj: str,
+        source_engram: str,
+        at: datetime,
+    ) -> None:
+        if not subject.strip() or not obj.strip():
+            return
+        with self._conn:
+            self._conn.execute(
+                """INSERT OR IGNORE INTO graph_edges
+                   (edge_id, scope, subject, predicate, object, source_engram, created_at)
+                   VALUES (?,?,?,?,?,?,?)""",
+                (new_id("edge"), scope, subject, predicate, obj, source_engram, _dt(at)),
+            )
+
+    def graph_candidates(
+        self, scope: str, terms: Iterable[str], max_level: int, limit: int = 30
+    ) -> List[str]:
+        cleaned = [t for t in terms if t]
+        if not cleaned:
+            return []
+        clauses = []
+        params: List[object] = [scope, max_level]
+        for term in cleaned[:12]:
+            clauses.append("(g.subject LIKE ? OR g.object LIKE ?)")
+            params.append("%" + term + "%")
+            params.append("%" + term + "%")
+        params.append(limit)
+        sql = """
+            SELECT DISTINCT g.source_engram
+            FROM graph_edges g JOIN engrams e ON e.engram_id = g.source_engram
+            WHERE g.scope = ? AND e.level < ? AND ({})
+            LIMIT ?
+        """.format(" OR ".join(clauses))
+        return [r["source_engram"] for r in self._conn.execute(sql, params).fetchall()]
+
+    def count_edges(self, scope: str) -> int:
+        row = self._conn.execute(
+            "SELECT COUNT(*) FROM graph_edges WHERE scope=?", (scope,)
+        ).fetchone()
         return int(row[0])
 
     # -- facts ---------------------------------------------------------------
@@ -626,6 +736,7 @@ class Store:
         query: str,
         at: datetime,
         *,
+        topic: str = "",
         spontaneous: bool = False,
         surfaced: bool = False,
         level: Optional[int] = None,
@@ -634,12 +745,13 @@ class Store:
         with self._conn:
             self._conn.execute(
                 """INSERT INTO recall_log
-                   (scope, engram_id, query, spontaneous, surfaced, level, score, at)
-                   VALUES (?,?,?,?,?,?,?,?)""",
+                   (scope, engram_id, query, topic, spontaneous, surfaced, level, score, at)
+                   VALUES (?,?,?,?,?,?,?,?,?)""",
                 (
                     scope,
                     engram_id,
                     query,
+                    topic,
                     int(bool(spontaneous)),
                     int(bool(surfaced)),
                     level,
@@ -664,6 +776,18 @@ class Store:
             "spontaneous": int(row["spontaneous"] or 0),
             "surfaced": int(row["surfaced"] or 0),
         }
+
+    def topic_mentioned_since(
+        self, scope: str, topic: str, since: datetime
+    ) -> int:
+        if not topic:
+            return 0
+        row = self._conn.execute(
+            "SELECT COUNT(*) FROM recall_log "
+            "WHERE scope=? AND surfaced=1 AND topic=? AND at >= ?",
+            (scope, topic, _dt(since)),
+        ).fetchone()
+        return int(row[0] or 0)
 
     def mentioned_today(self, scope: str, at: datetime) -> int:
         start = at.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -699,12 +823,14 @@ class Store:
             self._conn.execute("SELECT COUNT(*) FROM engram_vectors").fetchone()[0]
         )
         facts = int(self._conn.execute("SELECT COUNT(*) FROM facts").fetchone()[0])
+        edges = int(self._conn.execute("SELECT COUNT(*) FROM graph_edges").fetchone()[0])
         return {
             "engrams": engrams,
             "with_tokens": with_tokens,
             "missing_tokens": max(0, engrams - with_tokens),
             "vectors": vectors,
             "facts": facts,
+            "edges": edges,
         }
 
     def backup(self, destination: str) -> None:

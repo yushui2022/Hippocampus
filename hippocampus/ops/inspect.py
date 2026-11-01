@@ -69,3 +69,63 @@ def snapshot(path: str, scope: Optional[str] = None, limit: int = 10) -> Dict[st
         }
     finally:
         conn.close()
+
+
+def _connect(path: str) -> sqlite3.Connection:
+    uri = Path(path).expanduser().resolve().as_uri() + "?mode=ro"
+    conn = sqlite3.connect(uri, uri=True, timeout=5.0)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA query_only=ON")
+    return conn
+
+
+def list_engrams(
+    path: str,
+    scope: Optional[str] = None,
+    limit: int = 100,
+    offset: int = 0,
+) -> List[Dict[str, Any]]:
+    conn = _connect(path)
+    try:
+        sql = (
+            "SELECT engram_id, scope, kind, level, fidelity, importance, stability, "
+            "active_age_days, recall_count, substr(raw_text, 1, 240) AS text, "
+            "last_mention_at, created_at FROM engrams"
+        )
+        params: List[Any] = []
+        if scope:
+            sql += " WHERE scope=?"
+            params.append(scope)
+        sql += " ORDER BY created_at DESC LIMIT ? OFFSET ?"
+        params.extend([max(1, int(limit)), max(0, int(offset))])
+        return [dict(row) for row in conn.execute(sql, params).fetchall()]
+    finally:
+        conn.close()
+
+
+def list_facts(
+    path: str,
+    scope: Optional[str] = None,
+    limit: int = 100,
+    include_inactive: bool = True,
+) -> List[Dict[str, Any]]:
+    conn = _connect(path)
+    try:
+        sql = (
+            "SELECT fact_id, scope, kind, status, subject, predicate, obj, "
+            "confidence, ttl_days, expires_at, source_engram, text FROM facts"
+        )
+        clauses: List[str] = []
+        params: List[Any] = []
+        if scope:
+            clauses.append("scope=?")
+            params.append(scope)
+        if not include_inactive:
+            clauses.append("status='active'")
+        if clauses:
+            sql += " WHERE " + " AND ".join(clauses)
+        sql += " ORDER BY created_at DESC LIMIT ?"
+        params.append(max(1, int(limit)))
+        return [dict(row) for row in conn.execute(sql, params).fetchall()]
+    finally:
+        conn.close()

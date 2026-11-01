@@ -21,7 +21,7 @@ L4  archived      not volunteered, still reachable by keyword
 
 ## Status
 
-**v0.2.0 — v2 core.** Runnable, tested, benchmarked. Not production ready.
+**v0.5.0 — v2 core complete.** Runnable, tested, benchmarked. Not yet wired to a channel.
 
 | | |
 |---|---|
@@ -36,10 +36,15 @@ L4  archived      not volunteered, still reachable by keyword
 | Episode builder (turns → episodes) | ✅ |
 | Fine-grained facts with TTL / supersede / source | ✅ |
 | Read-only inspection + backup | ✅ |
-| Real embedding provider (bge-m3 via OpenAI-compatible API) | ✅ adapter |
-| Graph memory | ❌ later |
+| Real embedding provider (local bge-m3 / OpenAI-compatible) | ✅ |
 | Async embedding writes | ✅ |
-| HTTP service | ❌ later |
+| Topic-level mention budget | ✅ |
+| Shadow (zero-downtime) vector rebuild | ✅ |
+| Read-only observatory (HTTP + page) | ✅ |
+| Graph memory (opt-in) | ✅ flag |
+| Blind A/B harness | ✅ harness |
+| IM adapter (AstrBot / NapCat) | ❌ P3 |
+| Long-running HTTP API service | ❌ P3 |
 
 ### What changed in v2
 
@@ -223,6 +228,40 @@ async, because the query vector would require a blocking call.
 
 `mark_mentioned()` records what was actually said. `recall()` does not.
 
+A **topic budget** sits on top of the daily budget: if a memory's topic (from
+the summarizer, or `meta["topics"]`, or its fact key) was already surfaced in
+the last `topic_cooldown_hours` (default 24h), `salient()` skips it. This stops
+"she brings up the same thing three times" even when the daily budget allows it.
+
+### Graph (opt-in)
+
+Set `enable_graph=True` on a profile to store `(subject, predicate, object)`
+edges from user facts and add a graph route to the candidate union. The route
+matches entity terms with `LIKE` and is fused through the same RRF stage. It is
+off by default: facts must be stable before graph noise is worth it.
+
+### Observatory
+
+```bash
+python -m hippocampus.observatory --db memory.db --port 8765
+```
+
+A stdlib HTTP server with `/api/snapshot`, `/api/engrams`, `/api/facts` and a
+plain table page. Every request opens SQLite with `mode=ro` + `query_only`; it
+never calls `recall()` or `mark_mentioned()`, so browsing cannot change memory.
+It binds `127.0.0.1` by default.
+
+### Blind A/B
+
+```bash
+python -m eval.blind_test          # interactive
+python -m eval.blind_test --auto A # smoke test
+```
+
+The judge sees one question and two "what she remembers" snippets in random
+order: plastic memory (A) vs verbatim memory (B). Target: A wins > 60%. The
+harness only reports votes; it does not call an LLM judge.
+
 ---
 
 ## API
@@ -257,6 +296,7 @@ python -m eval.paraphrase --embedder lexicon
 python -m eval.paraphrase --embedder openai   # HIPPO_EMBED_KEY=...
 python -m eval.bench --n 500
 python -m eval.false_memory
+python -m eval.blind_test --auto A
 ```
 
 Current numbers on the 283-turn synthetic replay (seed 7, budget 6):
@@ -305,7 +345,7 @@ columns. `fidelity` is backfilled from `level`, and `gist_source` is set to
 `extractive` when a gist exists.
 
 ```
-meta.schema_version  0 -> 4
+meta.schema_version  0 -> 5
 ```
 
 Back up before upgrading:
@@ -320,6 +360,10 @@ After changing the embedding model, rebuild vectors:
 ```bash
 python -m hippocampus.rebuild --db memory.db --provider local
 ```
+
+Rebuilds are shadowed by default: new vectors are written to a side table and
+swapped in atomically. The old index keeps serving recalls until the swap; a
+failed rebuild leaves it untouched. Use `--no-shadow` for the in-place path.
 
 ---
 
@@ -336,9 +380,11 @@ hippocampus/
   episode.py         window segmenter
   facts.py           extractor + TTL builder
   indexer.py         async embedding worker
+  observatory.py     read-only HTTP page/API
+  rebuild.py         vector rebuild CLI
   retrieval/         embeddings · BM25 · vector index · RRF/MMR
-  ops/               read-only snapshot · backup
-eval/                replay · paraphrase · bench
+  ops/               read-only snapshot/list · backup
+eval/                replay · paraphrase · bench · false_memory · blind_test
 tests/               invariants and behaviour
 ```
 
@@ -346,10 +392,8 @@ tests/               invariants and behaviour
 
 ## Roadmap
 
-- **P1.5** — real bge-m3 baseline, candidate union tuning, rerank provider.
-- **P2** — graph memory (feature-flagged), read-only observatory UI, shadow
-  index rebuild, mention budget per topic.
-- **P3** — IM adapter, HTTP service, blind test harness.
+- **P3** — IM adapter (AstrBot / NapCat), long-running HTTP service, real-log
+  holdout set, multi-process write coordination.
 
 See the design notes in `docs/` for the full plan.
 

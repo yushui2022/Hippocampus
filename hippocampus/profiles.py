@@ -39,6 +39,9 @@ class Profile:
     max_chars: int = 2000
     max_item_chars: int = 500
     mention_budget_per_day: int = 3
+    topic_cooldown_hours: float = 24.0
+    topic_repeat_limit: int = 1
+    enable_graph: bool = False
     negative_intimacy_threshold: float = 0.7
     # "strict" forbids a recall from restoring detail beyond fidelity.
     fidelity_policy: str = "strict"

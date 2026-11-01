@@ -22,5 +22,11 @@ local-eval:
 rebuild-local:
 	python -m hippocampus.rebuild --db $${DB:-memory.db} --provider local
 
+observe:
+	python -m hippocampus.observatory --db $${DB:-memory.db}
+
+blind:
+	python -m eval.blind_test
+
 clean:
 	rm -rf __pycache__ */__pycache__ */*/__pycache__ .pytest_cache

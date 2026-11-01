@@ -471,11 +471,17 @@ class Hippocampus:
             return []
         budget = min(budget, remaining)
 
+        topic_since = at - timedelta(hours=self.profile.topic_cooldown_hours)
         scored: List[Tuple[str, float, Engram]] = []
         for engram in self.store.list(self.scope):
             if engram.level >= self.max_level or engram.level > 1:
                 continue
             if not self._may_speak(engram, at):
+                continue
+            topic = self._topic(engram)
+            if topic and self.store.topic_mentioned_since(
+                self.scope, topic, topic_since
+            ) >= self.profile.topic_repeat_limit:
                 continue
             r = decay.retrievability(engram.active_age_days, engram.stability)
             age = engram.age_days(at)
@@ -659,6 +665,7 @@ class Hippocampus:
                     engram_id,
                     "",
                     at,
+                    topic=self._topic(engram),
                     surfaced=True,
                     level=engram.level,
                 )
@@ -718,6 +725,15 @@ class Hippocampus:
         if fact is None:
             return None
         self._insert_fact_with_conflicts(fact)
+        if self.profile.enable_graph:
+            self.store.insert_edge(
+                self.scope,
+                fact.subject,
+                fact.predicate,
+                fact.obj,
+                source_engram,
+                self.now(),
+            )
         return fact
 
     # -- index maintenance ---------------------------------------------------
@@ -727,11 +743,13 @@ class Hippocampus:
         scope: Optional[str] = None,
         batch_size: int = 16,
         progress: Optional[Callable[[int, int], None]] = None,
+        shadow: bool = True,
     ) -> Dict[str, Any]:
-        """Drop and recompute vectors for a scope.
+        """Recompute vectors for a scope.
 
-        Required after changing the embedding model: vectors from different
-        models are not comparable even when the dimension matches.
+        With ``shadow=True`` the new vectors are built in a side table and
+        swapped in atomically, so recall keeps using the old index until the
+        rebuild succeeds. Required after changing the embedding model.
         """
         if self._embedder is None or self._vectors is None:
             raise ValueError("rebuild_vectors needs an embedder")
@@ -742,23 +760,45 @@ class Hippocampus:
         all_engrams = self.store.list(target)
         engrams = [e for e in all_engrams if e.raw_text.strip()]
         total = len(engrams)
-        self.store.clear_vectors(target)
-        self._vectors.invalidate(target)
+
+        if shadow:
+            self.store.begin_shadow_vectors()
+        else:
+            self.store.clear_vectors(target)
+            self._vectors.invalidate(target)
 
         done = 0
         step = max(1, int(batch_size))
-        for start in range(0, total, step):
-            batch = engrams[start : start + step]
-            vectors = self._embedder.embed([e.raw_text for e in batch])
-            if len(vectors) != len(batch):
-                raise RuntimeError("embedder returned {} vectors for {} texts".format(
-                    len(vectors), len(batch)
-                ))
-            for engram, vector in zip(batch, vectors):
-                self._vectors.upsert(target, engram.engram_id, vector)
-            done += len(batch)
-            if progress is not None:
-                progress(done, total)
+        try:
+            for start in range(0, total, step):
+                batch = engrams[start : start + step]
+                vectors = self._embedder.embed([e.raw_text for e in batch])
+                if len(vectors) != len(batch):
+                    raise RuntimeError(
+                        "embedder returned {} vectors for {} texts".format(
+                            len(vectors), len(batch)
+                        )
+                    )
+                for engram, vector in zip(batch, vectors):
+                    if shadow:
+                        self.store.upsert_shadow_vector(
+                            engram.engram_id,
+                            self._embedder.model,
+                            self._embedder.dim,
+                            vector,
+                        )
+                    else:
+                        self._vectors.upsert(target, engram.engram_id, vector)
+                done += len(batch)
+                if progress is not None:
+                    progress(done, total)
+            if shadow:
+                self.store.commit_shadow_vectors()
+                self._vectors.invalidate(target)
+        except Exception:
+            if shadow:
+                self.store.drop_shadow_vectors()
+            raise
 
         fingerprint = self._vectors.fingerprint()
         self.store.set_meta("embedder_fingerprint", fingerprint)
@@ -772,6 +812,7 @@ class Hippocampus:
             "model": self._embedder.model,
             "dim": self._embedder.dim,
             "fingerprint": fingerprint,
+            "shadow": shadow,
         }
 
     # -- introspection -------------------------------------------------------
@@ -811,6 +852,7 @@ class Hippocampus:
             if stability
             else 0.0,
             "facts": self.store.count_facts(self.scope),
+            "edges": self.store.count_edges(self.scope),
             "recall": self.store.recall_stats(self.scope),
             "index_pending": self._indexer.pending if self._indexer else 0,
             "index_dropped": self._indexer.dropped if self._indexer else 0,
@@ -838,6 +880,13 @@ class Hippocampus:
             ann = self._vectors.search(self.scope, vec, k=limit, allowed=active)
             if ann:
                 rankings.append([doc_id for doc_id, _ in ann])
+
+        if self.profile.enable_graph:
+            graph_ids = self.store.graph_candidates(
+                self.scope, query_tokens, self.max_level, limit
+            )
+            if graph_ids:
+                rankings.append(graph_ids)
 
         fused = rrf(rankings, k=60)
         if not fused:
@@ -950,6 +999,14 @@ class Hippocampus:
             return False
         return self._cooldown(engram, at) <= 0
 
+    def _topic(self, engram: Engram) -> str:
+        topics = engram.meta.get("topics") or []
+        if isinstance(topics, str):
+            topics = [topics]
+        if topics:
+            return str(topics[0])
+        return str(engram.meta.get("topic") or engram.meta.get("fact") or "")
+
     def _intimacy(self) -> float:
         rel = self._state.get("relationship", {}) or {}
         try:
@@ -982,6 +1039,8 @@ class Hippocampus:
                 engram.gist_source = "llm"
             if summary.emotion:
                 engram.emotion = summary.emotion
+            if summary.topics:
+                engram.meta["topics"] = list(summary.topics)[:6]
             engram.importance = max(engram.importance, _clamp(summary.importance))
         elif isinstance(summary, str) and summary.strip():
             engram.gist = summary.strip()
@@ -1011,6 +1070,15 @@ class Hippocampus:
             )
             if fact is not None:
                 self._insert_fact_with_conflicts(fact)
+                if self.profile.enable_graph:
+                    self.store.insert_edge(
+                        self.scope,
+                        fact.subject,
+                        fact.predicate,
+                        fact.obj,
+                        engram.engram_id,
+                        at,
+                    )
 
     def _insert_fact_with_conflicts(self, fact: Fact) -> None:
         conflicts = self.store.find_conflicting_facts(
