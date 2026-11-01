@@ -1,5 +1,41 @@
 # Changelog
 
+## v0.3.0 — 2026-11-01
+
+Local embeddings, measured calibration, and model-change support.
+
+### Added
+
+- `LocalEmbedder`: Ollama bge-m3 at `http://127.0.0.1:11434/v1` (1024d).
+- `Hippocampus.rebuild_vectors()` and `python -m hippocampus.rebuild` CLI
+  (`--provider local|openai|hashing`, `--dry-run`, batch progress).
+- `Store.clear_vectors`, `distinct_scopes`, `vector_dim`.
+- `docs/LOCAL_EMBEDDING.md`, `examples/local_embedding.py`,
+  `make local-demo`, `make local-eval`, `make rebuild-local`.
+
+### Changed
+
+- `importance_gain` is a Profile field, default **14** (was 11). On the
+  283-turn replay, `recall@6` moved 0.733 → 0.933 (token) and 1.000 with
+  local bge-m3.
+- An explicit re-telling now recovers **one level** of fidelity: it is new
+  evidence, not recall. Recall itself still cannot restore detail.
+- Cosine merge uses `embedding_merge_threshold=0.95`; token merge stays 0.85.
+- Companion retrieval weights moved to relevance 0.50 / R 0.15 / I 0.15 /
+  recency 0.05 / relationship 0.10 / emotion 0.05.
+
+### Measured (local bge-m3, Apple Silicon)
+
+| Metric | Token | bge-m3 |
+| --- | --- | --- |
+| `recall@6 (clear)` | 0.933 | 1.000 |
+| `fog_missing` | 0.000 | 0.000 |
+| `over_recall` | 0.100 | 0.100 |
+| `para_recall@6` | 0.600 (hashing) | 1.000 |
+| recall p50 | 0.4 ms | 18.6 ms |
+
+39 unittest cases.
+
 ## v0.2.0 — 2026-11-01
 
 The v2 core: fix the invariants first, then add retrieval, episodes and facts.
@@ -28,6 +64,10 @@ The v2 core: fix the invariants first, then add retrieval, episodes and facts.
 
 ### Added
 
+- `rebuild_vectors()` and `python -m hippocampus.rebuild` for model changes.
+- Companion importance calibration: `importance_gain = 14`.
+- One-level fidelity recovery on an explicit re-telling (new evidence, not recall).
+- Stricter cosine merge threshold (`embedding_merge_threshold = 0.95`).
 - Hybrid retrieval: BM25 + vector search + RRF + MMR + character budget.
 - `HashingEmbedder` (zero-dependency, deterministic), `LocalEmbedder`
   (Ollama bge-m3) and `OpenAIEmbedder` (any OpenAI-compatible endpoint).
@@ -43,7 +83,7 @@ The v2 core: fix the invariants first, then add retrieval, episodes and facts.
 - `ops.snapshot()` read-only inspection and `ops.backup_database()`.
 - Schema versioning and idempotent migration from v0 (`schema_version` 0 → 4).
 - `eval.bench`, `eval.paraphrase`, `eval.false_memory`, `--embedder` option on `eval.replay_30d`.
-- 37 unittest cases covering the invariants.
+- 39 unittest cases covering the invariants.
 
 ### Changed
 

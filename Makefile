@@ -19,5 +19,8 @@ local-eval:
 	HIPPO_EMBED_BASE=http://127.0.0.1:11434/v1 HIPPO_EMBED_KEY=ollama HIPPO_EMBED_MODEL=bge-m3 \
 		python -m eval.replay_30d --embedder openai
 
+rebuild-local:
+	python -m hippocampus.rebuild --db $${DB:-memory.db} --provider local
+
 clean:
 	rm -rf __pycache__ */__pycache__ */*/__pycache__ .pytest_cache

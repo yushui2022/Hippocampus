@@ -154,7 +154,7 @@ class TestInvariants(unittest.TestCase):
     def test_l1_recall_does_not_restore_raw(self):
         h = make()
         raw = "我数学考砸了，哭了好久，觉得自己特别没用"
-        e = h.remember(Event(raw, at=at(0)), importance=0.6)
+        e = h.remember(Event(raw, at=at(0)), importance=0.45)
         tick_days(h, 120)
         before = h.store.get(e.engram_id)
         self.assertEqual(before.fidelity, 1)
@@ -194,12 +194,24 @@ class TestInvariants(unittest.TestCase):
     def test_gist_source_is_honest(self):
         h = make()
         raw = "我数学考砸了，哭了好久，觉得自己特别没用"
-        e = h.remember(Event(raw, at=at(0)), importance=0.6)
+        e = h.remember(Event(raw, at=at(0)), importance=0.45)
         tick_days(h, 120)
         engram = h.store.get(e.engram_id)
         self.assertIn(engram.level, (1, 2))
         self.assertNotEqual(engram.render(now=at(120)), raw)
         self.assertLessEqual(len(engram.render(now=at(120))), len(raw))
+
+    def test_retelling_recovers_one_level(self):
+        h = make()
+        text = "我搬去成都了，这边一直下雨，很潮湿"
+        e = h.remember(Event(text, at=at(0)), importance=0.25)
+        tick_days(h, 120)
+        before = h.store.get(e.engram_id)
+        self.assertGreater(before.level, 0)
+        h.remember(Event(text, at=at(120)))
+        after = h.store.get(e.engram_id)
+        self.assertEqual(after.fidelity, max(0, before.fidelity - 1))
+        self.assertLessEqual(after.level, before.level)
 
     def test_importance_can_be_forced_down(self):
         h = make()
@@ -433,3 +445,27 @@ class TestTimeAndOps(unittest.TestCase):
         h.remember(Event("我喜欢猫", at=at(0)))
         self.assertEqual(h.recall("猫", budget=0), [])
         self.assertEqual(h.salient(budget=0), [])
+
+
+class TestRebuild(unittest.TestCase):
+    def test_rebuild_after_model_change(self):
+        path = tempfile.mktemp(suffix=".db")
+        old = Hippocampus(scope="s", path=path, embedder=HashingEmbedder(dim=8))
+        ids = [
+            old.remember(Event("我数学考砸了，哭了好久", at=at(0))).engram_id,
+            old.remember(Event("我养了一只猫叫团子", at=at(1))).engram_id,
+            old.remember(Event("我不吃香菜", at=at(2))).engram_id,
+        ]
+        self.assertEqual(old.store.vector_dim(ids[0]), 8)
+        old.close()
+
+        new = Hippocampus(scope="s", path=path, embedder=HashingEmbedder(dim=16))
+        self.assertTrue(new._state.get("needs_vector_rebuild"))
+        report = new.rebuild_vectors(batch_size=2)
+        self.assertEqual(report["vectors"], 3)
+        self.assertEqual(new.store.vector_count("s"), 3)
+        self.assertEqual(new.store.vector_dim(ids[0]), 16)
+        self.assertFalse(new._state.get("needs_vector_rebuild"))
+        self.assertTrue(new.recall("数学考砸了", now=at(2)))
+        new.close()
+        os.unlink(path)

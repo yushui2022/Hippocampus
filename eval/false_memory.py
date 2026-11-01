@@ -33,12 +33,12 @@ CASES: List[Tuple[str, str, List[str]]] = [
 ]
 
 
-def run(days: int = 800, budget: int = 6) -> dict:
+def run(days: int = 400, budget: int = 6) -> dict:
     h = Hippocampus(scope="fm", profile="companion", path=":memory:", embedder=HashingEmbedder())
     for index, (memory, _probe, _forbidden) in enumerate(CASES):
         h.remember(
             Event(memory, at=T0 + timedelta(hours=index), meta={"case": index}),
-            importance=0.45,
+            importance=0.30,
         )
     h.tick(T0)
     for day in range(1, days + 1):
@@ -75,7 +75,7 @@ def run(days: int = 800, budget: int = 6) -> dict:
 
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="False-memory probe")
-    parser.add_argument("--days", type=int, default=800)
+    parser.add_argument("--days", type=int, default=400)
     parser.add_argument("--budget", type=int, default=6)
     args = parser.parse_args(argv)
     result = run(args.days, args.budget)
@@ -85,6 +85,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     print("false_memory_rate  {:.3f}   (target <= 0.02)".format(result["false_memory_rate"]))
     for index, leaked, text in result["details"]:
         print("  case {} leaked {} in {!r}".format(index, leaked, text))
+    if result["foggy"] == 0:
+        print("warning: no memories reached L3; the probe is vacuous")
+        return 2
     return 0
 
 

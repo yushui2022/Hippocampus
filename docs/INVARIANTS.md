@@ -7,7 +7,7 @@ rejected.
 | # | Invariant | Why | Test |
 | --- | --- | --- | --- |
 | 1 | `level >= fidelity` | A trace cannot claim more clarity than it stored | `test_l1_recall_does_not_restore_raw` |
-| 2 | `fidelity` never decreases | Lost detail must not come back | `test_fidelity_monotonic` |
+| 2 | `fidelity` never decreases under forgetting or recall | Lost detail must not come back just because you looked | `test_fidelity_monotonic` |
 | 3 | `stability <= max_stability` | Even important memories must be able to blur | `test_stability_cap` |
 | 4 | `tick(now)` is idempotent | Replay and tests depend on it | `test_tick_is_idempotent` |
 | 5 | Unknown time spans default to idle | A cron outage must not age the user | `test_tick_catchup_uses_idle` |
@@ -21,6 +21,11 @@ rejected.
 ## Notes on the tricky ones
 
 ### `fidelity` vs `level`
+
+One deliberate exception: an explicit **re-telling** by the user is new
+evidence, not recall. `_rehearse()` may lower `fidelity` by one level because
+the detail was supplied again. `test_retelling_recovers_one_level` covers it.
+Recall itself can never do this.
 
 `level` answers "how clearly does this surface *now*". `fidelity` answers
 "how much detail is still stored". They move in the same direction when

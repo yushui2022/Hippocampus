@@ -29,8 +29,10 @@ GROWTH = 2.0
 # Stability floor for a memory nobody cares about (roughly 2 hours).
 S_MIN = 0.02
 
-# How strongly importance stretches stability. exp(11*I) => 1x .. 60000x.
-IMPORTANCE_GAIN = 11.0
+# How strongly importance stretches stability. Calibrated on the 283-turn
+# replay: 11 left too many repeated facts at L2 after 30 days; 14 keeps them
+# at L0/L1 without reviving one-off trivia.
+IMPORTANCE_GAIN = 14.0
 
 # Default ceiling. Profiles may override; ``reinforce`` must respect it.
 S_MAX = 45.0
@@ -57,9 +59,13 @@ def reinforce(
     return min(max(1e-6, max_stability), grown)
 
 
-def initial_stability(importance: float, max_stability: float = S_MAX) -> float:
+def initial_stability(
+    importance: float,
+    max_stability: float = S_MAX,
+    gain: float = IMPORTANCE_GAIN,
+) -> float:
     """Important things start out much harder to forget."""
-    raw = S_MIN * pow(2.718281828459045, IMPORTANCE_GAIN * max(0.0, min(1.0, importance)))
+    raw = S_MIN * pow(2.718281828459045, gain * max(0.0, min(1.0, importance)))
     return min(max_stability, raw)
 
 

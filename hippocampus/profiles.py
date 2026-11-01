@@ -23,6 +23,8 @@ class Profile:
     # Near-identical text above this similarity is treated as a re-telling of
     # the same event (rehearsal), not a new one (pattern separation).
     merge_threshold: float = 0.85
+    # Cosine merge is stricter: bge-m3 puts related life events close together.
+    embedding_merge_threshold: float = 0.95
     # Retrievability thresholds for L1..L4. A knowledge base and a companion
     # must not share the same curve.
     level_thresholds: Tuple[float, ...] = (0.75, 0.45, 0.22, 0.10)
@@ -31,6 +33,8 @@ class Profile:
     # Stability is "difficulty of forgetting"; even the most important memory
     # must be able to blur, so the growth is capped.
     max_stability: float = 45.0
+    # Importance -> initial stability. Higher = important things survive longer.
+    importance_gain: float = 14.0
     mmr_lambda: float = 0.7
     max_chars: int = 2000
     max_item_chars: int = 500

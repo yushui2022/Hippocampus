@@ -75,25 +75,25 @@ Apple Silicon, 64 GB, Ollama 0.40.13, bge-m3 1.2 GB, pure Python vector search.
 
 | Metric | Token baseline | Local bge-m3 |
 | --- | --- | --- |
-| `recall@6 (clear)` | 0.733 | 0.733 |
+| `recall@6 (clear)` | 0.933 | **1.000** |
 | `fog_accuracy` | 1.000 | 1.000 |
-| `fog_missing` | 0.000 | 0.133 |
-| `over_recall` | 0.100 | 0.050 |
+| `fog_missing` | 0.000 | **0.000** |
+| `over_recall` | 0.100 | 0.100 |
 | `para_recall@6` | 0.600 (hashing) | **1.000** |
-| recall p50 | 0.4 ms | 18.7 ms |
+| recall p50 | 0.4 ms | 18.6 ms |
 
 Two different things are being measured:
 
 - **Retrieval**: `para_recall` goes from 0.600 (hashing) to **1.000**; bge-m3
-  finds paraphrases that share no tokens.
+  finds paraphrases that share no tokens, and `fog_missing` drops to 0.000.
 - **Forgetting calibration**: `recall@6 (clear)` counts memories still at
-  L0/L1 after 30 days. bge-m3 does not change decay, so this number stays at
-  0.733. Fixing it is an importance/stability calibration task, not an
-  embedding task.
+  L0/L1 after 30 days. It was lifted to 1.000 by `importance_gain = 14` and
+  one-level recovery when the user explicitly re-tells a memory. The embedding
+  model is not responsible for that number.
 
-`fog_missing` moves from 0.000 to 0.133 on this synthetic set; two of fifteen
-fuzzy probes rank just outside the top 6. Treat it as a tuning target, not a
-regression of the embedding itself.
+The hashing baseline reaches 1.000 on `recall@6` but misses 4/15 fuzzy probes
+(`fog_missing 0.267`) because it has no semantics. That is the difference
+bge-m3 buys.
 
 ## 5. Cost, privacy, and consistency
 
@@ -103,8 +103,15 @@ regression of the embedding itself.
 - **Memory**: the model needs roughly 1.2 GB of disk and about 1–2 GB of RAM
   while loaded.
 - **Consistency**: changing the embedding model changes the vector space.
-  Hippocampus records a fingerprint and marks `needs_vector_rebuild`, but the
-  rebuild script is still a P1.5 item. Until it exists, keep the model fixed.
+  Hippocampus records a fingerprint and marks `needs_vector_rebuild`. Rebuild
+  with:
+
+  ```bash
+  python -m hippocampus.rebuild --db memory.db --provider local
+  ```
+
+  The CLI re-embeds every non-empty memory in every scope and updates the
+  fingerprint.
 
 ## 6. When not to use it
 

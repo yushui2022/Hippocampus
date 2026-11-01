@@ -48,12 +48,13 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 - [x] read-only `ops.snapshot()`
 - [x] backup via SQLite online API
 - [x] hard-delete cascade (engram / tokens / vectors / facts / audit)
+- [x] `rebuild_vectors()` + `python -m hippocampus.rebuild` CLI
 - [x] `eval.false_memory`
 - [x] README + `docs/INVARIANTS.md`
 
 ## Not done (next)
 
-- [ ] importance/stability calibration to lift `recall@6` (bge-m3 baseline is done locally)
+- [x] importance/stability calibration (`importance_gain=14`, re-telling recovery)
 - [ ] graph memory (`graph_nodes` / `graph_edges`) — feature-flagged, after facts
 - [ ] shadow index rebuild + progress reporting
 - [ ] async embedding queue (writes are synchronous today)
@@ -66,9 +67,9 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 
 | Mode | recall@6 | fog | fog_missing | over_recall |
 | --- | --- | --- | --- | --- |
-| token baseline | 0.733 | 1.000 | 0.000 | 0.100 |
-| hashing vectors | 0.800 | 1.000 | 0.267 | 0.000 |
-| local bge-m3 (Ollama) | 0.733 | 1.000 | 0.133 | 0.050 |
+| token baseline | 0.933 | 1.000 | 0.000 | 0.100 |
+| hashing vectors | 1.000 | 1.000 | 0.267 | 0.000 |
+| local bge-m3 (Ollama) | 1.000 | 1.000 | 0.000 | 0.100 |
 
 `eval.paraphrase --embedder openai`: 1.000 on 10 bundled pairs with local
 bge-m3 (0.600 with hashing). `recall@6` is a forgetting-calibration metric, not
@@ -79,7 +80,6 @@ Latency at 500 engrams, pure Python: remember p50 ≈ 10 ms, recall p50 ≈ 15 m
 
 ## Three next tasks (in order)
 
-1. Calibrate rule-based importance / stability so the `remember` group stays
-   at L0/L1 after 30 days (target `recall@6 ≥ 0.90`).
-2. Add an async embedding queue so `remember()` never blocks on the network.
-3. Add topic-level mention budget and a 24h repetition test.
+1. Add an async embedding queue so `remember()` never blocks on the network.
+2. Add topic-level mention budget and a 24h repetition test.
+3. Run the blind test (plastic vs verbatim) and record the result.

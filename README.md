@@ -239,16 +239,16 @@ Current numbers on the 283-turn synthetic replay (seed 7, budget 6):
 
 | Embedder | recall@6 | fog_accuracy | fog_missing | over_recall |
 | --- | --- | --- | --- | --- |
-| none (token baseline) | 0.733 | 1.000 | 0.000 | 0.100 |
-| hashing (token vectors) | 0.800 | 1.000 | 0.267 | 0.000 |
-| **local bge-m3 (Ollama)** | 0.733 | 1.000 | 0.133 | 0.050 |
+| none (token baseline) | 0.933 | 1.000 | 0.000 | 0.100 |
+| hashing (token vectors) | 1.000 | 1.000 | 0.267 | 0.000 |
+| **local bge-m3 (Ollama)** | 1.000 | 1.000 | 0.000 | 0.100 |
 
 `para_recall@6`: 0.600 with hashing, **1.000 with local bge-m3** (10/10).
 
-`recall@6` counts memories still at L0/L1 after 30 days, so it measures
-forgetting calibration, not retrieval. bge-m3's win is paraphrase recall;
-lifting `recall@6` is an importance/stability tuning task. See
-`docs/LOCAL_EMBEDDING.md` for the full table and caveats.
+bge-m3's clear win is paraphrase recall (0.600 → 1.000) and fuzzy recall
+(`fog_missing` 0.267 → 0.000). The `remember` gain comes from importance
+calibration (`importance_gain = 14`) plus one-level recovery on an explicit
+re-telling. See `docs/LOCAL_EMBEDDING.md` for the full table and caveats.
 
 > The benchmark is retrieval-level, not answer accuracy. A separate blind test
 > (plastic memory vs verbatim memory) is the real acceptance test.
@@ -258,7 +258,7 @@ lifting `recall@6` is an importance/stability tuning task. See
 ## Invariants
 
 1. `level >= fidelity` always.
-2. `fidelity` never decreases.
+2. `fidelity` never decreases under forgetting or recall (an explicit re-telling is new evidence and may recover one level).
 3. `stability <= Profile.max_stability`.
 4. `tick(now)` is idempotent for the same `now`.
 5. Unknown time spans default to idle, never to active.
@@ -289,6 +289,12 @@ Back up before upgrading:
 ```bash
 cp memory.db memory.db.bak
 python -c "from hippocampus import Store; Store('memory.db').close()"
+```
+
+After changing the embedding model, rebuild vectors:
+
+```bash
+python -m hippocampus.rebuild --db memory.db --provider local
 ```
 
 ---

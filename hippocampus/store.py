@@ -468,6 +468,31 @@ class Store:
                 "DELETE FROM engram_vectors WHERE engram_id=?", (engram_id,)
             )
 
+    def clear_vectors(self, scope: Optional[str] = None) -> int:
+        with self._conn:
+            if scope:
+                cursor = self._conn.execute(
+                    "DELETE FROM engram_vectors WHERE engram_id IN "
+                    "(SELECT engram_id FROM engrams WHERE scope=?)",
+                    (scope,),
+                )
+            else:
+                cursor = self._conn.execute("DELETE FROM engram_vectors")
+        self._bump()
+        return int(cursor.rowcount or 0)
+
+    def vector_dim(self, engram_id: str) -> int:
+        row = self._conn.execute(
+            "SELECT dim FROM engram_vectors WHERE engram_id=?", (engram_id,)
+        ).fetchone()
+        return int(row["dim"]) if row else 0
+
+    def distinct_scopes(self) -> List[str]:
+        rows = self._conn.execute(
+            "SELECT DISTINCT scope FROM engrams ORDER BY scope"
+        ).fetchall()
+        return [row["scope"] for row in rows]
+
     def vector_count(self, scope: Optional[str] = None) -> int:
         if scope is None:
             row = self._conn.execute("SELECT COUNT(*) FROM engram_vectors").fetchone()

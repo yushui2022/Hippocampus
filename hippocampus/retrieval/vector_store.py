@@ -75,6 +75,14 @@ class VectorIndex:
         pairs.sort(key=lambda item: item[1], reverse=True)
         return pairs[:k]
 
+    def invalidate(self, scope: Optional[str] = None) -> None:
+        if scope is None:
+            self._cache.clear()
+            self._matrix.clear()
+        else:
+            self._cache.pop(scope, None)
+            self._matrix.pop(scope, None)
+
     def remove_scope(self, scope: str) -> None:
         for engram_id in list(self._cache.get(scope, {})):
             self.store.delete_vector(engram_id)

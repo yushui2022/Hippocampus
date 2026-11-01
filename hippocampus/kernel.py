@@ -140,9 +140,14 @@ class Hippocampus:
                 if candidate is not None:
                     existing, sim = candidate, vec_hits[0][1]
         novelty = 1.0 - sim
+        threshold = (
+            self.profile.embedding_merge_threshold
+            if query_vec is not None
+            else self.profile.merge_threshold
+        )
         is_retelling = (
             existing is not None
-            and sim >= self.profile.merge_threshold
+            and sim >= threshold
             and existing.meta.get("actor", "user") == event.actor
             and existing.kind == kind
         )
@@ -182,7 +187,9 @@ class Hippocampus:
             level=0,
             fidelity=0,
             importance=score,
-            stability=decay.initial_stability(score, self.profile.max_stability),
+            stability=decay.initial_stability(
+                score, self.profile.max_stability, self.profile.importance_gain
+            ),
             difficulty=5.0,
             active_age_days=0.0,
             created_at=at,
@@ -235,9 +242,14 @@ class Hippocampus:
                 if candidate is not None:
                     existing, sim = candidate, vec_hits[0][1]
         novelty = 1.0 - sim
+        threshold = (
+            self.profile.embedding_merge_threshold
+            if query_vec is not None
+            else self.profile.merge_threshold
+        )
         is_retelling = (
             existing is not None
-            and sim >= self.profile.merge_threshold
+            and sim >= threshold
             and existing.meta.get("actor", "user") == "user"
             and existing.kind == kind
         )
@@ -272,7 +284,9 @@ class Hippocampus:
             level=0,
             fidelity=0,
             importance=score,
-            stability=decay.initial_stability(score, self.profile.max_stability),
+            stability=decay.initial_stability(
+                score, self.profile.max_stability, self.profile.importance_gain
+            ),
             created_at=_aware(events[0].resolved_at()),
             last_active_at=at,
             refs=refs,
@@ -691,6 +705,57 @@ class Hippocampus:
         self._insert_fact_with_conflicts(fact)
         return fact
 
+    # -- index maintenance ---------------------------------------------------
+    def rebuild_vectors(
+        self,
+        *,
+        scope: Optional[str] = None,
+        batch_size: int = 16,
+        progress: Optional[Callable[[int, int], None]] = None,
+    ) -> Dict[str, Any]:
+        """Drop and recompute vectors for a scope.
+
+        Required after changing the embedding model: vectors from different
+        models are not comparable even when the dimension matches.
+        """
+        if self._embedder is None or self._vectors is None:
+            raise ValueError("rebuild_vectors needs an embedder")
+        target = scope or self.scope
+        all_engrams = self.store.list(target)
+        engrams = [e for e in all_engrams if e.raw_text.strip()]
+        total = len(engrams)
+        self.store.clear_vectors(target)
+        self._vectors.invalidate(target)
+
+        done = 0
+        step = max(1, int(batch_size))
+        for start in range(0, total, step):
+            batch = engrams[start : start + step]
+            vectors = self._embedder.embed([e.raw_text for e in batch])
+            if len(vectors) != len(batch):
+                raise RuntimeError("embedder returned {} vectors for {} texts".format(
+                    len(vectors), len(batch)
+                ))
+            for engram, vector in zip(batch, vectors):
+                self._vectors.upsert(target, engram.engram_id, vector)
+            done += len(batch)
+            if progress is not None:
+                progress(done, total)
+
+        fingerprint = self._vectors.fingerprint()
+        self.store.set_meta("embedder_fingerprint", fingerprint)
+        if target == self.scope:
+            self._state.pop("needs_vector_rebuild", None)
+            self.store.set_state(target, self.profile.name, self._state)
+        return {
+            "scope": target,
+            "vectors": done,
+            "skipped_empty": len(all_engrams) - total,
+            "model": self._embedder.model,
+            "dim": self._embedder.dim,
+            "fingerprint": fingerprint,
+        }
+
     # -- introspection -------------------------------------------------------
     def count(self) -> int:
         return self.store.count(self.scope, self.max_level)
@@ -790,6 +855,11 @@ class Hippocampus:
         )
         engram.active_age_days = 0.0
         engram.last_active_at = at
+        # A re-telling is new evidence, not recall: the user supplied the
+        # detail again, so the trace may recover one level of fidelity.
+        if engram.fidelity > 0:
+            engram.fidelity -= 1
+        engram.level = max(engram.fidelity, engram.level - 1)
         if len(event.text) > len(engram.raw_text):
             engram.raw_text = event.text
             engram.tokens = tokenize(engram.raw_text)
