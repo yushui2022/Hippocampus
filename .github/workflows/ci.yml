@@ -23,5 +23,7 @@ jobs:
         run: python -m eval.replay_30d --days 30 --seed 7
       - name: Paraphrase pipeline
         run: python -m eval.paraphrase --embedder lexicon
+      - name: False-memory probe
+        run: python -m eval.false_memory
       - name: Latency smoke
         run: python -m eval.bench --n 200

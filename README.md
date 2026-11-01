@@ -221,6 +221,7 @@ python -m eval.replay_30d --embedder hashing
 python -m eval.paraphrase --embedder lexicon
 python -m eval.paraphrase --embedder openai   # HIPPO_EMBED_KEY=...
 python -m eval.bench --n 500
+python -m eval.false_memory
 ```
 
 Current numbers on the 283-turn synthetic replay (seed 7, budget 6):

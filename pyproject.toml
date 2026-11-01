@@ -27,6 +27,7 @@ dev = ["pytest>=7"]
 hippo-eval = "eval.replay_30d:main"
 hippo-bench = "eval.bench:main"
 hippo-paraphrase = "eval.paraphrase:main"
+hippo-false-memory = "eval.false_memory:main"
 
 [tool.setuptools.packages.find]
 include = ["hippocampus*", "eval*"]

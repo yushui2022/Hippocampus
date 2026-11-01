@@ -1,0 +1,84 @@
+# v2 status
+
+Snapshot: 2026-11-01, branch `v2.0`.
+
+This maps the execution plan (`执行-海马记忆系统 v2`) to what actually exists.
+
+## Done
+
+### P0 — invariants
+
+- [x] baseline frozen (tag-ready commit)
+- [x] schema versioning + idempotent migration (v0 → v4)
+- [x] stability cap (`Profile.max_stability`)
+- [x] day-based `tick()` with idle defaults and `active_days`
+- [x] `fidelity` vs `level` split
+- [x] `gist_source` (`none | extractive | llm`); L1/L2 differ
+- [x] recall/mention separation + `mark_mentioned()`
+- [x] `recall(reinforce=False)` default; `peek()` never writes
+- [x] WAL + `busy_timeout` + foreign keys
+- [x] `correct()` / `set_importance(force=True)`
+- [x] token rebuild instead of unbounded union
+- [x] invariant test suite
+- [x] recall log v2 (`spontaneous`, `surfaced`, `level`, `score`)
+- [x] CI workflow + `Makefile`
+
+### P1 — retrieval and write pipeline
+
+- [x] `Embedder` protocol; `HashingEmbedder`; `OpenAIEmbedder` (bge-m3)
+- [x] `VectorIndex` with SQLite persistence and optional NumPy
+- [x] `engram_vectors` + provider fingerprint
+- [x] BM25 over the persisted token index
+- [x] candidate union + RRF + Hippocampus rerank
+- [x] MMR + character budget
+- [x] `Episode` / `WindowSegmenter` / `remember_episode` / `feed_episode`
+- [x] `Summarizer` hook + deterministic `Summary` type
+- [x] cosine merge when an embedder is configured
+- [x] `eval.paraphrase`, `eval.bench`
+- [x] migration of old rows (backfill + optional re-embed)
+
+### P2 — facts, behaviour, ops
+
+- [x] facts table with typed TTL / status / `valid_from` / `valid_to`
+- [x] `RuleFactExtractor` (user-only, negation-aware)
+- [x] supersede semantics and expiry in `consolidate()`
+- [x] `salient()` proactive selection (clarity / emotion / cooldown)
+- [x] daily mention budget + `mark_mentioned()`
+- [x] uncertainty-preserving render (L3 has no entities)
+- [x] read-only `ops.snapshot()`
+- [x] backup via SQLite online API
+- [x] hard-delete cascade (engram / tokens / vectors / facts / audit)
+- [x] `eval.false_memory`
+- [x] README + `docs/INVARIANTS.md`
+
+## Not done (next)
+
+- [ ] real bge-m3 baseline and threshold tuning (needs `HIPPO_EMBED_KEY`)
+- [ ] graph memory (`graph_nodes` / `graph_edges`) — feature-flagged, after facts
+- [ ] shadow index rebuild + progress reporting
+- [ ] async embedding queue (writes are synchronous today)
+- [ ] observatory page (only the read-only snapshot API exists)
+- [ ] blind test harness (A/B plastic vs verbatim)
+- [ ] IM adapter (`AstrBot` / `NapCat`)
+- [ ] topic-level mention budget (currently global per day)
+
+## Current numbers
+
+| Mode | recall@6 | fog | over_recall | false memory |
+| --- | --- | --- | --- | --- |
+| token baseline | 0.733 | 1.000 | 0.100 | — |
+| hashing vectors | 0.800 | 1.000 | 0.000 | run `eval.false_memory` |
+| bge-m3 | needs key | — | — | — |
+
+`eval.paraphrase --embedder lexicon`: 1.000 on 10 bundled pairs (pipeline
+check, not a model benchmark).
+
+Latency at 500 engrams, pure Python: remember p50 ≈ 10 ms, recall p50 ≈ 15 ms,
+30-day catch-up ≈ 30 ms. Install NumPy for vector search at larger scales.
+
+## Three next tasks (in order)
+
+1. Run `eval.replay_30d --embedder openai` and `eval.paraphrase --embedder openai`
+   with a real bge-m3 key; record numbers in the README.
+2. Add an async embedding queue so `remember()` never blocks on the network.
+3. Add topic-level mention budget and a 24h repetition test.

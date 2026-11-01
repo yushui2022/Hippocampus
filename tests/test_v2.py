@@ -376,3 +376,60 @@ class TestFacts(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestTimeAndOps(unittest.TestCase):
+    def test_daily_tick_matches_single_catchup(self):
+        daily = make()
+        once = make()
+        for h in (daily, once):
+            h.remember(Event("我数学考砸了，哭了好久", at=at(0)), importance=0.6)
+            h.tick(at(0))
+        for day in range(1, 31):
+            daily.tick(at(day), active_days={at(day - 1).date(), at(day).date()})
+        once.tick(at(30), active_days={at(day).date() for day in range(0, 31)})
+        a = daily.store.list("test")[0]
+        b = once.store.list("test")[0]
+        self.assertAlmostEqual(a.active_age_days, b.active_age_days, places=6)
+        self.assertEqual(a.level, b.level)
+        self.assertEqual(a.fidelity, b.fidelity)
+
+    def test_correct_reindexes_text(self):
+        h = make()
+        e = h.remember(Event("我喜欢猫", at=at(0)))
+        h.correct(e.engram_id, text="我不吃香菜")
+        self.assertEqual(h.store.get(e.engram_id).raw_text, "我不吃香菜")
+        self.assertTrue(any("香菜" in hit.text for hit in h.recall("香菜", now=at(0))))
+
+    def test_consolidate_fills_extractive_gist(self):
+        h = make()
+        e = h.remember(Event("我数学考砸了，哭了好久，觉得自己特别没用", at=at(0)), importance=0.5)
+        tick_days(h, 120)
+        engram = h.store.get(e.engram_id)
+        self.assertEqual(engram.gist, "")
+        h.consolidate(now=at(120))
+        engram = h.store.get(e.engram_id)
+        self.assertEqual(engram.gist_source, "extractive")
+        self.assertTrue(engram.gist)
+
+    def test_backup_and_restore(self):
+        src = tempfile.mktemp(suffix=".db")
+        bak = tempfile.mktemp(suffix=".db")
+        h = Hippocampus(scope="s", path=src)
+        h.remember(Event("我喜欢猫", at=at(0)))
+        h.store.backup(bak)
+        h.close()
+        restored = Store(bak)
+        self.assertEqual(restored.count("s"), 1)
+        restored.close()
+        for path in (src, bak):
+            try:
+                os.unlink(path)
+            except OSError:
+                pass
+
+    def test_budget_zero(self):
+        h = make()
+        h.remember(Event("我喜欢猫", at=at(0)))
+        self.assertEqual(h.recall("猫", budget=0), [])
+        self.assertEqual(h.salient(budget=0), [])

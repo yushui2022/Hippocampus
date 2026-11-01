@@ -42,8 +42,8 @@ The v2 core: fix the invariants first, then add retrieval, episodes and facts.
 - `correct()`, `set_importance(force=...)`, `mark_mentioned()`.
 - `ops.snapshot()` read-only inspection and `ops.backup_database()`.
 - Schema versioning and idempotent migration from v0 (`schema_version` 0 → 4).
-- `eval.bench`, `eval.paraphrase`, `--embedder` option on `eval.replay_30d`.
-- 32 unittest cases covering the invariants.
+- `eval.bench`, `eval.paraphrase`, `eval.false_memory`, `--embedder` option on `eval.replay_30d`.
+- 37 unittest cases covering the invariants.
 
 ### Changed
 

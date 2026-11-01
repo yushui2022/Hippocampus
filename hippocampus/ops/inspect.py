@@ -18,16 +18,18 @@ def snapshot(path: str, scope: Optional[str] = None, limit: int = 10) -> Dict[st
     conn.row_factory = sqlite3.Row
     try:
         conn.execute("PRAGMA query_only=ON")
-        meta = {
-            row["key"]: row["value"]
-            for row in conn.execute("SELECT key, value FROM meta").fetchall()
-        }
         tables = [
             row["name"]
             for row in conn.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
             ).fetchall()
         ]
+        meta = {}
+        if "meta" in tables:
+            meta = {
+                row["key"]: row["value"]
+                for row in conn.execute("SELECT key, value FROM meta").fetchall()
+            }
         counts: Dict[str, int] = {}
         for table in ("engrams", "engram_tokens", "engram_vectors", "facts", "recall_log"):
             if table in tables:
