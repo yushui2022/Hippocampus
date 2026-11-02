@@ -21,7 +21,7 @@ L4  archived      not volunteered, still reachable by keyword
 
 ## Status
 
-**v0.7.0 — v2 core complete.** Runnable, tested, benchmarked. Not yet wired to a channel.
+**v0.8.0 — v2 core + NapCat route B.** Runnable, tested, benchmarked. Not yet wired to a channel.
 
 | | |
 |---|---|
@@ -44,7 +44,7 @@ L4  archived      not volunteered, still reachable by keyword
 | Read-only observatory (HTTP + page) | ✅ |
 | Graph memory (opt-in) | ✅ flag |
 | Blind A/B harness | ✅ harness |
-| IM adapter (AstrBot / NapCat) | ❌ P3 |
+| NapCat adapter (route B, Hippocampus-owned) | ✅ |
 | Long-running HTTP API service | ❌ P3 |
 
 ### What changed in v2
@@ -413,6 +413,7 @@ hippocampus/
   prompts/           summarize.txt
   observatory.py     read-only HTTP page/API
   rebuild.py         vector rebuild CLI
+integrations/napcat/ NapCat route-B adapter (own runtime)
   retrieval/         embeddings · BM25 · vector index · RRF/MMR
   ops/               read-only snapshot/list · backup
 eval/                replay · paraphrase · bench · false_memory · blind_test
@@ -423,8 +424,21 @@ tests/               invariants and behaviour
 
 ## Roadmap
 
-- **P3** — IM adapter (AstrBot / NapCat), long-running HTTP service, real-log
-  holdout set, multi-process write coordination.
+- **P3** — long-running HTTP service, real-log holdout set, multi-process
+  write coordination.
+
+### NapCat adapter (route B)
+
+A standalone adapter lives in [`integrations/napcat`](integrations/napcat/).
+NapCat is only the QQ protocol transport; the adapter owns conversation history,
+memory, self-model and prompt assembly. AstrBot is not in the reply path.
+
+```bash
+cd integrations/napcat
+PYTHONPATH=../..:. pytest -q tests
+```
+
+It exposes `/ws` (OneBot v11), `/health`, `/status`, and the `/hmem` commands.
 
 Summarizer details: [`docs/SUMMARIZER.md`](docs/SUMMARIZER.md).
 

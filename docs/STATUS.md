@@ -63,7 +63,7 @@ This maps the execution plan (`执行-海马记忆系统 v2`) to what actually e
 
 ## Not done (next)
 
-- [ ] IM adapter (`AstrBot` / `NapCat`)
+- [x] NapCat adapter (route B, `integrations/napcat`)
 - [ ] long-running HTTP API service / daemon
 - [ ] real-log holdout set (current numbers are synthetic)
 - [ ] multi-process write coordination and auth

@@ -105,20 +105,17 @@ def build(api_key: str, persona: str) -> tuple:
     for turn in turns:
         by_day.setdefault(turn.at.date(), []).append(turn)
 
-    episode_count = 0
     for day in sorted(by_day):
-        batch: List[Event] = []
         for turn in by_day[day]:
-            batch.append(Event(turn.text, at=turn.at, meta={"fact": turn.fact_key}))
-            if len(batch) >= 10:
-                hippo.remember_episode(batch, summarize=True)
-                episode_count += 1
-                batch = []
-        if batch:
-            hippo.remember_episode(batch, summarize=True)
-            episode_count += 1
+            hippo.feed_episode(
+                Event(turn.text, at=turn.at, meta={"fact": turn.fact_key}),
+                max_turns=10,
+            )
+        hippo.flush_episode()
         last = by_day[day][-1].at
         hippo.tick(last + timedelta(minutes=1), active=True)
+
+    episode_count = len(hippo.store.list("ab"))
 
     queries = synth.queries(facts, days=30)
     probe_now = datetime.combine(

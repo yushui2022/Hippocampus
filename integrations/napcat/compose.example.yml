@@ -1,0 +1,44 @@
+services:
+  napcat:
+    image: mlikiowa/napcat-docker:latest
+    container_name: napcat
+    restart: unless-stopped
+    environment:
+      - NAPCAT_UID=${NAPCAT_UID:-501}
+      - NAPCAT_GID=${NAPCAT_GID:-20}
+      - MODE=astrbot
+    ports:
+      - "6099:6099"
+    volumes:
+      - ./data:/AstrBot/data
+      - ./napcat/config:/app/napcat/config
+      - ./ntqq:/app/.config/QQ
+    networks:
+      - hippocampus_network
+
+  bridge:
+    build: .
+    container_name: hippocampus-napcat
+    restart: unless-stopped
+    environment:
+      - MEMORY_DB=/data/hippocampus/memory.db
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - CHAT_MODEL=deepseek-flash
+      - EMBED_BASE=http://host.docker.internal:11434/v1
+      - EMBED_MODEL=bge-m3
+      - TEST_GROUP=${TEST_GROUP:-922410298}
+      - CAPTURE_GROUPS=${CAPTURE_GROUPS:-922410298}
+      - BOT_NAMES=${BOT_NAMES:-桃子姐姐,桃子姐}
+    volumes:
+      - ./data:/data
+      - ../..:/opt/hippocampus:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      hippocampus_network:
+        aliases:
+          - astrbot
+
+networks:
+  hippocampus_network:
+    driver: bridge

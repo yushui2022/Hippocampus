@@ -42,6 +42,9 @@ class Profile:
     topic_cooldown_hours: float = 24.0
     topic_repeat_limit: int = 1
     enable_graph: bool = False
+    topic_split: bool = True
+    topic_split_threshold: float = 0.10
+    topic_min_chars: int = 6
     negative_intimacy_threshold: float = 0.7
     # "strict" forbids a recall from restoring detail beyond fidelity.
     fidelity_policy: str = "strict"

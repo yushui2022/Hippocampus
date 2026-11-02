@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hippocampus-napcat"
+version = "0.1.0"
+description = "NapCat OneBot adapter owned by Hippocampus (route B)"
+requires-python = ">=3.10"
+dependencies = ["aiohttp>=3.9"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23"]
+
+[tool.setuptools.packages.find]
+include = ["hippocampus_napcat*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

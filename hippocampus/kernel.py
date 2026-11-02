@@ -340,11 +340,26 @@ class Hippocampus:
             self._request_summary(engram, list(events))
         return engram
 
-    def feed_episode(self, event: Event, *, max_turns: int = 10, gap_minutes: float = 180.0) -> List[Engram]:
+    def feed_episode(
+        self,
+        event: Event,
+        *,
+        max_turns: int = 10,
+        gap_minutes: float = 180.0,
+        topic_split: Optional[bool] = None,
+    ) -> List[Engram]:
         """Convenience helper: buffer events and write closed episodes."""
         segmenter = self._segmenters.get(self.scope)
         if segmenter is None:
-            segmenter = WindowSegmenter(max_turns=max_turns, gap_minutes=gap_minutes)
+            segmenter = WindowSegmenter(
+                max_turns=max_turns,
+                gap_minutes=gap_minutes,
+                topic_split=(
+                    self.profile.topic_split if topic_split is None else topic_split
+                ),
+                topic_threshold=self.profile.topic_split_threshold,
+                topic_min_chars=self.profile.topic_min_chars,
+            )
             self._segmenters[self.scope] = segmenter
         out: List[Engram] = []
         for episode in segmenter.feed(event):

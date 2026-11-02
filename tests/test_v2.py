@@ -312,9 +312,9 @@ class TestRetrieval(unittest.TestCase):
             Event("我吃了一顿火锅", at=at(0, hours=1)),
             Event("我看了一部电影", at=at(0, hours=2)),
         ]
-        h.feed_episode(events[0], max_turns=2)
-        h.feed_episode(events[1], max_turns=2)
-        h.feed_episode(events[2], max_turns=2)
+        h.feed_episode(events[0], max_turns=2, topic_split=False)
+        h.feed_episode(events[1], max_turns=2, topic_split=False)
+        h.feed_episode(events[2], max_turns=2, topic_split=False)
         self.assertEqual(h.count(), 1)
         h.flush_episode()
         self.assertEqual(h.count(), 2)
@@ -772,3 +772,78 @@ class TestDialogueFormat(unittest.TestCase):
         self.assertIn("阿澈: 我数学考砸了", text)
         self.assertIn("我: 别难过", text)
         self.assertNotIn("对方", text)
+
+
+class TestTopicSplit(unittest.TestCase):
+    def test_unrelated_messages_become_separate_episodes(self):
+        h = make()
+        h.feed_episode(Event("我数学考砸了，哭了好久", at=at(0)), max_turns=10)
+        h.feed_episode(Event("我拿到那家公司的offer了，开心到睡不着", at=at(0, hours=1)), max_turns=10)
+        h.flush_episode()
+        self.assertEqual(h.count(), 2)
+
+    def test_related_messages_stay_together(self):
+        h = make()
+        h.feed_episode(Event("我数学考砸了，哭了好久", at=at(0)), max_turns=10)
+        h.feed_episode(Event("数学一直学不好，我很焦虑", at=at(0, hours=1)), max_turns=10)
+        h.flush_episode()
+        self.assertEqual(h.count(), 1)
+
+    def test_short_filler_does_not_split(self):
+        h = make()
+        h.feed_episode(Event("我数学考砸了，哭了好久", at=at(0)), max_turns=10)
+        h.feed_episode(Event("嗯嗯", at=at(0, hours=1)), max_turns=10)
+        h.flush_episode()
+        self.assertEqual(h.count(), 1)
+
+    def test_topic_split_can_be_disabled(self):
+        h = make()
+        h.feed_episode(Event("我数学考砸了，哭了好久", at=at(0)), max_turns=10, topic_split=False)
+        h.feed_episode(Event("我拿到那家公司的offer了，开心到睡不着", at=at(0, hours=1)), max_turns=10)
+        h.flush_episode()
+        self.assertEqual(h.count(), 1)
+
+
+class TestSelfModel(unittest.TestCase):
+    def test_merge_render_and_persist(self):
+        from hippocampus.self_model import SelfModel, parse_reflection
+
+        store = Store(":memory:")
+        model = SelfModel(store, "s")
+        model.merge(
+            {
+                "traits": ["嘴硬心软", "爱吐槽"],
+                "user_facts": ["阿澈最近在找工作"],
+                "inside_jokes": ["牛来"],
+                "relationship": ["会互相拆台"],
+                "style_notes": ["句子很短"],
+            }
+        )
+        rendered = model.render()
+        self.assertIn("嘴硬心软", rendered)
+        self.assertIn("牛来", rendered)
+
+        loaded = SelfModel(store, "s")
+        self.assertIn("阿澈最近在找工作", loaded.render())
+
+        data = parse_reflection(
+            '```json\n{"traits":["更会怼人了"],"user_facts":["阿澈怕黑"]}\n```'
+        )
+        self.assertEqual(data["traits"], ["更会怼人了"])
+        loaded.merge(data)
+        self.assertIn("更会怼人了", loaded.render())
+        store.close()
+
+    def test_pending_tracks_reflected_engrams(self):
+        from hippocampus.self_model import SelfModel
+
+        store = Store(":memory:")
+        h = Hippocampus(scope="s", store=store)
+        e1 = h.remember(Event("我数学考砸了", at=at(0)))
+        e2 = h.remember(Event("我养了一只猫", at=at(1)))
+        model = SelfModel(store, "s")
+        self.assertEqual(len(model.pending(store.list("s"))), 2)
+        model.mark_reflected([e1])
+        pending = model.pending(store.list("s"))
+        self.assertEqual([e.engram_id for e in pending], [e2.engram_id])
+        store.close()

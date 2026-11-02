@@ -1,0 +1,7 @@
+name: astrbot_plugin_hippocampus
+display_name: 海马记忆
+desc: 用 Hippocampus 内核替换长期记忆：分级遗忘、活跃年龄、事实抽取、主动提及抑制。
+short_desc: 会遗忘、会模糊、会克制的长期记忆。
+version: 0.1.0
+author: Orlando
+repo: https://github.com/yushui2022/Hippocampus

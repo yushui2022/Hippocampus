@@ -197,6 +197,10 @@ class LLMSummarizer:
                     time.sleep(0.4 * (2 ** attempt))
         raise SummaryError("summarizer failed: {}".format(last_error))
 
+    def chat(self, messages: List[Dict[str, str]]) -> str:
+        """Raw chat call, used by reflection jobs."""
+        return self._call(messages)
+
     def _call(self, messages: List[Dict[str, str]]) -> str:
         if self._transport is not None:
             return self._transport(messages)

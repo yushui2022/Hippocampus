@@ -1,0 +1,202 @@
+{
+  "enabled": {
+    "description": "启用海马记忆",
+    "type": "bool",
+    "default": true
+  },
+  "db_path": {
+    "description": "记忆数据库路径",
+    "type": "string",
+    "default": "/AstrBot/data/hippocampus/memory.db",
+    "hint": "建议放在 AstrBot data 目录，容器重启不丢"
+  },
+  "embed_provider": {
+    "description": "向量模型",
+    "type": "string",
+    "options": [
+      "local",
+      "openai",
+      "none"
+    ],
+    "labels": [
+      "本地 Ollama",
+      "OpenAI 兼容",
+      "不使用（纯 BM25）"
+    ],
+    "default": "local"
+  },
+  "embed_base": {
+    "description": "Embedding 接口地址",
+    "type": "string",
+    "default": "http://host.docker.internal:11434/v1",
+    "hint": "容器内访问宿主 Ollama 用 host.docker.internal；本机直连用 127.0.0.1"
+  },
+  "embed_model": {
+    "description": "Embedding 模型",
+    "type": "string",
+    "default": "bge-m3"
+  },
+  "embed_dim": {
+    "description": "向量维度",
+    "type": "int",
+    "default": 1024
+  },
+  "embed_api_key": {
+    "description": "Embedding API Key（本地 Ollama 留空）",
+    "type": "string",
+    "default": "",
+    "secret": true
+  },
+  "summarize": {
+    "description": "用 LLM 生成第一人称记忆",
+    "type": "bool",
+    "default": true
+  },
+  "summary_api_key": {
+    "description": "摘要模型 API Key",
+    "type": "string",
+    "default": "",
+    "secret": true,
+    "hint": "留空时读取环境变量 DEEPSEEK_API_KEY"
+  },
+  "summary_base": {
+    "description": "摘要模型接口地址",
+    "type": "string",
+    "default": "https://api.deepseek.com/v1"
+  },
+  "summary_model": {
+    "description": "摘要模型名",
+    "type": "string",
+    "default": "deepseek-chat"
+  },
+  "persona": {
+    "description": "角色设定（只影响记忆语气）",
+    "type": "text",
+    "default": "桃子姐姐"
+  },
+  "recall_budget": {
+    "description": "每次注入最多几条记忆",
+    "type": "int",
+    "default": 6,
+    "slider": {
+      "min": 1,
+      "max": 12,
+      "step": 1
+    }
+  },
+  "max_chars": {
+    "description": "记忆注入字符上限",
+    "type": "int",
+    "default": 2000,
+    "slider": {
+      "min": 200,
+      "max": 6000,
+      "step": 100
+    }
+  },
+  "capture_group": {
+    "description": "在群聊里捕获与机器人的对话",
+    "type": "bool",
+    "default": true
+  },
+  "debug": {
+    "description": "输出召回调试日志",
+    "type": "bool",
+    "default": false
+  },
+  "name_reply_probability": {
+    "description": "被叫名字时回复的概率",
+    "type": "float",
+    "default": 0.9,
+    "slider": {
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.05
+    }
+  },
+  "flush_interval_seconds": {
+    "description": "缓冲对话落盘间隔（秒）",
+    "type": "int",
+    "default": 60,
+    "slider": {
+      "min": 30,
+      "max": 1800,
+      "step": 30
+    }
+  },
+  "humanize": {
+    "description": "去掉客服腔并把回复压短",
+    "type": "bool",
+    "default": true
+  },
+  "max_reply_chars": {
+    "description": "单条回复最大字数",
+    "type": "int",
+    "default": 40,
+    "slider": {
+      "min": 20,
+      "max": 200,
+      "step": 10
+    }
+  },
+  "capture_all_group": {
+    "description": "记录群里所有文字消息（不只 @ 她的）",
+    "type": "bool",
+    "default": true
+  },
+  "typing_delay": {
+    "description": "回复前随机停顿，像人在打字",
+    "type": "bool",
+    "default": true
+  },
+  "multi_message_chance": {
+    "description": "拆成 2-3 条短消息的概率",
+    "type": "float",
+    "default": 0.35,
+    "slider": {
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.05
+    }
+  },
+  "essay_chance": {
+    "description": "偶尔发一段小作文的概率",
+    "type": "float",
+    "default": 0.1,
+    "slider": {
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.05
+    }
+  },
+  "essay_max_chars": {
+    "description": "小作文最大字数",
+    "type": "int",
+    "default": 220,
+    "slider": {
+      "min": 80,
+      "max": 500,
+      "step": 20
+    }
+  },
+  "auto_recall": {
+    "description": "每轮自动注入相关记忆（关掉则只靠模型主动检索）",
+    "type": "bool",
+    "default": true
+  },
+  "auto_tick": {
+    "description": "定时推进遗忘与巩固",
+    "type": "bool",
+    "default": true
+  },
+  "auto_recall_cooldown_hours": {
+    "description": "同一记忆自动注入的冷却小时数",
+    "type": "float",
+    "default": 24.0,
+    "slider": {
+      "min": 0,
+      "max": 168,
+      "step": 1
+    }
+  }
+}

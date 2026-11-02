@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.8.0 — 2026-11-02
+
+Route B: Hippocampus-owned NapCat adapter.
+
+### Added
+
+- `integrations/napcat/`: standalone OneBot v11 reverse-WS adapter. NapCat is
+  only transport; AstrBot is not in the reply path.
+- Per-scope conversation history, memory capture policy, self-model, tick /
+  consolidate / reflection, `/hmem` commands, `/health`, `/status`.
+- DeepSeek Flash multimodal input, Bing + DuckDuckGo lite search, `web_fetch`
+  with SSRF protection, multi-bubble reply rhythm.
+- 12 integration tests (event parsing, capture policy, commands, SSRF, memory).
+
+### Changed
+
+- Live stack now runs `python -m hippocampus_napcat` as the bridge; NapCat
+  reconnects to the `astrbot` network alias on port 6199.
+- Root test suite: 59 tests. Integration suite: 12 tests.
+
 ## v0.7.1 — 2026-11-01
 
 Summarizer evaluation.
