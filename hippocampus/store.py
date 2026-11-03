@@ -16,10 +16,10 @@ from array import array
 from datetime import datetime, timezone
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
-from .models import Engram, Fact, new_id
+from .models import Engram, Entity, Fact, StagingItem, new_id
 from .tokens import jaccard
 
-SCHEMA_VERSION = 5
+SCHEMA_VERSION = 6
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS engrams (
@@ -113,6 +113,40 @@ CREATE TABLE IF NOT EXISTS meta (
     key   TEXT PRIMARY KEY,
     value TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS staging (
+    staging_id     TEXT PRIMARY KEY,
+    scope          TEXT NOT NULL,
+    context_id     TEXT NOT NULL,
+    context_kind   TEXT NOT NULL,
+    context_size   INTEGER NOT NULL DEFAULT 2,
+    speaker_id     TEXT NOT NULL,
+    speaker_name   TEXT NOT NULL DEFAULT '',
+    actor          TEXT NOT NULL,
+    text           TEXT NOT NULL,
+    addressed      INTEGER NOT NULL DEFAULT 0,
+    witnesses      TEXT NOT NULL DEFAULT '[]',
+    visibility     TEXT NOT NULL,
+    refs           TEXT NOT NULL DEFAULT '[]',
+    tokens         TEXT NOT NULL DEFAULT '[]',
+    at             TEXT NOT NULL,
+    status         TEXT NOT NULL DEFAULT 'pending',
+    engram_id      TEXT,
+    salience       REAL
+);
+CREATE TABLE IF NOT EXISTS entities (
+    scope          TEXT NOT NULL,
+    entity_id      TEXT NOT NULL,
+    kind           TEXT NOT NULL,
+    name           TEXT NOT NULL DEFAULT '',
+    familiarity    REAL NOT NULL DEFAULT 0,
+    interactions   INTEGER NOT NULL DEFAULT 0,
+    first_seen     TEXT,
+    last_seen      TEXT,
+    contexts       TEXT NOT NULL DEFAULT '[]',
+    card           TEXT NOT NULL DEFAULT '{}',
+    meta           TEXT NOT NULL DEFAULT '{}',
+    PRIMARY KEY (scope, entity_id)
+);
 CREATE INDEX IF NOT EXISTS idx_engrams_scope ON engrams(scope, created_at);
 CREATE INDEX IF NOT EXISTS idx_engrams_level ON engrams(scope, level);
 CREATE INDEX IF NOT EXISTS idx_tokens_token ON engram_tokens(token);
@@ -124,6 +158,10 @@ CREATE INDEX IF NOT EXISTS idx_graph_object ON graph_edges(scope, object);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_graph_unique
     ON graph_edges(scope, subject, predicate, object, source_engram);
 CREATE INDEX IF NOT EXISTS idx_vec_model ON engram_vectors(model);
+CREATE INDEX IF NOT EXISTS idx_staging_ctx
+    ON staging(scope, context_id, status, at);
+CREATE INDEX IF NOT EXISTS idx_staging_at ON staging(scope, at);
+CREATE INDEX IF NOT EXISTS idx_entities_kind ON entities(scope, kind);
 """
 
 _ENGRAM_COLUMNS_V2 = {
@@ -809,6 +847,136 @@ class Store:
         ).fetchone()
         return int(row[0] or 0)
 
+    # -- staging (v3) --------------------------------------------------------
+    def insert_staging(self, item: StagingItem) -> None:
+        with self._conn:
+            self._conn.execute(
+                """INSERT INTO staging (
+                    staging_id, scope, context_id, context_kind, context_size,
+                    speaker_id, speaker_name, actor, text, addressed, witnesses,
+                    visibility, refs, tokens, at, status, engram_id, salience
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                _staging_row(item),
+            )
+        self._bump()
+
+    def list_staging(
+        self,
+        scope: str,
+        *,
+        context_id: Optional[str] = None,
+        statuses: Optional[Sequence[str]] = None,
+        since: Optional[datetime] = None,
+        limit: Optional[int] = None,
+    ) -> List[StagingItem]:
+        sql = "SELECT * FROM staging WHERE scope=?"
+        params: List[object] = [scope]
+        if context_id is not None:
+            sql += " AND context_id=?"
+            params.append(context_id)
+        if statuses:
+            sql += " AND status IN ({})".format(",".join("?" for _ in statuses))
+            params.extend(statuses)
+        if since is not None:
+            sql += " AND at >= ?"
+            params.append(_dt(since))
+        sql += " ORDER BY at"
+        if limit:
+            sql += " LIMIT ?"
+            params.append(int(limit))
+        return [_staging_from_row(r) for r in self._conn.execute(sql, params).fetchall()]
+
+    def staging_contexts(self, scope: str, status: str = "pending") -> List[str]:
+        rows = self._conn.execute(
+            "SELECT DISTINCT context_id FROM staging WHERE scope=? AND status=?",
+            (scope, status),
+        ).fetchall()
+        return [r["context_id"] for r in rows]
+
+    def count_staging(self, scope: str, status: Optional[str] = None) -> int:
+        sql = "SELECT COUNT(*) FROM staging WHERE scope=?"
+        params: List[object] = [scope]
+        if status:
+            sql += " AND status=?"
+            params.append(status)
+        return int(self._conn.execute(sql, params).fetchone()[0])
+
+    def set_staging_status(
+        self,
+        staging_ids: Iterable[str],
+        status: str,
+        *,
+        engram_id: Optional[str] = None,
+        salience: Optional[float] = None,
+    ) -> None:
+        ids = list(staging_ids)
+        if not ids:
+            return
+        with self._conn:
+            self._conn.executemany(
+                "UPDATE staging SET status=?, engram_id=COALESCE(?, engram_id), "
+                "salience=COALESCE(?, salience) WHERE staging_id=?",
+                [(status, engram_id, salience, i) for i in ids],
+            )
+        self._bump()
+
+    def purge_staging(self, scope: str, before: datetime) -> int:
+        """Delete every buffer row older than ``before`` (invariant 13)."""
+        with self._conn:
+            cur = self._conn.execute(
+                "DELETE FROM staging WHERE scope=? AND at < ?", (scope, _dt(before))
+            )
+        if cur.rowcount:
+            self._bump()
+        return int(cur.rowcount or 0)
+
+    # -- entities (v3) -------------------------------------------------------
+    def get_entity(self, scope: str, entity_id: str) -> Optional[Entity]:
+        row = self._conn.execute(
+            "SELECT * FROM entities WHERE scope=? AND entity_id=?",
+            (scope, entity_id),
+        ).fetchone()
+        return _entity_from_row(row) if row else None
+
+    def upsert_entity(self, entity: Entity) -> None:
+        with self._conn:
+            self._conn.execute(
+                """INSERT INTO entities (
+                    scope, entity_id, kind, name, familiarity, interactions,
+                    first_seen, last_seen, contexts, card, meta
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?)
+                ON CONFLICT(scope, entity_id) DO UPDATE SET
+                    kind=excluded.kind, name=excluded.name,
+                    familiarity=excluded.familiarity,
+                    interactions=excluded.interactions,
+                    first_seen=excluded.first_seen, last_seen=excluded.last_seen,
+                    contexts=excluded.contexts, card=excluded.card,
+                    meta=excluded.meta""",
+                (
+                    entity.scope,
+                    entity.entity_id,
+                    entity.kind,
+                    entity.name,
+                    float(entity.familiarity),
+                    int(entity.interactions),
+                    _dt(entity.first_seen),
+                    _dt(entity.last_seen),
+                    json.dumps(entity.contexts, ensure_ascii=False),
+                    json.dumps(entity.card, ensure_ascii=False),
+                    json.dumps(entity.meta, ensure_ascii=False),
+                ),
+            )
+        self._bump()
+
+    def list_entities(self, scope: str, kind: Optional[str] = None) -> List[Entity]:
+        sql = "SELECT * FROM entities WHERE scope=?"
+        params: List[object] = [scope]
+        if kind:
+            sql += " AND kind=?"
+            params.append(kind)
+        sql += " ORDER BY familiarity DESC, last_seen DESC"
+        return [_entity_from_row(r) for r in self._conn.execute(sql, params).fetchall()]
+
     # -- meta ----------------------------------------------------------------
     def get_meta(self, key: str, default: str = "") -> str:
         row = self._conn.execute("SELECT value FROM meta WHERE key=?", (key,)).fetchone()
@@ -939,6 +1107,72 @@ def _blob_to_vec(blob: bytes, dim: int) -> List[float]:
     values = array("f")
     values.frombytes(blob)
     return list(values)[:dim]
+
+
+def _staging_row(item: StagingItem) -> Tuple[object, ...]:
+    return (
+        item.staging_id,
+        item.scope,
+        item.context_id,
+        item.context_kind,
+        int(item.context_size),
+        item.speaker_id,
+        item.speaker_name,
+        item.actor,
+        item.text,
+        int(bool(item.addressed)),
+        json.dumps(item.witnesses, ensure_ascii=False),
+        item.visibility,
+        json.dumps(item.refs, ensure_ascii=False),
+        json.dumps(sorted(item.tokens), ensure_ascii=False),
+        _dt(item.at),
+        item.status,
+        item.engram_id,
+        item.salience,
+    )
+
+
+def _staging_from_row(row: sqlite3.Row) -> StagingItem:
+    try:
+        tokens = set(json.loads(row["tokens"] or "[]"))
+    except (TypeError, ValueError):
+        tokens = set((row["tokens"] or "").split())
+    return StagingItem(
+        staging_id=row["staging_id"],
+        scope=row["scope"],
+        context_id=row["context_id"],
+        context_kind=row["context_kind"],
+        context_size=int(row["context_size"]),
+        speaker_id=row["speaker_id"],
+        speaker_name=row["speaker_name"] or "",
+        actor=row["actor"],
+        text=row["text"],
+        addressed=bool(row["addressed"]),
+        witnesses=json.loads(row["witnesses"] or "[]"),
+        visibility=row["visibility"],
+        refs=json.loads(row["refs"] or "[]"),
+        tokens=tokens,
+        at=_parse(row["at"]) or datetime.now(timezone.utc),
+        status=row["status"],
+        engram_id=row["engram_id"],
+        salience=float(row["salience"]) if row["salience"] is not None else None,
+    )
+
+
+def _entity_from_row(row: sqlite3.Row) -> Entity:
+    return Entity(
+        scope=row["scope"],
+        entity_id=row["entity_id"],
+        kind=row["kind"],
+        name=row["name"] or "",
+        familiarity=float(row["familiarity"] or 0.0),
+        interactions=int(row["interactions"] or 0),
+        first_seen=_parse(row["first_seen"]),
+        last_seen=_parse(row["last_seen"]),
+        contexts=json.loads(row["contexts"] or "[]"),
+        card=json.loads(row["card"] or "{}"),
+        meta=json.loads(row["meta"] or "{}"),
+    )
 
 
 def _fact_from_row(row: sqlite3.Row) -> Fact:

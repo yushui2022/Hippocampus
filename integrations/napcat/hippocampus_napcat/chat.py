@@ -42,7 +42,7 @@ class ChatService:
     def observe(self, event: MessageEvent) -> None:
         text = event.text or ("[图片]" if event.images else "")
         if text:
-            self.histories[event.scope].append(
+            self.histories[event.context_id].append(
                 {"role": "user", "name": event.sender_name, "text": text}
             )
 
@@ -51,26 +51,31 @@ class ChatService:
         if is_greeting(text):
             answer = greeting_reply(text)
             await self._send(event, answer)
-            self._record_assistant(event.scope, answer)
+            self._record_assistant(event, answer)
             return
 
-        hits = []
         query = text
         if empty_mention:
             recent = [
                 h["text"]
-                for h in list(self.histories[event.scope])[-4:]
+                for h in list(self.histories[event.context_id])[-4:]
                 if h.get("role") == "user"
             ]
             query = " ".join(recent[-3:]) or "最近"
-        try:
-            hits = self.memory.recall(event.scope, query, self.cfg.recall_budget)
-        except Exception:
-            hits = []
 
-        system = self._system(event.scope, empty_mention, hits)
+        try:
+            bundle = self.memory.context(
+                query,
+                context_id=event.context_id,
+                present=[event.speaker_id],
+                budget=self.cfg.recall_budget,
+            )
+        except Exception:
+            bundle = None
+
+        system = self._system(bundle, empty_mention)
         messages: List[dict] = [{"role": "system", "content": system}]
-        history = list(self.histories[event.scope])[-8:]
+        history = list(self.histories[event.context_id])[-8:]
         for item in history:
             if (
                 item.get("role") == "user"
@@ -126,17 +131,15 @@ class ChatService:
             await self._send(event, extra)
         full = " ".join([visible] + list(extras)).strip()
         if full:
-            self._record_assistant(event.scope, full)
+            self._record_assistant(event, full)
 
-    def _system(self, scope: str, empty_mention: bool, hits=()) -> str:
+    def _system(self, bundle, empty_mention: bool) -> str:
         parts = [self.cfg.persona, self.cfg.style]
-        if hits:
-            parts.append(
-                "<长期记忆>\n"
-                + "\n".join("- {}".format(hit.text) for hit in hits)
-                + "\n</长期记忆>"
-            )
-        self_block = self.memory.self_model(scope).render()
+        if bundle is not None:
+            rendered = bundle.render()
+            if rendered:
+                parts.append(rendered)
+        self_block = self.memory.self_block()
         if self_block:
             parts.append(self_block)
         if empty_mention:
@@ -209,12 +212,14 @@ class ChatService:
             group_id=event.group_id, user_id=event.user_id, text=text
         )
 
-    def _record_assistant(self, scope: str, text: str) -> None:
+    def _record_assistant(self, event: MessageEvent, text: str) -> None:
         try:
-            self.memory.record(scope, text, actor="assistant")
+            self.memory.observe_assistant(event, text)
         except Exception:
             pass
-        self.histories[scope].append({"role": "assistant", "text": text})
+        self.histories[event.context_id].append(
+            {"role": "assistant", "text": text}
+        )
 
     async def _image_data(self, url: str) -> str:
         try:

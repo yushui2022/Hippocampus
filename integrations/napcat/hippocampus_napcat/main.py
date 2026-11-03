@@ -40,23 +40,27 @@ async def ws_handler(request: web.Request) -> web.WebSocketResponse:
 
 async def health(request: web.Request) -> web.Response:
     bridge: Bridge = request.app["bridge"]
+    stats = bridge.memory.brain.stats()
     return web.json_response(
         {
             "ok": True,
             "napcat": bridge.onebot.connected,
-            "scopes": len(bridge.memory.hippos),
+            "scope": bridge.memory.brain.scope,
+            "engrams": stats.get("total"),
+            "buffer": stats.get("buffer_pending"),
+            "entities": stats.get("entities"),
         }
     )
 
 
 async def status(request: web.Request) -> web.Response:
     bridge: Bridge = request.app["bridge"]
-    scope = request.query.get("scope", "")
-    if not scope:
-        return web.json_response(
-            {"scopes": list(bridge.memory.hippos), "napcat": bridge.onebot.connected}
-        )
-    return web.json_response(bridge.memory.status(scope))
+    return web.json_response(
+        {
+            "napcat": bridge.onebot.connected,
+            "status": bridge.memory.status(),
+        }
+    )
 
 
 async def on_startup(app: web.Application) -> None:

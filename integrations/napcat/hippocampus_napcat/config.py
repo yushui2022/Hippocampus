@@ -57,6 +57,9 @@ class Config:
     port: int = 6199
 
     memory_db: str = "/data/hippocampus/memory.db"
+    brain_scope: str = "self:taozi"
+    profile: str = "companion"
+    card_min_evidence: int = 2
     chat_model: str = "deepseek-flash"
     chat_base: str = "https://api.deepseek.com/v1"
     api_key: str = ""
@@ -98,6 +101,9 @@ class Config:
             host=_env("BRIDGE_HOST", "0.0.0.0"),
             port=_int("BRIDGE_PORT", 6199),
             memory_db=_env("MEMORY_DB", "/data/hippocampus/memory.db"),
+            brain_scope=_env("BRAIN_SCOPE", "self:taozi"),
+            profile=_env("BRAIN_PROFILE", "companion"),
+            card_min_evidence=_int("CARD_MIN_EVIDENCE", 2),
             chat_model=_env("CHAT_MODEL", "deepseek-flash"),
             chat_base=_env("CHAT_BASE", "https://api.deepseek.com/v1"),
             api_key=_env("DEEPSEEK_API_KEY", ""),
@@ -130,4 +136,8 @@ class Config:
     def should_capture(self, group_id: str, addressed: bool) -> bool:
         if not group_id:
             return self.capture_private
-        return group_id in self.capture_groups or addressed
+        return (
+            group_id == self.test_group
+            or group_id in self.capture_groups
+            or addressed
+        )

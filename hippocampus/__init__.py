@@ -18,9 +18,23 @@ from .episode import Episode, WindowSegmenter
 from .facts import FactCandidate, NullFactExtractor, RuleFactExtractor
 from .indexer import AsyncIndexer
 from .kernel import Hippocampus
-from .models import Engram, Event, Fact, RecallHit, Summary, TickReport
+from .brain import Brain, BrainContext, ObserveResult
+from .consolidation import ConsolidationReport, Consolidator
+from .models import (
+    Engram,
+    Entity,
+    Event,
+    Fact,
+    RecallHit,
+    StagingItem,
+    Summary,
+    TickReport,
+    Utterance,
+)
 from .ops import backup_database, restore_database, snapshot
-from .profiles import PRESETS, Profile, get_profile
+from .profiles import PRESETS, ContextPolicy, Profile, get_profile
+from .sensory import SensoryGate
+from .self_model import SelfModel
 from .retrieval import (
     BM25Index,
     Embedder,
@@ -39,10 +53,21 @@ from .summarizer import (
     parse_summary,
 )
 
-__version__ = "0.8.0"
+__version__ = "0.9.0"
 
 __all__ = [
     "Hippocampus",
+    "Brain",
+    "BrainContext",
+    "ObserveResult",
+    "Consolidator",
+    "ConsolidationReport",
+    "Utterance",
+    "StagingItem",
+    "Entity",
+    "SensoryGate",
+    "SelfModel",
+    "ContextPolicy",
     "AsyncIndexer",
     "Event",
     "Engram",

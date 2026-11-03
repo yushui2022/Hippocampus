@@ -251,6 +251,8 @@ class Hippocampus:
         kind: str = "episodic",
         summarize: bool = True,
         importance: Optional[float] = None,
+        meta: Optional[Dict[str, Any]] = None,
+        summary: Optional[Summary] = None,
     ) -> Optional[Engram]:
         events = [e for e in events if (e.text or "").strip()]
         if not events:
@@ -323,20 +325,24 @@ class Hippocampus:
             refs=refs,
             tokens=tokens,
             meta={
-                "actor": "user",
+                "actor": "user" if any(e.actor == "user" for e in events) else "assistant",
                 "scene": events[0].scene,
                 "turns": len(events),
                 "span": [_dt(events[0].resolved_at()), _dt(at)],
                 "facts": [
                     e.meta["fact"] for e in events if e.meta.get("fact")
                 ],
+                **dict(meta or {}),
             },
         )
         self.store.insert(engram)
         self._index(engram, query_vec)
         if self._auto_facts:
             self._ingest_facts(engram, list(events), at)
-        if summarize and self._summarizer is not None:
+        if summary is not None:
+            self._apply_summary_obj(engram, summary)
+            self.store.update(engram)
+        elif summarize and self._summarizer is not None:
             self._request_summary(engram, list(events))
         return engram
 
@@ -390,6 +396,8 @@ class Hippocampus:
         now: Optional[datetime] = None,
         reinforce: bool = False,
         spontaneous: bool = False,
+        where: Optional[Callable[[Engram], bool]] = None,
+        boost: Optional[Callable[[Engram], float]] = None,
     ) -> List[RecallHit]:
         at = _aware(now) if now else self.now()
         if budget <= 0:
@@ -419,6 +427,8 @@ class Hippocampus:
                 continue
             if spontaneous and not self._may_speak(engram, at):
                 continue
+            if where is not None and not where(engram):
+                continue
 
             r = decay.retrievability(engram.active_age_days, engram.stability)
             signals = {
@@ -442,6 +452,8 @@ class Hippocampus:
                 ),
                 self.profile.retrieval_weights,
             )
+            if boost is not None:
+                score += float(boost(engram))
             scored.append((engram_id, score, engram, signals))
 
         if not scored:

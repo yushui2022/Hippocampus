@@ -1,5 +1,12 @@
 # HANDOFF · Hippocampus × NapCat（路线 B）
 
+> **2026-11-03 更新：v0.9.0，v3 P1 已完成。**
+> 记忆链路已从「v2 内核直连」升级为 `Brain`：感官门控 → 72 小时暂存 →
+> 睡眠巩固 → 来源规则 → 人物卡。线上适配器已切到 `Brain`，新的自我 scope
+> 是 `self:taozi`，情境是 `qq:dm:<uid>` / `qq:group:<gid>`。
+> 旧的 `qq:*` / `napcat:*` 数据仍在同一个库文件里，但新代码不再读取。
+> 根测试 77 项，适配器测试 14 项，`eval.forgetting_v3` 五项全过。
+
 > 写给接手的人 / 另一个 AI。目标是让你在 10 分钟内知道：
 > 这是什么、现在到哪了、怎么跑、哪里会踩坑、下一步该做什么。
 
@@ -18,26 +25,29 @@ QQ 消息经 NapCat 进入 `hippocampus-napcat` 适配器；对话历史、长�
 | 项 | 状态 |
 |---|---|
 | 仓库 | `github.com/yushui2022/Hippocampus` |
-| 分支 / 提交 | `v2.0` / `26a8ceb`（`main` 已同步） |
-| 版本 | `v0.8.0` |
-| 根测试 | 59 个 unittest 全绿 |
-| 适配器测试 | 12 个 pytest 全绿 |
+| 分支 / 提交 | `v3.0` / 见 `git log`（`main` 稍后同步） |
+| 版本 | `v0.9.0` |
+| 根测试 | 77 个 unittest 全绿 |
+| 适配器测试 | 14 个 pytest 全绿 |
 | 运行中 | `hippocampus-bridge`、`napcat` |
 | bridge 健康 | `{"ok": true, "napcat": true}` |
-| 当前记忆库 | 93 engrams / 3 facts |
+| 当前记忆库 | 旧数据保留；新 scope `self:taozi` 从空开始 |
 | 真实群消息 | 新适配器 scope `qq:GroupMessage:922410298` 已写入 |
 | 图片 | DeepSeek Flash 多模态直传，已直接 API 验证 |
 | 搜索 | `web_search` / `web_fetch`，已合成链路验证 |
 | 人格 | SelfModel 已生成（含 `qq:` scope） |
 
-### 重要：当前有两代 scope 并存
+### 重要：两代 scope 并存
 
-| scope 前缀 | 来源 | 状态 |
+| scope / 情境 | 来源 | 状态 |
 |---|---|---|
-| `napcat:...` | 旧 AstrBot + 旧 bridge 原型 | 历史数据，仍在新库中 |
-| `qq:...` | 当前 `integrations/napcat` | 现行链路 |
+| `self:taozi` | v0.9.0 `Brain`（现行） | 新记忆全部写这里 |
+| `qq:dm:<uid>` / `qq:group:<gid>` | 上面这个 Brain 的情境 id | 不是独立记忆，只是来源标签 |
+| `qq:GroupMessage:*`、`napcat:*` | v0.8 及更早 | 历史数据，保留但不再读取 |
 
-新代码只读写 `qq:`。旧 `napcat:` 数据不会自动迁移，也不会被新 adapter 使用。接手后建议先决定：**保留作历史、迁移、还是清理。**
+v3 是「一个自我一个大脑」：私聊和群聊共享记忆，靠来源规则决定能不能说。
+旧数据没有 v3 的 `source` 字段，所以即使被读到也会被视为可说；但新 scope
+不会去读它们。确认不需要后，可以按 v3 文档第 15 节直接删除旧 scope。
 
 ---
 

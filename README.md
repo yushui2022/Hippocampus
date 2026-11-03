@@ -23,7 +23,7 @@ L4  archived      not volunteered, still reachable by keyword
 
 ## Status
 
-**v0.8.0 — v2 core + NapCat route B.** Runnable, tested, benchmarked. Not yet wired to a channel.
+**v0.9.0 — v3 brain layer + NapCat route B.** Runnable, tested, benchmarked, live on QQ.
 
 | | |
 |---|---|
@@ -47,7 +47,29 @@ L4  archived      not volunteered, still reachable by keyword
 | Graph memory (opt-in) | ✅ flag |
 | Blind A/B harness | ✅ harness |
 | NapCat adapter (route B, Hippocampus-owned) | ✅ |
+| v3 sensory gate (filler / noise / duplicate) | ✅ |
+| Hippocampal staging buffer (72 h TTL) | ✅ |
+| Sleep consolidation (LLM + rule fallback) | ✅ |
+| Source rules (private / shared / public) | ✅ |
+| Participant cards + familiarity | ✅ |
+| Evidence-gated self-model (waterline) | ✅ |
+| Forgetting benchmark (`eval.forgetting_v3`) | ✅ |
 | Long-running HTTP API service | ❌ P3 |
+| Embodied client (Unity / browser) | ❌ next |
+
+### What changed in v3
+
+- **Most input never enters memory.** `SensoryGate` drops fillers, noise and
+  duplicate lines before anything is written.
+- **There is a buffer layer.** `Brain.observe` only inserts a staging row;
+  sleep consolidation later promotes or drops it. Small talk is recallable
+  for ~72 hours, then gone.
+- **Every memory carries a source.** A DM secret is not injected in front of a
+  group; not because the model is told to behave, but because recall filters it.
+- **People get cards.** Notes need two independent pieces of evidence before
+  they are rendered.
+- **Reflection has a waterline and evidence counts**, so a busy week cannot
+  skip memories and one joke cannot freeze into a trait.
 
 ### What changed in v2
 

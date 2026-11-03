@@ -52,12 +52,78 @@ class Profile:
     candidate_limit: int = 50
     query_cache_size: int = 128
 
+    # -- v3: sensory gate, attention, staging, sleep ----------------------
+    sensory_min_chars: int = 2
+    crowd_size: int = 30
+    attention_familiar: float = 0.3
+    attention_min_chars_crowd: int = 8
+    buffer_ttl_hours: float = 72.0
+    sleep_idle_minutes: float = 20.0
+    sleep_pressure: float = 3.0
+    sleep_max_hold_hours: float = 6.0
+    sleep_batch: int = 60
+    promote_threshold: float = 0.35
+    card_min_evidence: int = 2
+    familiarity_half_life_days: float = 60.0
+    reflect_pressure: float = 3.0
+    reflect_min_hours: float = 6.0
+    # Frequency of "small talk" before it counts as repetition.
+    repetition_window: int = 4
+
     @property
     def max_level(self) -> int:
         return self.levels - 1
 
     def weight_sum(self) -> float:
         return sum(self.importance_weights.values()) or 1.0
+
+    def policy(self, context_kind: str = "dyad", context_size: int = 2) -> "ContextPolicy":
+        """Rules for one situation.
+
+        The same brain lives in DMs and group chats; only the situation's
+        parameters change. Personality does not.
+        """
+        if context_kind == "group":
+            return ContextPolicy(
+                promote_threshold=max(self.promote_threshold, 0.45),
+                sleep_idle_minutes=max(self.sleep_idle_minutes, 30.0),
+                sleep_pressure=max(self.sleep_pressure, 4.0),
+                sleep_max_hold_hours=self.sleep_max_hold_hours,
+                sleep_batch=self.sleep_batch,
+                card_min_evidence=max(self.card_min_evidence, 2),
+                familiarity_half_life_days=min(self.familiarity_half_life_days, 45.0),
+                reflect_pressure=max(self.reflect_pressure, 4.0),
+                attention_familiar=self.attention_familiar,
+                attention_min_chars_crowd=self.attention_min_chars_crowd,
+            )
+        return ContextPolicy(
+            promote_threshold=self.promote_threshold,
+            sleep_idle_minutes=self.sleep_idle_minutes,
+            sleep_pressure=self.sleep_pressure,
+            sleep_max_hold_hours=self.sleep_max_hold_hours,
+            sleep_batch=self.sleep_batch,
+            card_min_evidence=self.card_min_evidence,
+            familiarity_half_life_days=self.familiarity_half_life_days,
+            reflect_pressure=self.reflect_pressure,
+            attention_familiar=self.attention_familiar,
+            attention_min_chars_crowd=self.attention_min_chars_crowd,
+        )
+
+
+@dataclass(frozen=True)
+class ContextPolicy:
+    """Situation-level knobs derived from a profile."""
+
+    promote_threshold: float
+    sleep_idle_minutes: float
+    sleep_pressure: float
+    sleep_max_hold_hours: float
+    sleep_batch: int
+    card_min_evidence: int
+    familiarity_half_life_days: float
+    reflect_pressure: float
+    attention_familiar: float
+    attention_min_chars_crowd: int
 
 
 PRESETS: Dict[str, Profile] = {

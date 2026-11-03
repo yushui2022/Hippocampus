@@ -343,7 +343,7 @@ class TestRetrieval(unittest.TestCase):
         conn.commit()
         conn.close()
         store = Store(path)
-        self.assertEqual(store.schema_version(), 5)
+        self.assertEqual(store.schema_version(), 6)
         old = store.get("old1")
         self.assertEqual(old.fidelity, 2)
         self.assertEqual(old.gist_source, "none")

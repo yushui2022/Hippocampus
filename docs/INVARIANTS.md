@@ -79,3 +79,47 @@ model then acts on its own mistake.
 Don't. Add a profile flag or a new API instead. If an invariant truly must
 change, update this file, the test and the changelog in the same PR, and
 explain the user-visible consequence.
+
+---
+
+# v3 invariants (12–18)
+
+These sit above the v2 invariants. v2 still owns decay, fidelity and rendering;
+v3 owns what enters memory, where it came from, and whether it may be spoken.
+
+| # | Invariant | Test |
+|---|---|---|
+| 12 | `Brain.observe` never calls an LLM | `test_observe_never_calls_llm` |
+| 13 | A dropped buffer row leaves no trace after the TTL | `test_dropped_buffer_visible_then_gone_after_ttl` |
+| 14 | Assistant lines never create facts, card notes or self-model entries | `test_assistant_lines_never_create_facts_or_notes` |
+| 15 | A private memory is never recalled in front of outsiders | `test_private_memory_not_recalled_in_group` |
+| 16 | `context()` / `peek()` write nothing | `test_context_is_read_only` |
+| 17 | Reflection does not call the LLM again with no new memories | `test_reflection_does_not_loop` |
+| 18 | `maintain(now)` is idempotent for the same clock | `test_maintain_is_idempotent` |
+
+### Why 12 matters
+
+`observe` is the hot path: one message, one SQLite insert, no network. If the
+gate or the staging write ever needs a model call, every message inherits the
+model's latency and failure modes.
+
+### Why 14 matters
+
+An engam can contain assistant text (for context), but facts and notes are
+derived only from `actor=user` turns. This is the fix for the classic failure:
+the model writes a summary, the summary becomes a fact, and the model recites
+its own mistake back as a memory.
+
+### Why 15 matters
+
+The v2 adapter enforced privacy with a prompt line ("don't reveal DMs"). v3
+filters at recall: a private source's allowed listeners are its speakers and
+witnesses, and the current audience must be a subset. The model never sees the
+memory in the first place.
+
+### Why 17 matters
+
+The v2 self-model used `reflected_ids[:200]`. A busy week silently dropped old
+ids, so "unreflected" memories could be reflected twice or never. v3 stores a
+timestamp waterline (`reflected_until`) plus evidence counts, and reflection
+only runs when the pressure and time thresholds are met.

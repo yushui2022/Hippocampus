@@ -1,19 +1,21 @@
 from __future__ import annotations
 
-import asyncio
-from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Set
+from typing import Dict, List, Optional
 
-from hippocampus import Event, Hippocampus, LLMSummarizer, LocalEmbedder, Store
-from hippocampus.self_model import SelfModel, parse_reflection, reflection_prompt
+from hippocampus import Brain, LLMSummarizer, LocalEmbedder, Store, Utterance
 
 from .config import Config
+from .events import MessageEvent
 
 
 class MemoryService:
-    """Owns all Hippocampus instances and the self-model per QQ scope."""
+    """One Brain per bot.
+
+    DMs and groups are not separate memories: they are separate *situations*
+    inside one self, distinguished by source. That is the v3 model.
+    """
 
     def __init__(
         self,
@@ -40,95 +42,107 @@ class MemoryService:
                 base_url=cfg.chat_base,
                 model=cfg.summary_model,
             )
-        self.hippos: Dict[str, Hippocampus] = {}
-        self.self_models: Dict[str, SelfModel] = {}
-        self.active_days: Dict[str, Set] = defaultdict(set)
+        self.brain = Brain(
+            scope=cfg.brain_scope,
+            store=self.store,
+            profile=cfg.profile,
+            summarizer=self.summarizer,
+            embedder=self.embedder,
+            persona=cfg.persona,
+            async_index=True,
+            async_summary=True,
+        )
 
-    def hippo(self, scope: str) -> Hippocampus:
-        item = self.hippos.get(scope)
-        if item is None:
-            item = Hippocampus(
-                scope=scope,
-                store=self.store,
-                embedder=self.embedder,
-                summarizer=self.summarizer,
-                persona=self.cfg.persona,
-                async_index=True,
-                async_summary=True,
-            )
-            self.hippos[scope] = item
-        return item
-
-    def self_model(self, scope: str) -> SelfModel:
-        item = self.self_models.get(scope)
-        if item is None:
-            item = SelfModel(self.store, scope)
-            self.self_models[scope] = item
-        return item
-
-    def record(
+    # -- writes --------------------------------------------------------------
+    def observe(
         self,
-        scope: str,
-        text: str,
+        event: MessageEvent,
         *,
-        actor: str = "user",
-        sender_name: str = "",
-        refs: Optional[Iterable[str]] = None,
-    ) -> None:
-        text = (text or "").strip()
-        if not text:
-            return
-        self.active_days[scope].add(datetime.now(timezone.utc).date())
-        self.hippo(scope).feed_episode(
-            Event(
-                text=text,
-                actor=actor,
+        witnesses: Optional[List[str]] = None,
+        context_size: int = 2,
+    ):
+        return self.brain.observe(
+            Utterance(
+                text=event.text or ("[图片]" if event.images else ""),
+                context_id=event.context_id,
+                context_kind="group" if event.is_group else "dyad",
+                context_size=max(2, context_size),
+                speaker_id=event.speaker_id,
+                speaker_name=event.sender_name,
+                actor="user",
+                addressed=event.addressed(self.cfg.bot_names),
+                witnesses=list(witnesses or [event.speaker_id]),
+                refs=[event.message_id] if event.message_id else [],
                 at=datetime.now(timezone.utc),
-                meta={"sender_name": sender_name or "你", "refs": list(refs or [])},
-            ),
-            max_turns=10,
+            )
         )
 
-    def recall(self, scope: str, query: str, budget: int = 2):
-        return self.hippo(scope).recall(query, budget=budget)
-
-    def tick_all(self, now: Optional[datetime] = None) -> None:
-        at = now or datetime.now(timezone.utc)
-        for scope, hippo in list(self.hippos.items()):
-            days = self.active_days.pop(scope, set())
-            hippo.flush_episode()
-            hippo.tick(at, active_days=days)
-            hippo.consolidate(at)
-
-    async def reflect(
-        self, scope: str, *, force: bool = False, min_pending: int = 4
-    ) -> bool:
-        if self.summarizer is None:
-            return False
-        hippo = self.hippo(scope)
-        model = self.self_model(scope)
-        pending = model.pending(hippo.store.list(scope))
-        if not pending or (not force and len(pending) < min_pending):
-            return False
-        raw = await asyncio.to_thread(
-            self.summarizer.chat, reflection_prompt(model, pending)
+    def observe_assistant(self, event: MessageEvent, text: str) -> None:
+        if not text.strip():
+            return
+        self.brain.observe(
+            Utterance(
+                text=text,
+                context_id=event.context_id,
+                context_kind="group" if event.is_group else "dyad",
+                context_size=2,
+                speaker_id="self",
+                speaker_name=self.cfg.bot_names[0] if self.cfg.bot_names else "我",
+                actor="assistant",
+                addressed=False,
+                witnesses=[event.speaker_id],
+                at=datetime.now(timezone.utc),
+            )
         )
-        model.merge(parse_reflection(raw))
-        model.mark_reflected(pending)
-        return True
+        self.brain.mark_replied(event.context_id, event.speaker_id)
 
-    def status(self, scope: str) -> Dict[str, object]:
-        hippo = self.hippo(scope)
-        stats = hippo.stats()
-        stats["self_model"] = self.self_model(scope).render()
+    # -- reads ---------------------------------------------------------------
+    def context(
+        self,
+        query: str,
+        *,
+        context_id: str,
+        present: Optional[List[str]] = None,
+        budget: int = 2,
+    ):
+        return self.brain.context(
+            query,
+            context_id=context_id,
+            present=present or [],
+            budget=budget,
+        )
+
+    def self_block(self) -> str:
+        return self.brain.self_model().render(
+            min_evidence=self.cfg.card_min_evidence
+        )
+
+    # -- maintenance ---------------------------------------------------------
+    def maintain(self) -> Dict[str, object]:
+        return self.brain.maintain()
+
+    def sleep(self, *, context_id: Optional[str] = None, force: bool = True):
+        return self.brain.sleep(context_id=context_id, force=force)
+
+    def reflect(self, *, force: bool = True) -> bool:
+        return self.brain.reflect(force=force)
+
+    def status(self) -> Dict[str, object]:
+        stats = self.brain.stats()
+        stats["self_model"] = self.self_block()
+        stats["people"] = [
+            {
+                "id": entity.entity_id,
+                "name": entity.name,
+                "familiarity": round(entity.familiarity, 3),
+                "notes": len(entity.card.get("notes") or []),
+            }
+            for entity in self.brain.people()
+        ]
         return stats
 
     def close(self) -> None:
-        for hippo in self.hippos.values():
-            try:
-                hippo.flush_episode()
-                hippo.close()
-            except Exception:
-                pass
-        self.hippos.clear()
-        self.store.close()
+        try:
+            self.brain.close()
+        finally:
+            self.store.close()

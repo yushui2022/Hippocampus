@@ -13,7 +13,7 @@ def test_parse_private():
         "sender": {"nickname": "斯高"},
         "message": [{"type": "text", "data": {"text": "你好"}}],
     })
-    assert e and e.scope == "qq:FriendMessage:2" and e.text == "你好"
+    assert e and e.context_id == "qq:dm:2" and e.text == "你好"
 
 
 def test_parse_group_at_and_image():
@@ -27,7 +27,7 @@ def test_parse_group_at_and_image():
             {"type": "image", "data": {"url": "https://x/y.png"}},
         ],
     })
-    assert e and e.scope == "qq:GroupMessage:99"
+    assert e and e.context_id == "qq:group:99"
     assert e.at_self and e.images == ["https://x/y.png"] and e.sender_name == "阿澈"
 
 

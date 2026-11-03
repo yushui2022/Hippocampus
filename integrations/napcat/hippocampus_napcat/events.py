@@ -23,10 +23,19 @@ class MessageEvent:
         return bool(self.group_id)
 
     @property
-    def scope(self) -> str:
+    def context_id(self) -> str:
         if self.group_id:
-            return "qq:GroupMessage:" + self.group_id
-        return "qq:FriendMessage:" + self.user_id
+            return "qq:group:" + self.group_id
+        return "qq:dm:" + self.user_id
+
+    @property
+    def speaker_id(self) -> str:
+        return "qq:" + self.user_id
+
+    @property
+    def scope(self) -> str:
+        """Legacy name kept for callers that only need a chat key."""
+        return self.context_id
 
     def addressed(self, names=("桃子姐姐", "桃子姐")) -> bool:
         return (not self.is_group) or self.at_self or any(

@@ -37,6 +37,115 @@ class Event:
 
 
 @dataclass
+class Utterance:
+    """One perceived input, with its situation and its source.
+
+    The kernel stores this in the hippocampal buffer first. Nothing here calls
+    an LLM: ``Brain.observe`` must stay O(1) writes (invariant 12).
+    """
+
+    text: str
+    context_id: str = "default"
+    context_kind: str = "dyad"  # dyad | group
+    context_size: int = 2
+    speaker_id: str = "user"
+    speaker_name: str = ""
+    actor: str = "user"  # user | assistant
+    addressed: bool = False
+    witnesses: List[str] = field(default_factory=list)
+    visibility: str = ""  # private | shared | public; inferred when empty
+    at: Optional[datetime] = None
+    refs: List[str] = field(default_factory=list)
+    kind: str = "speech"  # speech | action | expression | scene
+    meta: Dict[str, Any] = field(default_factory=dict)
+
+    def resolved_at(self) -> datetime:
+        return self.at or utcnow()
+
+    def resolved_visibility(self) -> str:
+        if self.visibility in ("private", "shared", "public"):
+            return self.visibility
+        if self.context_kind == "group":
+            return "shared"
+        return "private"
+
+    def source(self) -> Dict[str, Any]:
+        return {
+            "context_id": self.context_id,
+            "context_kind": self.context_kind,
+            "speakers": [self.speaker_id],
+            "witnesses": list(dict.fromkeys(self.witnesses or [self.speaker_id])),
+            "visibility": self.resolved_visibility(),
+            "at": self.resolved_at().isoformat(),
+        }
+
+
+@dataclass
+class StagingItem:
+    """One buffered perception in the hippocampal staging table."""
+
+    staging_id: str = field(default_factory=lambda: new_id("stg"))
+    scope: str = "default"
+    context_id: str = "default"
+    context_kind: str = "dyad"
+    context_size: int = 2
+    speaker_id: str = "user"
+    speaker_name: str = ""
+    actor: str = "user"
+    text: str = ""
+    addressed: bool = False
+    witnesses: List[str] = field(default_factory=list)
+    visibility: str = "private"
+    refs: List[str] = field(default_factory=list)
+    tokens: Set[str] = field(default_factory=set)
+    at: datetime = field(default_factory=utcnow)
+    status: str = "pending"  # pending | promoted | dropped
+    engram_id: Optional[str] = None
+    salience: Optional[float] = None
+
+    def source(self) -> Dict[str, Any]:
+        return {
+            "context_id": self.context_id,
+            "context_kind": self.context_kind,
+            "speakers": [self.speaker_id],
+            "witnesses": list(self.witnesses),
+            "visibility": self.visibility,
+            "at": self.at.isoformat(),
+        }
+
+    def as_engram(self) -> Engram:
+        """Buffer hits are rendered like L0 memories."""
+        return Engram(
+            engram_id=self.staging_id,
+            scope=self.scope,
+            kind="episodic",
+            raw_text=self.text,
+            level=0,
+            fidelity=0,
+            created_at=self.at,
+            refs=list(self.refs),
+            meta={"layer": "buffer", "source": self.source(), "status": self.status},
+        )
+
+
+@dataclass
+class Entity:
+    """A long-lived entity card: a participant or a context."""
+
+    scope: str = "default"
+    entity_id: str = ""
+    kind: str = "participant"  # participant | context
+    name: str = ""
+    familiarity: float = 0.0
+    interactions: int = 0
+    first_seen: Optional[datetime] = None
+    last_seen: Optional[datetime] = None
+    contexts: List[str] = field(default_factory=list)
+    card: Dict[str, Any] = field(default_factory=dict)
+    meta: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
 class Engram:
     """One memory trace.
 
