@@ -55,7 +55,7 @@ L4  archived      not volunteered, still reachable by keyword
 | Evidence-gated self-model (waterline) | ✅ |
 | Forgetting benchmark (`eval.forgetting_v3`) | ✅ |
 | Long-running HTTP API service | ❌ P3 |
-| Embodied client (Unity / browser) | ❌ next |
+| Embodied client (Unity A0: room + actions + chat) | ✅ |
 
 ### What changed in v3
 
