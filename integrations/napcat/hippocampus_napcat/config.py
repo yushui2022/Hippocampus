@@ -93,6 +93,13 @@ class Config:
     maintenance_seconds: int = 60
     reflect_min_pending: int = 4
 
+    voice_enabled: bool = True
+    tts_url: str = "http://host.docker.internal:6211/tts"
+    voice_dir: str = "/data/voice"
+    voice_path_prefix: str = "/AstrBot/data/voice"
+    voice_chance: float = 1.0
+    voice_max_chars: int = 220
+
     @classmethod
     def from_env(cls) -> "Config":
         test_group = _env("TEST_GROUP", "922410298")
@@ -131,6 +138,12 @@ class Config:
             essay_max_chars=_int("ESSAY_MAX_CHARS", 220),
             maintenance_seconds=_int("MAINTENANCE_SECONDS", 60),
             reflect_min_pending=_int("REFLECT_MIN_PENDING", 4),
+            voice_enabled=_bool("VOICE_ENABLED", True),
+            tts_url=_env("TTS_URL", "http://host.docker.internal:6211/tts"),
+            voice_dir=_env("VOICE_DIR", "/data/voice"),
+            voice_path_prefix=_env("VOICE_PATH_PREFIX", "/AstrBot/data/voice"),
+            voice_chance=_float("VOICE_CHANCE", 1.0),
+            voice_max_chars=_int("VOICE_MAX_CHARS", 220),
         )
 
     def should_capture(self, group_id: str, addressed: bool) -> bool:

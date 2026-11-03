@@ -49,6 +49,7 @@ async def health(request: web.Request) -> web.Response:
             "engrams": stats.get("total"),
             "buffer": stats.get("buffer_pending"),
             "entities": stats.get("entities"),
+            "voice": bool(bridge.cfg.voice_enabled),
         }
     )
 
@@ -61,6 +62,17 @@ async def status(request: web.Request) -> web.Response:
             "status": bridge.memory.status(),
         }
     )
+
+
+async def voice_test(request: web.Request) -> web.Response:
+    bridge: Bridge = request.app["bridge"]
+    data = await request.json()
+    ok = await bridge.chat.speak_to(
+        group_id=str(data.get("group_id") or ""),
+        user_id=str(data.get("user_id") or ""),
+        text=str(data.get("text") or "这是桃子姐姐的语音测试。"),
+    )
+    return web.json_response({"ok": ok})
 
 
 async def on_startup(app: web.Application) -> None:
@@ -92,6 +104,7 @@ def create_app(cfg: Config) -> web.Application:
     app.router.add_get("/ws", ws_handler)
     app.router.add_get("/health", health)
     app.router.add_get("/status", status)
+    app.router.add_post("/voice-test", voice_test)
     app.on_startup.append(on_startup)
     app.on_cleanup.append(on_cleanup)
     return app

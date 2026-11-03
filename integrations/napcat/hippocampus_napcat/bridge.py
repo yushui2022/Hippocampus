@@ -82,6 +82,20 @@ class Bridge:
                 self.seen = set(list(self.seen)[-600:])
         log("recv", event.context_id, event.sender_name, (event.text or "[图片]")[:40])
 
+        if event.text.startswith("/voice"):
+            text = event.text[len("/voice") :].strip()
+            ok = await self.chat.speak_to(
+                group_id=event.group_id,
+                user_id=event.user_id,
+                text=text or "这是桃子姐姐的语音测试。",
+            )
+            await self.onebot.send_text(
+                group_id=event.group_id,
+                user_id=event.user_id,
+                text="语音发送成功" if ok else "语音发送失败",
+            )
+            return
+
         if event.text.startswith("/hmem"):
             await self.command(event)
             return

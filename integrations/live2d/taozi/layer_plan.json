@@ -1,0 +1,618 @@
+{
+  "character_summary": "正面站姿动漫少女：棕色齐肩短发、粉色连帽卫衣、黑色短裤、黑色过膝袜与粉色运动鞋。适合按头身分离、眼口表情、头发与帽绳物理、手臂和腿部小幅动作进行 Live2D 拆层。",
+  "regions": {
+    "face": [
+      382,
+      82,
+      78,
+      118
+    ],
+    "left_eye": [
+      393,
+      136,
+      30,
+      25
+    ],
+    "right_eye": [
+      427,
+      136,
+      31,
+      25
+    ],
+    "mouth": [
+      413,
+      171,
+      19,
+      11
+    ]
+  },
+  "layers": [
+    {
+      "name": "hair_back",
+      "order": 0,
+      "purpose": "后发和头后轮廓，支撑头部旋转时后发遮挡与摆动。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamHairBack"
+    },
+    {
+      "name": "hood_back",
+      "order": 1,
+      "purpose": "卫衣帽子后片与肩后结构，身体倾斜时防止露底。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamBodyAngleZ"
+    },
+    {
+      "name": "neck",
+      "order": 2,
+      "purpose": "颈部皮肤，连接头部与躯干并随头部转动。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamAngleZ"
+    },
+    {
+      "name": "torso_under",
+      "order": 3,
+      "purpose": "卫衣下躯干和骨盆补画层，防止身体弯曲漏底。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamBodyAngleX"
+    },
+    {
+      "name": "leg_skin_character_right",
+      "order": 4,
+      "purpose": "角色右腿裸腿皮肤底层，补画被长袜、短裤和鞋遮挡部分。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamLegR"
+    },
+    {
+      "name": "leg_skin_character_left",
+      "order": 5,
+      "purpose": "角色左腿裸腿皮肤底层，补画被长袜、短裤和鞋遮挡部分。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamLegL"
+    },
+    {
+      "name": "stocking_character_right",
+      "order": 6,
+      "purpose": "角色右腿黑色过膝袜，随腿部小幅摆动。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamLegR"
+    },
+    {
+      "name": "stocking_character_left",
+      "order": 7,
+      "purpose": "角色左腿黑色过膝袜，随腿部小幅摆动。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamLegL"
+    },
+    {
+      "name": "shorts",
+      "order": 8,
+      "purpose": "黑色短裤主体，遮挡大腿根，需补画上衣下摆内侧。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamBodyAngleX"
+    },
+    {
+      "name": "shoe_character_right",
+      "order": 9,
+      "purpose": "角色右脚运动鞋，随脚部微小移动。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamFootR"
+    },
+    {
+      "name": "shoe_character_left",
+      "order": 10,
+      "purpose": "角色左脚运动鞋，随脚部微小移动。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamFootL"
+    },
+    {
+      "name": "hoodie_body",
+      "order": 11,
+      "purpose": "粉色卫衣躯干主体，身体呼吸与倾斜主变形层。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamBodyAngleX"
+    },
+    {
+      "name": "hoodie_collar",
+      "order": 12,
+      "purpose": "卫衣领口前片，覆盖颈部连接处。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamBodyAngleZ"
+    },
+    {
+      "name": "hoodie_pocket",
+      "order": 13,
+      "purpose": "卫衣前袋，随躯干轻微形变。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamBodyAngleX"
+    },
+    {
+      "name": "hoodie_drawstring_viewer_left",
+      "order": 14,
+      "purpose": "画面左侧帽绳，用于轻微物理摆动。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamHoodStringL"
+    },
+    {
+      "name": "hoodie_drawstring_viewer_right",
+      "order": 15,
+      "purpose": "画面右侧帽绳，用于轻微物理摆动。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamHoodStringR"
+    },
+    {
+      "name": "sleeve_character_right",
+      "order": 16,
+      "purpose": "角色右袖，手臂摆动主层，需补画被袖子遮挡的手臂。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamArmRA"
+    },
+    {
+      "name": "sleeve_character_left",
+      "order": 17,
+      "purpose": "角色左袖，手臂摆动主层，需补画被袖子遮挡的手臂。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamArmLA"
+    },
+    {
+      "name": "hand_character_right",
+      "order": 18,
+      "purpose": "角色右手，手臂末端跟随，需补画袖口内手腕。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamHandR"
+    },
+    {
+      "name": "hand_character_left",
+      "order": 19,
+      "purpose": "角色左手，手臂末端跟随，需补画袖口内手腕。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamHandL"
+    },
+    {
+      "name": "face_base",
+      "order": 20,
+      "purpose": "面部皮肤底色，承载眼口鼻，并需补画刘海和侧发遮挡区。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamAngleZ"
+    },
+    {
+      "name": "eye_white_viewer_left",
+      "order": 21,
+      "purpose": "画面左眼眼白，随眼睑开合。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamEyeLOpen"
+    },
+    {
+      "name": "eye_white_viewer_right",
+      "order": 22,
+      "purpose": "画面右眼眼白，随眼睑开合。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamEyeROpen"
+    },
+    {
+      "name": "iris_viewer_left",
+      "order": 23,
+      "purpose": "画面左眼虹膜和瞳孔，用于视线移动。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamEyeBallX"
+    },
+    {
+      "name": "iris_viewer_right",
+      "order": 24,
+      "purpose": "画面右眼虹膜和瞳孔，用于视线移动。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamEyeBallX"
+    },
+    {
+      "name": "eyelash_upper_viewer_left",
+      "order": 25,
+      "purpose": "画面左眼上睫毛与眼睑线，控制眨眼。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamEyeLOpen"
+    },
+    {
+      "name": "eyelash_upper_viewer_right",
+      "order": 26,
+      "purpose": "画面右眼上睫毛与眼睑线，控制眨眼。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamEyeROpen"
+    },
+    {
+      "name": "eyelash_lower_viewer_left",
+      "order": 27,
+      "purpose": "画面左眼下眼睑线，随闭眼微动。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamEyeLOpen"
+    },
+    {
+      "name": "eyelash_lower_viewer_right",
+      "order": 28,
+      "purpose": "画面右眼下眼睑线，随闭眼微动。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamEyeROpen"
+    },
+    {
+      "name": "brow_viewer_left",
+      "order": 29,
+      "purpose": "画面左眉毛，默认被刘海遮挡，需补画用于头部运动。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamBrowLY"
+    },
+    {
+      "name": "brow_viewer_right",
+      "order": 30,
+      "purpose": "画面右眉毛，默认被刘海遮挡，需补画用于头部运动。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamBrowRY"
+    },
+    {
+      "name": "nose",
+      "order": 31,
+      "purpose": "鼻头线与鼻影，面部小幅变形。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamAngleZ"
+    },
+    {
+      "name": "mouth_inner",
+      "order": 32,
+      "purpose": "口腔内部与舌头，张嘴时露出，需补画。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamMouthOpenY"
+    },
+    {
+      "name": "mouth_line",
+      "order": 33,
+      "purpose": "嘴部线条和唇形，控制微笑与开合。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamMouthForm"
+    },
+    {
+      "name": "hair_side_viewer_left",
+      "order": 34,
+      "purpose": "画面左侧发束，遮挡脸颊，随头部和物理摆动。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamHairSide"
+    },
+    {
+      "name": "hair_side_viewer_right",
+      "order": 35,
+      "purpose": "画面右侧发束，遮挡脸颊，随头部和物理摆动。",
+      "needs_inpaint": true,
+      "cubism_parameter": "ParamHairSide"
+    },
+    {
+      "name": "hair_bangs",
+      "order": 36,
+      "purpose": "刘海主体，遮挡额头，头部转动和风效主层。",
+      "needs_inpaint": false,
+      "cubism_parameter": "ParamHairFront"
+    }
+  ],
+  "repair_tasks": [
+    "补画被刘海遮挡的额头、眉弓和上眼睑上方皮肤，保持面部底色连续。",
+    "补画被侧发遮挡的脸颊、耳前和下颌边缘，供头部大角度转动。",
+    "补画颈部被下巴与卫衣领口遮挡的连接区域。",
+    "补画卫衣帽子后片及领口内侧，防止头部或身体转动露底。",
+    "补画卫衣袖下手臂和腋下轮廓，确保抬臂或摆动不穿帮。",
+    "补画袖口内手腕及手掌根部，手部摆动时保持连续。",
+    "补画卫衣下摆内侧、短裤上缘和骨盆区域。",
+    "补画短裤遮挡下的大腿根及双腿内侧。",
+    "补画过膝袜遮挡的腿部皮肤和袜口内侧，避免腿部摆动漏色。",
+    "补画鞋内脚踝和袜底被鞋遮挡部分。",
+    "补画眼白被上睫毛和眼睑遮挡区域，并分离虹膜高光以避免视线移动时高光漂移。",
+    "补画闭眼状态所需的下眼睑内侧与睫毛线内侧。",
+    "补画口腔内部、舌头和牙齿，供张嘴表情使用。",
+    "补画刘海下发际线、眉毛和耳前结构，供头部大角度转动。"
+  ],
+  "parameters": [
+    {
+      "name": "ParamAngleX",
+      "range": "-30,30",
+      "affected_layers": [
+        "face_base",
+        "neck",
+        "hair_bangs",
+        "hair_side_viewer_left",
+        "hair_side_viewer_right",
+        "hair_back",
+        "eye_white_viewer_left",
+        "eye_white_viewer_right",
+        "iris_viewer_left",
+        "iris_viewer_right",
+        "eyelash_upper_viewer_left",
+        "eyelash_upper_viewer_right",
+        "mouth_line"
+      ]
+    },
+    {
+      "name": "ParamAngleY",
+      "range": "-30,30",
+      "affected_layers": [
+        "face_base",
+        "neck",
+        "hair_bangs",
+        "hair_side_viewer_left",
+        "hair_side_viewer_right",
+        "eye_white_viewer_left",
+        "eye_white_viewer_right",
+        "iris_viewer_left",
+        "iris_viewer_right",
+        "mouth_line"
+      ]
+    },
+    {
+      "name": "ParamAngleZ",
+      "range": "-30,30",
+      "affected_layers": [
+        "face_base",
+        "neck",
+        "hair_bangs",
+        "hair_side_viewer_left",
+        "hair_side_viewer_right",
+        "hair_back",
+        "nose"
+      ]
+    },
+    {
+      "name": "ParamEyeLOpen",
+      "range": "0,1",
+      "affected_layers": [
+        "eye_white_viewer_left",
+        "iris_viewer_left",
+        "eyelash_upper_viewer_left",
+        "eyelash_lower_viewer_left"
+      ]
+    },
+    {
+      "name": "ParamEyeROpen",
+      "range": "0,1",
+      "affected_layers": [
+        "eye_white_viewer_right",
+        "iris_viewer_right",
+        "eyelash_upper_viewer_right",
+        "eyelash_lower_viewer_right"
+      ]
+    },
+    {
+      "name": "ParamEyeBallX",
+      "range": "-1,1",
+      "affected_layers": [
+        "iris_viewer_left",
+        "iris_viewer_right"
+      ]
+    },
+    {
+      "name": "ParamEyeBallY",
+      "range": "-1,1",
+      "affected_layers": [
+        "iris_viewer_left",
+        "iris_viewer_right"
+      ]
+    },
+    {
+      "name": "ParamMouthOpenY",
+      "range": "0,1",
+      "affected_layers": [
+        "mouth_inner",
+        "mouth_line"
+      ]
+    },
+    {
+      "name": "ParamMouthForm",
+      "range": "-1,1",
+      "affected_layers": [
+        "mouth_line"
+      ]
+    },
+    {
+      "name": "ParamBrowLY",
+      "range": "-1,1",
+      "affected_layers": [
+        "brow_viewer_left"
+      ]
+    },
+    {
+      "name": "ParamBrowRY",
+      "range": "-1,1",
+      "affected_layers": [
+        "brow_viewer_right"
+      ]
+    },
+    {
+      "name": "ParamBodyAngleX",
+      "range": "-10,10",
+      "affected_layers": [
+        "hoodie_body",
+        "hoodie_pocket",
+        "hoodie_collar",
+        "torso_under",
+        "shorts",
+        "hood_back"
+      ]
+    },
+    {
+      "name": "ParamBodyAngleZ",
+      "range": "-10,10",
+      "affected_layers": [
+        "hoodie_body",
+        "hoodie_collar",
+        "hood_back",
+        "shorts",
+        "torso_under"
+      ]
+    },
+    {
+      "name": "ParamBreath",
+      "range": "0,1",
+      "affected_layers": [
+        "hoodie_body",
+        "hoodie_pocket",
+        "hood_back",
+        "sleeve_character_right",
+        "sleeve_character_left"
+      ]
+    },
+    {
+      "name": "ParamHairFront",
+      "range": "-1,1",
+      "affected_layers": [
+        "hair_bangs"
+      ]
+    },
+    {
+      "name": "ParamHairSide",
+      "range": "-1,1",
+      "affected_layers": [
+        "hair_side_viewer_left",
+        "hair_side_viewer_right"
+      ]
+    },
+    {
+      "name": "ParamHairBack",
+      "range": "-1,1",
+      "affected_layers": [
+        "hair_back"
+      ]
+    },
+    {
+      "name": "ParamArmLA",
+      "range": "-1,1",
+      "affected_layers": [
+        "sleeve_character_left",
+        "hand_character_left"
+      ]
+    },
+    {
+      "name": "ParamArmRA",
+      "range": "-1,1",
+      "affected_layers": [
+        "sleeve_character_right",
+        "hand_character_right"
+      ]
+    },
+    {
+      "name": "ParamHandL",
+      "range": "-1,1",
+      "affected_layers": [
+        "hand_character_left"
+      ]
+    },
+    {
+      "name": "ParamHandR",
+      "range": "-1,1",
+      "affected_layers": [
+        "hand_character_right"
+      ]
+    },
+    {
+      "name": "ParamLegL",
+      "range": "-10,10",
+      "affected_layers": [
+        "leg_skin_character_left",
+        "stocking_character_left"
+      ]
+    },
+    {
+      "name": "ParamLegR",
+      "range": "-10,10",
+      "affected_layers": [
+        "leg_skin_character_right",
+        "stocking_character_right"
+      ]
+    },
+    {
+      "name": "ParamFootL",
+      "range": "-10,10",
+      "affected_layers": [
+        "shoe_character_left"
+      ]
+    },
+    {
+      "name": "ParamFootR",
+      "range": "-10,10",
+      "affected_layers": [
+        "shoe_character_right"
+      ]
+    },
+    {
+      "name": "ParamHoodStringL",
+      "range": "-1,1",
+      "affected_layers": [
+        "hoodie_drawstring_viewer_left"
+      ]
+    },
+    {
+      "name": "ParamHoodStringR",
+      "range": "-1,1",
+      "affected_layers": [
+        "hoodie_drawstring_viewer_right"
+      ]
+    }
+  ],
+  "physics": [
+    {
+      "name": "hair_back_sway",
+      "input": "ParamAngleX,ParamAngleZ,ParamBodyAngleX",
+      "output": "ParamHairBack",
+      "layers": [
+        "hair_back"
+      ]
+    },
+    {
+      "name": "hair_side_sway",
+      "input": "ParamAngleX,ParamAngleZ",
+      "output": "ParamHairSide",
+      "layers": [
+        "hair_side_viewer_left",
+        "hair_side_viewer_right"
+      ]
+    },
+    {
+      "name": "hair_front_sway",
+      "input": "ParamAngleX,ParamAngleY,ParamBodyAngleZ",
+      "output": "ParamHairFront",
+      "layers": [
+        "hair_bangs"
+      ]
+    },
+    {
+      "name": "drawstring_sway",
+      "input": "ParamBodyAngleX,ParamBodyAngleZ,ParamBreath",
+      "output": "ParamHoodStringL,ParamHoodStringR",
+      "layers": [
+        "hoodie_drawstring_viewer_left",
+        "hoodie_drawstring_viewer_right"
+      ]
+    },
+    {
+      "name": "hand_follow_arm",
+      "input": "ParamArmLA,ParamArmRA",
+      "output": "ParamHandL,ParamHandR",
+      "layers": [
+        "hand_character_left",
+        "hand_character_right"
+      ]
+    }
+  ],
+  "acceptance_poses": [
+    "默认正面站立。",
+    "头部左转/右转30度，刘海与侧发不穿透脸颊。",
+    "头部左倾/右倾15度，颈部与卫衣领口无缝隙。",
+    "双眼完全闭合、半闭眼与单眼眨眼。",
+    "视线移动到左上/右下，虹膜不越出眼白。",
+    "张嘴与微笑切换，口腔内部不破损。",
+    "身体左右倾斜10度并呼吸，卫衣下摆与短裤不露底。",
+    "手臂前后轻微摆动，袖口与手腕连接连续。",
+    "头发、帽绳在头部/身体运动下产生滞后摆动。",
+    "腿部和脚部小幅度移动，长袜与鞋无接缝。"
+  ],
+  "risks": [
+    "面部被刘海与侧发大面积遮挡，补画范围不足会导致头部转动时额头/脸颊断层。",
+    "眼睛高光若与虹膜同层会随视线移动，建议拆为独立高光层。",
+    "袖口与手部粘连，手腕补画不足会导致摆臂漏底。",
+    "卫衣下摆遮挡短裤上缘，需补画短裤和躯干内侧。",
+    "过膝袜与短裤之间裸露皮肤窄，皮肤层与袜层需精确遮罩。",
+    "鞋与袜重叠，脚踝补画不足会导致脚部移动穿帮。",
+    "正面图缺少侧面和背面信息，后发、帽后和腋下需合理推断。",
+    "腿部为并拢站立，左右腿层需避免互相穿插。"
+  ]
+}

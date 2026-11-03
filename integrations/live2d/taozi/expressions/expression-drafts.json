@@ -1,0 +1,36 @@
+{
+  "source": "taozi.png",
+  "type": "draft",
+  "regions": {
+    "face": [
+      382,
+      82,
+      78,
+      118
+    ],
+    "left_eye": [
+      393,
+      136,
+      30,
+      25
+    ],
+    "right_eye": [
+      427,
+      136,
+      31,
+      25
+    ],
+    "mouth": [
+      413,
+      171,
+      19,
+      11
+    ]
+  },
+  "files": [
+    "expression-neutral.png",
+    "expression-blink.png",
+    "expression-wink-left.png",
+    "expression-mouth-open.png"
+  ]
+}

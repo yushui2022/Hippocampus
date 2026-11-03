@@ -1,5 +1,8 @@
 # HANDOFF · Hippocampus × NapCat（路线 B）
 
+> **语音已上线（2026-11-03）。** QQ 回复会附带 Qwen3-TTS 本地语音条；
+> TTS 常驻 `live2d/tts/server.py` :6211，NapCat 自动转 silk。
+>
 > **Unity 壳已暂停（2026-11-03）。** 复盘、环境、协议、资产授权全部整理在
 > `/Users/orlando/Documents/Obsidian Vault/unity使用/`。代码和 6200 服务保留，不再投入。
 >

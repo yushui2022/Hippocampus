@@ -66,6 +66,7 @@ OUTPUT_RULES = """
  "actions":[{"action":"动作名","target":"目标id或空"}]}
 say 里每句都会作为一个气泡发出去，最多 2 句。
 actions 可以为空；只允许 scene.actions 里出现的动作，只允许 scene 里的目标 id 或 user。
+动作是点缀：大多数回复 actions 为空；偶尔点头、摇头、看她/他、跳一下或走到沙发，不要每句都动。
 """
 
 

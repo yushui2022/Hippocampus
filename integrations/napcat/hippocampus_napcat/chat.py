@@ -5,6 +5,7 @@ import base64
 import json
 import random
 import re
+import time
 from collections import defaultdict, deque
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -52,6 +53,7 @@ class ChatService:
             answer = greeting_reply(text)
             await self._send(event, answer)
             self._record_assistant(event, answer)
+            await self.speak(event, answer)
             return
 
         query = text
@@ -132,6 +134,7 @@ class ChatService:
         full = " ".join([visible] + list(extras)).strip()
         if full:
             self._record_assistant(event, full)
+            await self.speak(event, full)
 
     def _system(self, bundle, empty_mention: bool) -> str:
         parts = [self.cfg.persona, self.cfg.style]
@@ -220,6 +223,75 @@ class ChatService:
         self.histories[event.context_id].append(
             {"role": "assistant", "text": text}
         )
+
+    async def synthesize(self, text: str) -> Optional[str]:
+        if not self.cfg.voice_enabled or not text.strip():
+            return None
+        if random.random() > self.cfg.voice_chance:
+            return None
+        try:
+            session = await self._session_getter()
+            async with session.post(
+                self.cfg.tts_url,
+                json={
+                    "text": text[: self.cfg.voice_max_chars],
+                    "mood": "auto",
+                },
+                timeout=120,
+            ) as resp:
+                if resp.status != 200:
+                    print("[voice] tts http {}".format(resp.status), flush=True)
+                    return None
+                data = await resp.read()
+        except Exception as exc:  # noqa: BLE001
+            print("[voice] tts failed", repr(exc), flush=True)
+            return None
+
+        name = "voice_{}_{}.wav".format(
+            int(time.time() * 1000), random.randint(100, 999)
+        )
+        directory = Path(self.cfg.voice_dir)
+        directory.mkdir(parents=True, exist_ok=True)
+        (directory / name).write_bytes(data)
+        return self.cfg.voice_path_prefix.rstrip("/") + "/" + name
+
+    async def speak(self, event: MessageEvent, text: str) -> None:
+        path = await self.synthesize(text)
+        if not path:
+            return
+        try:
+            result = await self.onebot.send_record(
+                group_id=event.group_id, user_id=event.user_id, file=path
+            )
+            print(
+                "[voice] sent {} -> {}".format(
+                    path, str(result.get("status", result))[:40]
+                ),
+                flush=True,
+            )
+        except Exception as exc:  # noqa: BLE001
+            print("[voice] send failed", repr(exc), flush=True)
+
+    async def speak_to(
+        self, *, group_id: str = "", user_id: str = "", text: str
+    ) -> bool:
+        path = await self.synthesize(text)
+        if not path:
+            return False
+        try:
+            result = await self.onebot.send_record(
+                group_id=group_id, user_id=user_id, file=path
+            )
+            print(
+                "[voice] test {} -> {}".format(
+                    path, str(result.get("status", result))[:40]
+                ),
+                flush=True,
+            )
+            return True
+        except Exception as exc:  # noqa: BLE001
+            print("[voice] test failed", repr(exc), flush=True)
+            return False
 
     async def _image_data(self, url: str) -> str:
         try:

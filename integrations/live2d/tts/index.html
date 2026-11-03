@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>桃子姐姐 · 音色候选</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      margin: 0;
+      padding: 40px 22px 80px;
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #171315;
+      color: #f6ece7;
+    }
+    main { max-width: 760px; margin: 0 auto; }
+    h1 { font-size: 26px; margin: 0 0 6px; }
+    .sub { color: #b9a7a0; font-size: 14px; margin-bottom: 28px; }
+    .card {
+      background: #241d20;
+      border: 1px solid #3a2e32;
+      border-radius: 16px;
+      padding: 18px 18px 14px;
+      margin-bottom: 14px;
+    }
+    .card h2 { font-size: 16px; margin: 0 0 4px; }
+    .card p { margin: 0 0 12px; color: #c9b8b1; font-size: 13px; line-height: 1.5; }
+    audio { width: 100%; }
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f2a48f;
+      color: #3a1d1a;
+      margin-left: 8px;
+      vertical-align: 2px;
+    }
+    .note { color: #9c8b85; font-size: 12px; margin-top: 24px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>桃子姐姐 · 音色候选</h1>
+  <div class="sub">同一句话，不同的音色和语气。点播放，选一个。</div>
+
+  <div class="card">
+    <h2>Serena · 温柔</h2>
+    <p>像朋友聊天，语速稍慢，带一点笑意。适合“桃子姐姐”。</p>
+    <audio controls preload="none" src="samples/serena_warm_000.wav"></audio>
+  </div>
+
+  <div class="card">
+    <h2>Serena · 轻声<span class="tag">当前默认</span></h2>
+    <p>声音更轻、更慢，像晚上聊天。</p>
+    <audio controls preload="none" src="samples/serena_soft_000.wav"></audio>
+  </div>
+
+  <div class="card">
+    <h2>Serena · 原声</h2>
+    <p>不加语气指令，模型默认的温柔女声。</p>
+    <audio controls preload="none" src="samples/serena_plain_000.wav"></audio>
+  </div>
+
+  <div class="card">
+    <h2>Vivian · 俏皮</h2>
+    <p>更亮、更有个性，像熟人之间开玩笑。</p>
+    <audio controls preload="none" src="samples/vivian_lively_000.wav"></audio>
+  </div>
+
+  <div class="note">
+    本地 Qwen3-TTS 1.7B（MLX 8bit），Apache 2.0，无 API。<br />
+    同一句：你回来啦。今天怎么样？我给你留了盏灯。
+  </div>
+</main>
+</body>
+</html>

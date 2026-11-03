@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>桃子姐姐</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="stage">
+    <img id="room" src="../assets/room.png" alt="" />
+    <div id="character">
+      <img class="layer" id="body" src="../assets/body.png" alt="桃子姐姐" />
+      <img class="layer" id="neck" src="../assets/neck_fill.png" alt="" />
+      <div id="head-group">
+        <img class="layer" id="head" src="../assets/head.png" alt="" />
+        <img class="layer" id="expr" src="../assets/blank.png" alt="" />
+        <img class="layer" id="blink" src="../assets/blink_head.png" alt="" />
+        <img class="layer" id="talk" src="../assets/talk_mouth.png" alt="" />
+      </div>
+    </div>
+    <div id="vignette"></div>
+  </div>
+
+  <header id="topbar">
+    <div class="name">桃子姐姐</div>
+    <div id="status" class="status">连接中…</div>
+  </header>
+
+  <section id="chat">
+    <div id="log"></div>
+  </section>
+
+  <form id="composer" autocomplete="off">
+    <input id="input" maxlength="200" placeholder="跟她说点什么…" />
+    <button id="send" type="submit">发送</button>
+  </form>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -56,6 +56,16 @@ class OneBotConnection:
             params["user_id"] = int(user_id)
             await self.send_action("send_private_msg", params)
 
+    async def send_record(
+        self, *, group_id: str = "", user_id: str = "", file: str
+    ) -> dict:
+        params = {"message": [{"type": "record", "data": {"file": file}}]}
+        if group_id:
+            params["group_id"] = int(group_id)
+            return await self.send_action("send_group_msg", params)
+        params["user_id"] = int(user_id)
+        return await self.send_action("send_private_msg", params)
+
     def handle_payload(self, data: dict) -> Optional[dict]:
         echo = data.get("echo")
         if echo and echo in self.pending:
