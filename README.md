@@ -1,5 +1,7 @@
 # Hippocampus · 海马
 
+> Handoff for the current QQ deployment: [`HANDOFF.md`](HANDOFF.md).
+>
 > A memory kernel that forgets like a human: important things blur slowly,
 > trivia fades, recall strengthens what it touches — and a half-remembered
 > thing never comes back verbatim.
