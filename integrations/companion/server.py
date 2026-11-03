@@ -332,7 +332,7 @@ class Companion:
         while True:
             await asyncio.sleep(60)
             try:
-                report = await asyncio.to_thread(self.brain.maintain)
+                report = self.brain.maintain()
                 if report.get("promoted") or report.get("dropped"):
                     log(
                         "maintain",

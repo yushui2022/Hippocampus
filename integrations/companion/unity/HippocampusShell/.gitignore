@@ -12,3 +12,4 @@ Recordings/
 *.user
 .DS_Store
 build-*.log
+*.log

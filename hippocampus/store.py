@@ -184,7 +184,7 @@ class Store:
     def __init__(self, path: str = ":memory:") -> None:
         self.path = path
         self.version = 0  # bumped on writes; retrieval caches key off it
-        self._conn = sqlite3.connect(path, timeout=5.0)
+        self._conn = sqlite3.connect(path, timeout=5.0, check_same_thread=False)
         self._conn.row_factory = sqlite3.Row
         self._conn.execute("PRAGMA journal_mode=WAL")
         self._conn.execute("PRAGMA busy_timeout=5000")

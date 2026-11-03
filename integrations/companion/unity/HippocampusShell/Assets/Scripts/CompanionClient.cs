@@ -75,6 +75,7 @@ namespace Hippocampus.Shell
         public string userName = "你";
         public ChatUI chat;
         public AvatarController avatar;
+        public VrmAvatar vrm;
 
         private ClientWebSocket socket;
         private CancellationTokenSource cts;
@@ -214,6 +215,10 @@ namespace Hippocampus.Shell
                         chat?.AddBot(line.text);
                     }
                 }
+            }
+            if (vrm != null)
+            {
+                vrm.SetExpression(turn.expression);
             }
             if (turn.actions != null && avatar != null)
             {

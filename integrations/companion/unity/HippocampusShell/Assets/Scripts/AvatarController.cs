@@ -44,6 +44,7 @@ namespace Hippocampus.Shell
 
         public float walkSpeed = 1.6f;
         public float runSpeed = 3.6f;
+        public float sitDrop = 0.45f;
 
         private readonly Dictionary<string, Transform> targets = new Dictionary<string, Transform>();
         private Vector3 destination;
@@ -215,7 +216,7 @@ namespace Hippocampus.Shell
                 return;
             }
             sitting = true;
-            avatar.position += Vector3.down * 0.45f;
+            avatar.position += Vector3.down * sitDrop;
         }
 
         public void StandUp()
@@ -225,7 +226,7 @@ namespace Hippocampus.Shell
                 return;
             }
             sitting = false;
-            avatar.position += Vector3.up * 0.45f;
+            avatar.position += Vector3.up * sitDrop;
         }
 
         private void LookAt(string targetId)

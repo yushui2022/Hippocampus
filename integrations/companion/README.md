@@ -33,6 +33,8 @@ open integrations/companion/unity/HippocampusShell/Build/HippocampusShell.app
 
 ## 当前能力
 
+- VRM 角色（AvatarSample_A），正面站立，会呼吸、眨眼
+- 客厅场景：沙发、电视、窗外风景、地毯、茶几、落地灯、绿植
 - 文字对话，1–2 个气泡
 - 动作：走过去 / 坐下 / 站起来 / 跳 / 看她 / 挥手 / 点头 / 摇头
 - 和 QQ 共用 `self:taozi` 的记忆设计（同一个 Brain 类，独立 DB）
@@ -40,7 +42,6 @@ open integrations/companion/unity/HippocampusShell/Build/HippocampusShell.app
 
 ## 明确没有
 
-- TTS / 口型 / 表情
-- VRM 模型（现在是胶囊占位）
+- TTS / 口型（表情已接 Joy/Sorrow/Angry/Fun）
 - 麦克风输入
 - 多房间 / NavMesh

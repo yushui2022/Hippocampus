@@ -1,8 +1,7 @@
 # Unity shell (A0)
 
-一个最小的 Unity 壳：房间、角色占位、聊天框、WebSocket 协议客户端。
-角色现在是一个胶囊，先验证「说得通、动得起来、协议不返工」；VRM 换模型是
-下一步，不动协议。
+一个最小的 Unity 壳：房间、VRM 角色、聊天框、WebSocket 协议客户端。
+角色是 VRoid 官方的 `AvatarSample_A`，表情走 VRM 0.x 的 BlendShape 预设。
 
 ## 本机已安装
 
@@ -34,10 +33,10 @@ UNITY="$HOME/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/MacO
   -executeMethod Hippocampus.Shell.EditorTools.SceneBuilder.BuildScene \
   -logFile -
 
-# 2. 打包 macOS
-"$UNITY" -batchmode -nographics -quit \
+# 2. 重建场景 + 打包 macOS（推荐，省一次 Unity 启动）
+"$UNITY" -batchmode -nographics \
   -projectPath "$PWD" \
-  -executeMethod Hippocampus.Shell.EditorTools.BuildScript.BuildMac \
+  -executeMethod Hippocampus.Shell.EditorTools.BuildScript.BuildAll \
   -logFile -
 ```
 
@@ -98,18 +97,25 @@ wave / nod / shake_head
 服务端必须先按 `hello.scene` 校验：不在词表、目标不存在、客户端没声明的
 动作，直接丢掉，不下发。
 
-## 为什么先不用 VRM
+## VRM
 
-- 协议、动作、场景、UI 先跑通，换模型只改渲染层
-- UniVRM / three-vrm 的导入和授权是另一条链路，不该卡住编译
-- 胶囊能验证「她转过来看你、走过去坐下、挥手」，这些才是壳的核心
+- 引擎：UniVRM 0.131.4（`Packages/com.vrmc.univrm`、`com.vrmc.gltf`）
+- 模型：`Assets/Models/AvatarSample_A.prefab`（VRoid 官方样例）
+- 源文件：`/Users/orlando/Documents/蓝色大肥鱼/vrm/AvatarSample_A.vrm`
+- 授权：VRoid 样例，个人/商用可用、无需署名；不能转售 VRM 文件本身
+- 色彩空间：Linear（MToon 在 Gamma 下会发灰）
+- 表情：`VrmAvatar.SetExpression()` 映射 `neutral / happy / sad / angry / shy`
+  到 `Neutral / Joy / Sorrow / Angry / Fun`
+- 眨眼：UniVRM 的 `Blinker`，约 4.5 秒一次
+- 待机：呼吸缩放 + 手臂从 T-pose 放下
 
-换 VRM 时只替换 `Taozhi` 这个 GameObject，保留 `AvatarController` 的
-`avatar` 引用和动作语义。
+换模型时保持 `AvatarController.avatar` 指向根节点，协议和动作不用改。
 
 ## 已知限制
 
 - 还没有 TTS（先文字）
-- 还没有表情 / 口型
-- 没有 NavMesh，走路是直线 `MoveTowards`；换 VRM 后再上寻路
+- 表情已接，口型还没有
+- 没有 NavMesh，走路是直线 `MoveTowards`
 - 场景由 `Assets/Editor/SceneBuilder.cs` 生成，不要手改 `Main.unity`
+- Unity 2022 在 macOS 上批处理退出偶尔会挂；`BuildAll` 里显式
+  `EditorApplication.Exit(0)`，如果进程不退，杀掉并删 `Temp/UnityLockfile` 即可
