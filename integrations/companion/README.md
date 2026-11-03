@@ -1,4 +1,6 @@
-# Companion shell (A0)
+# Companion shell (A0) · 已暂停
+
+> 2026-11-03 暂停。复盘见 Obsidian `unity使用/`。代码和协议保留。
 
 两个进程：
 

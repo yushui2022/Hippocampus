@@ -1,5 +1,8 @@
 # HANDOFF · Hippocampus × NapCat（路线 B）
 
+> **Unity 壳已暂停（2026-11-03）。** 复盘、环境、协议、资产授权全部整理在
+> `/Users/orlando/Documents/Obsidian Vault/unity使用/`。代码和 6200 服务保留，不再投入。
+>
 > **2026-11-03 更新：v0.9.0，v3 P1 已完成。**
 > 记忆链路已从「v2 内核直连」升级为 `Brain`：感官门控 → 72 小时暂存 →
 > 睡眠巩固 → 来源规则 → 人物卡。线上适配器已切到 `Brain`，新的自我 scope
