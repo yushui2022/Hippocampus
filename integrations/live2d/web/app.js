@@ -524,17 +524,19 @@ function connect() {
 }
 
 /* -- form switch ------------------------------------------------------- */
-let currentForm = localStorage.getItem("taozi-form") || "big";
+const requestedForm = new URLSearchParams(window.location.search).get("form");
+let currentForm = requestedForm || localStorage.getItem("taozi-form") || "big";
 
 async function loadForm(name) {
   const base = "../assets/" + name + "/";
-  const manifest = await (await fetch(base + "manifest.json")).json();
-  document.getElementById("body").src = base + "body.png";
-  document.getElementById("head").src = base + "head.png";
-  document.getElementById("neck").src = base + "neck_fill.png";
-  blinkLayer.src = base + "blink_head.png";
-  talkLayer.src = base + "talk_mouth.png";
-  exprLayer.src = "../assets/blank.png";
+  const manifest = await (await fetch(base + "manifest.json?v=" + Date.now())).json();
+  const v = "?v=" + Date.now();
+  document.getElementById("body").src = base + "body.png" + v;
+  document.getElementById("head").src = base + "head.png" + v;
+  document.getElementById("neck").src = base + "neck_fill.png" + v;
+  blinkLayer.src = base + "blink_head.png" + v;
+  talkLayer.src = base + "talk_mouth.png" + v;
+  exprLayer.src = "../assets/blank.png" + v;
   exprLayer.style.opacity = "0";
   talkLayer.style.opacity = "0";
   blinkLayer.style.opacity = "0";
