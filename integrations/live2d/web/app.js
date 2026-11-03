@@ -11,6 +11,7 @@ const statusEl = document.getElementById("status");
 const logEl = document.getElementById("log");
 const form = document.getElementById("composer");
 const input = document.getElementById("input");
+const formToggle = document.getElementById("form-toggle");
 
 let socket = null;
 let retryTimer = null;
@@ -279,8 +280,12 @@ requestAnimationFrame(frame);
 /* -- expressions ------------------------------------------------------- */
 let expressionTimer = null;
 let currentExpression = "";
+let expressionEnabled = false;
 
 function setExpression(name, holdMs = 5000) {
+  if (!expressionEnabled) {
+    return;
+  }
   const key = (name || "").toLowerCase();
   const allowed = ["happy", "sad", "angry", "shy"];
   if (expressionTimer) {
@@ -517,6 +522,42 @@ function connect() {
     setStatus("连接失败", false);
   });
 }
+
+/* -- form switch ------------------------------------------------------- */
+let currentForm = localStorage.getItem("taozi-form") || "big";
+
+async function loadForm(name) {
+  const base = "../assets/" + name + "/";
+  const manifest = await (await fetch(base + "manifest.json")).json();
+  document.getElementById("body").src = base + "body.png";
+  document.getElementById("head").src = base + "head.png";
+  document.getElementById("neck").src = base + "neck_fill.png";
+  blinkLayer.src = base + "blink_head.png";
+  talkLayer.src = base + "talk_mouth.png";
+  exprLayer.src = "../assets/blank.png";
+  exprLayer.style.opacity = "0";
+  talkLayer.style.opacity = "0";
+  blinkLayer.style.opacity = "0";
+  mouthRunning = false;
+  expressionEnabled = false;
+  currentExpression = "";
+
+  character.style.setProperty("--char-height", manifest.heightVh + "vh");
+  character.style.setProperty("--char-aspect", manifest.aspect);
+  character.style.setProperty("--pivot-x", (manifest.pivot[0] * 100).toFixed(2) + "%");
+  character.style.setProperty("--pivot-y", (manifest.pivot[1] * 100).toFixed(2) + "%");
+
+  character.style.left = name === "big" ? "72%" : "70%";
+  currentForm = name;
+  localStorage.setItem("taozi-form", name);
+  formToggle.textContent = name === "big" ? "变小鲸" : "变大鲸";
+}
+
+formToggle.addEventListener("click", () => {
+  loadForm(currentForm === "big" ? "small" : "big").catch(() => {});
+});
+
+loadForm(currentForm).catch(() => {});
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
