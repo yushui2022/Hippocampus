@@ -47,6 +47,12 @@ html, body {
           saturate(0.96) brightness(1.02);
 }
 
+/* the video already carries its own shading; a filter chain forces an extra
+   offscreen pass and the sprite loses its linework */
+#character.video-mode {
+  filter: drop-shadow(0 14px 18px rgba(40, 20, 20, 0.22));
+}
+
 #character::after {
   content: "";
   position: absolute;

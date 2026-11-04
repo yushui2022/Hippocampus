@@ -283,10 +283,21 @@ function frame(now) {
   const shakeOffset = shakeUntil > now ? Math.sin((shakeUntil - now) / 50) * 4.5 : 0;
   const sitOffset = sit * 18;
 
-  character.style.transform =
-    `translateX(calc(-50% + ${posX + weight + currentX * 0.25}px)) ` +
-    `translateY(${currentY * 0.14 + walkBob + sitOffset + jumpY - bounce * 7}px) ` +
-    `rotate(${sway + lean}deg) scaleY(${1 + breathe - sit * 0.02})`;
+  // whole-pixel translation only: fractional offsets make the browser resample
+  // the video texture every frame, which is what made the sprite look soft
+  const tx = Math.round(posX + weight + currentX * 0.25);
+  const ty = Math.round(currentY * 0.14 + walkBob + sitOffset + jumpY - bounce * 7);
+
+  if (videoMode) {
+    // the clip already contains breathing / sway; re-applying it would double the
+    // motion and blur the frame
+    character.style.transform = `translateX(calc(-50% + ${tx}px)) translateY(${ty}px)`;
+  } else {
+    character.style.transform =
+      `translateX(calc(-50% + ${tx}px)) ` +
+      `translateY(${ty}px) ` +
+      `rotate(${sway + lean}deg) scaleY(${1 + breathe - sit * 0.02})`;
+  }
 
   headGroup.style.transform =
     `translate(${headDX}px, ${headDY + nodOffset}px) rotate(${headTilt + shakeOffset}deg)`;
