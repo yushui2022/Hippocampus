@@ -1,6 +1,9 @@
 /* Stream shell: no input box, no dragging. The bridge pushes comments and turns. */
 (() => {
   const BRIDGE = `ws://${location.hostname}:6220/ws`;
+  // ?mute=1 turns the page into a silent preview (subtitles only) so a second
+  // tab does not talk over the OBS browser source
+  const MUTED = new URLSearchParams(location.search).get("mute") === "1";
   const TTS_URL = "http://127.0.0.1:6211/tts";
   const ASSETS = "../assets/small/";
   const BG = "../assets/bg/bedroom.webm";
@@ -142,6 +145,13 @@
     }
     playClip("talk", true);
     setTopic("talk");
+    if (MUTED) {
+      setTimeout(() => {
+        playClip(resting, true);
+        setTopic(resting);
+      }, Math.min(9000, 1500 + text.length * 160));
+      return;
+    }
     try {
       const res = await fetch(TTS_URL, {
         method: "POST",

@@ -24,11 +24,13 @@ from mlx_audio.tts.generate import generate_audio
 from mlx_audio.tts.utils import load_model
 
 MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-8bit"
-VOICE = "Serena"
+VOICE = os.environ.get("TTS_VOICE", "ono_anna")
 
 INSTRUCT = {
-    "warm": "像朋友聊天一样，语气温柔，语速稍慢，不要播音腔，带一点笑意。",
+    # 直播默认：雌小鬼，轻挑版（2026-11-04 主人选定）
+    "brat": "轻松地挑衅，像在开玩笑，句尾微微上扬，带一点笑意，不要凶，不要温柔，不要播音腔。",
     "soft": "声音轻一点、软一点，正常语速，像朋友聊天，不要拖长音，不要播音腔。",
+    "warm": "像朋友聊天一样，语气温柔，语速稍慢，不要播音腔，带一点笑意。",
     "lively": "轻松、俏皮一点，像在跟熟人说话，不要朗读感。",
 }
 
@@ -40,7 +42,7 @@ def pick_mood(requested: str) -> str:
     """Explicit mood wins; otherwise use the configured default."""
     if requested in INSTRUCT:
         return requested
-    return os.environ.get("DEFAULT_MOOD", "soft")
+    return os.environ.get("DEFAULT_MOOD", "brat")
 
 
 def synthesize(text: str, mood: str) -> bytes:

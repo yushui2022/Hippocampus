@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>大肥鱼 · 音色试听（全部）</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; padding: 30px 38px 70px; background: #14121a; color: #ece8f4;
+         font: 15px/1.6 -apple-system, "PingFang SC", sans-serif; }
+  h1 { font-size: 21px; margin: 0 0 4px; font-weight: 600; }
+  p.sub { color: #948da6; margin: 0 0 22px; font-size: 13px; }
+  .group { margin: 0 0 22px; }
+  .group h2 { font-size: 13px; color: #9d96ad; letter-spacing: .08em; margin: 0 0 10px;
+              font-weight: 500; text-transform: uppercase; }
+  .item { display: flex; align-items: center; gap: 14px; max-width: 680px;
+          background: #1e1b26; border: 1px solid #322c40; border-radius: 12px;
+          padding: 10px 14px; margin-bottom: 8px; }
+  .item .name { width: 110px; font-weight: 600; font-size: 15px; }
+  .item .tag { font-size: 11px; color: #948da6; border: 1px solid #3a3348;
+               padding: 1px 7px; border-radius: 999px; min-width: 74px; text-align: center; }
+  .item audio { flex: 1; height: 32px; }
+  .item.cur { border-color: #3f6f9e; }
+  button { font: inherit; padding: 8px 16px; border-radius: 9px; border: 1px solid #3d3550;
+           background: #2a2436; color: #ece8f4; cursor: pointer; }
+  button:hover { background: #352d45; }
+  .bar { display: flex; gap: 10px; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+  <h1>音色试听</h1>
+  <p class="sub">同一句话、同一个语气提示，全部 9 个音色。大肥鱼是女声，重点听前四个。</p>
+
+  <div class="bar">
+    <button id="play-all">依次播放女声四条</button>
+    <button id="stop">停</button>
+  </div>
+
+  <div class="group">
+    <h2>女声</h2>
+    <div class="item cur">
+      <div class="name">Serena</div><span class="tag">现在在用</span>
+      <audio controls preload="auto" src="samples/s_serena_000.wav"></audio>
+    </div>
+    <div class="item">
+      <div class="name">Vivian</div><span class="tag">清亮少女</span>
+      <audio controls preload="auto" src="samples/s_vivian_000.wav"></audio>
+    </div>
+    <div class="item">
+      <div class="name">Ono Anna</div><span class="tag">软糯</span>
+      <audio controls preload="auto" src="samples/s_ono_anna_000.wav"></audio>
+    </div>
+    <div class="item">
+      <div class="name">Sohee</div><span class="tag">韩系女声</span>
+      <audio controls preload="auto" src="samples/s_sohee_000.wav"></audio>
+    </div>
+  </div>
+
+  <div class="group">
+    <h2>男声（参考，不合适）</h2>
+    <div class="item"><div class="name">Dylan</div><span class="tag">男声</span>
+      <audio controls preload="auto" src="samples/s_dylan_000.wav"></audio></div>
+    <div class="item"><div class="name">Eric</div><span class="tag">男声</span>
+      <audio controls preload="auto" src="samples/s_eric_000.wav"></audio></div>
+    <div class="item"><div class="name">Aiden</div><span class="tag">男声</span>
+      <audio controls preload="auto" src="samples/s_aiden_000.wav"></audio></div>
+    <div class="item"><div class="name">Ryan</div><span class="tag">男声</span>
+      <audio controls preload="auto" src="samples/s_ryan_000.wav"></audio></div>
+    <div class="item"><div class="name">Uncle Fu</div><span class="tag">男声</span>
+      <audio controls preload="auto" src="samples/s_uncle_fu_000.wav"></audio></div>
+  </div>
+
+<script>
+  const female = Array.from(document.querySelectorAll(".group")[0].querySelectorAll("audio"));
+  let stopped = false;
+  function stopAll() {
+    stopped = true;
+    document.querySelectorAll("audio").forEach((a) => { a.pause(); a.currentTime = 0; });
+  }
+  document.getElementById("stop").addEventListener("click", stopAll);
+  document.getElementById("play-all").addEventListener("click", async () => {
+    stopped = false;
+    stopAll();
+    stopped = false;
+    for (const a of female) {
+      if (stopped) break;
+      a.currentTime = 0;
+      await a.play().catch(() => {});
+      await new Promise((resolve) => {
+        a.onended = resolve;
+        const t = setInterval(() => {
+          if (stopped || a.ended) { clearInterval(t); resolve(); }
+        }, 200);
+      });
+    }
+  });
+</script>
+</body>
+</html>
