@@ -13,6 +13,10 @@
   const subtitle = document.getElementById("subtitle");
   const subtitleText = document.getElementById("subtitle-text");
   const comments = document.getElementById("comments");
+  const dialog = document.getElementById("dialog");
+  const dialogLines = document.getElementById("dialog-lines");
+  let dialogTimer = null;
+  const DIALOG_KEEP = 3;
   const topic = document.getElementById("topic");
 
   let audioCtx = null;
@@ -83,6 +87,27 @@
     while (comments.children.length > 6) {
       comments.removeChild(comments.firstChild);
     }
+  }
+
+  function pushDialog(text) {
+    if (!text) {
+      return;
+    }
+    const line = document.createElement("div");
+    line.className = "line";
+    line.textContent = text;
+    dialogLines.appendChild(line);
+    while (dialogLines.children.length > DIALOG_KEEP) {
+      dialogLines.removeChild(dialogLines.firstChild);
+    }
+    Array.from(dialogLines.children).forEach((el, i, all) => {
+      el.classList.toggle("old", i < all.length - 1);
+    });
+    dialog.classList.add("show");
+    if (dialogTimer) {
+      clearTimeout(dialogTimer);
+    }
+    dialogTimer = setTimeout(() => dialog.classList.remove("show"), 22000);
   }
 
   function showSubtitle(text, holdMs) {
@@ -162,6 +187,7 @@
       return;
     }
     const joined = lines.join("");
+    pushDialog(joined);
     lines.forEach((line, index) => {
       setTimeout(() => showSubtitle(line, 5200), index * 900);
     });

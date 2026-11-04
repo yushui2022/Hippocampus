@@ -130,6 +130,56 @@ html, body {
   box-shadow: 0 0 10px var(--accent);
 }
 
+/* reply log (top) -------------------------------------------------------- */
+#dialog {
+  position: absolute;
+  top: 104px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(760px, 46vw);
+  padding: 14px 20px 16px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(18, 15, 26, 0.72), rgba(18, 15, 26, 0.5));
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+
+#dialog.show {
+  opacity: 1;
+}
+
+#dialog .dlg-label {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: rgba(126, 199, 255, 0.85);
+  margin-bottom: 6px;
+}
+
+#dialog-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#dialog-lines .line {
+  font-size: 21px;
+  line-height: 1.4;
+  color: rgba(244, 241, 248, 0.94);
+  animation: dlgIn 220ms ease-out;
+}
+
+#dialog-lines .line.old {
+  color: rgba(244, 241, 248, 0.45);
+  font-size: 18px;
+}
+
+@keyframes dlgIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
 /* comments -------------------------------------------------------------- */
 #comments {
   position: absolute;

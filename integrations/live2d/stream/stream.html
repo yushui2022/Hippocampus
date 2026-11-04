@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>大肥鱼 · 直播画面</title>
-<link rel="stylesheet" href="stream.css?v=5" />
+<link rel="stylesheet" href="stream.css?v=6" />
 </head>
 <body>
 <div id="stage">
@@ -23,11 +23,16 @@
     <span class="sub" id="topic">在线陪聊</span>
   </header>
 
+  <section id="dialog" aria-live="polite">
+    <div class="dlg-label">她在说</div>
+    <div id="dialog-lines"></div>
+  </section>
+
   <div id="comments"></div>
 
   <div id="subtitle" class="hidden"><span id="subtitle-text"></span></div>
 
 </div>
-<script src="stream.js?v=5"></script>
+<script src="stream.js?v=6"></script>
 </body>
 </html>
