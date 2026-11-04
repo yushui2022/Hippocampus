@@ -12,6 +12,8 @@ const logEl = document.getElementById("log");
 const form = document.getElementById("composer");
 const input = document.getElementById("input");
 const formToggle = document.getElementById("form-toggle");
+const petVideo = document.getElementById("pet-video");
+let videoMode = false;
 
 let socket = null;
 let retryTimer = null;
@@ -91,6 +93,16 @@ window.addEventListener("pointermove", (event) => {
 
 character.addEventListener("pointerdown", (event) => {
   event.preventDefault();
+  if (videoMode) {
+    petVideo.src = "../assets/small/click.webm";
+    petVideo.play().catch(() => {});
+    window.setTimeout(() => {
+      if (videoMode) {
+        petVideo.src = "../assets/small/idle.webm";
+        petVideo.play().catch(() => {});
+      }
+    }, 1600);
+  }
   dragging = true;
   dragMoved = false;
   dragStartX = event.clientX;
@@ -310,6 +322,9 @@ function setExpression(name, holdMs = 5000) {
 
 /* -- blink ------------------------------------------------------------- */
 function blinkOnce() {
+  if (videoMode) {
+    return;
+  }
   blinkLayer.style.opacity = "1";
   window.setTimeout(() => {
     blinkLayer.style.opacity = "0";
@@ -363,6 +378,16 @@ async function speak(text) {
   if (!text) {
     return;
   }
+  if (videoMode) {
+    petVideo.src = "../assets/small/talk.webm";
+    petVideo.play().catch(() => {});
+    window.setTimeout(() => {
+      if (videoMode) {
+        petVideo.src = "../assets/small/idle.webm";
+        petVideo.play().catch(() => {});
+      }
+    }, Math.max(1800, text.length * 220));
+  }
   try {
     const response = await fetch(TTS_URL, {
       method: "POST",
@@ -386,6 +411,10 @@ async function speak(text) {
     source.onended = () => {
       mouthRunning = false;
       talkLayer.style.opacity = "0";
+      if (videoMode) {
+        petVideo.src = "../assets/small/idle.webm";
+        petVideo.play().catch(() => {});
+      }
     };
     source.start();
     driveMouthFromAnalyser();
@@ -531,11 +560,20 @@ async function loadForm(name) {
   const base = "../assets/" + name + "/";
   const manifest = await (await fetch(base + "manifest.json?v=" + Date.now())).json();
   const v = "?v=" + Date.now();
-  document.getElementById("body").src = base + "body.png" + v;
-  document.getElementById("head").src = base + "head.png" + v;
-  document.getElementById("neck").src = base + "neck_fill.png" + v;
-  blinkLayer.src = base + "blink_head.png" + v;
-  talkLayer.src = base + "talk_mouth.png" + v;
+  videoMode = Boolean(manifest.video);
+  character.classList.toggle("video-mode", videoMode);
+  if (videoMode) {
+    petVideo.src = base + "idle.webm" + v;
+    petVideo.play().catch(() => {});
+  } else {
+    petVideo.pause();
+    petVideo.removeAttribute("src");
+    document.getElementById("body").src = base + "body.png" + v;
+    document.getElementById("head").src = base + "head.png" + v;
+    document.getElementById("neck").src = base + "neck_fill.png" + v;
+    blinkLayer.src = base + "blink_head.png" + v;
+    talkLayer.src = base + "talk_mouth.png" + v;
+  }
   exprLayer.src = "../assets/blank.png" + v;
   exprLayer.style.opacity = "0";
   talkLayer.style.opacity = "0";
