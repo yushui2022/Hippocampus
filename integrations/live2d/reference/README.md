@@ -4,7 +4,9 @@
 
 - 原 OC「溟月」：上善无形，**CC BY-NC-SA 4.0**
 - 女仆鲸鱼娘二创：ZipZipPipe（在溟月基础上加入 DeepSeek 元素）
-- 本目录的 `community.jpg` 是社区二创图，用于个人非商用展示
+- Q 版：这个刀子真甜（Updream），2026-07
+- 本目录的 `community.jpg` 是大形态社区图
+- `q_threeview.webp` / `q_front_cutout.png` 是 Q 版三视图与正面抠图
 
 ## 使用限制
 
