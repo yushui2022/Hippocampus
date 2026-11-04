@@ -1,0 +1,200 @@
+:root {
+  --ink: #f4f1f8;
+  --panel: rgba(18, 15, 24, 0.72);
+  --line: rgba(255, 255, 255, 0.14);
+  --accent: #7ec7ff;
+  --live: #ff4d6d;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0d0b11;
+  color: var(--ink);
+  font-family: "PingFang SC", "Hiragino Sans GB", -apple-system, sans-serif;
+}
+
+#stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#bg-video {
+  position: absolute;
+  inset: -2%;
+  width: 104%;
+  height: 104%;
+  object-fit: cover;
+  filter: brightness(0.9) saturate(0.95) blur(1.4px);
+}
+
+#bg-video:not([src]) { display: none; }
+
+#room {
+  position: absolute;
+  inset: -4%;
+  width: 108%;
+  height: 108%;
+  object-fit: cover;
+  filter: brightness(0.88) saturate(0.92) blur(0.6px);
+}
+
+#vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 60% 40%, transparent 40%, rgba(8, 6, 12, 0.55) 100%),
+    linear-gradient(180deg, rgba(8, 6, 12, 0.45) 0%, transparent 22%, transparent 70%, rgba(8, 6, 12, 0.7) 100%);
+}
+
+/* avatar ---------------------------------------------------------------- */
+#character {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  height: 68vh;
+  transform: translateX(-50%);
+  aspect-ratio: 16 / 9;
+  transform-origin: 50% 100%;
+}
+
+#pet-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 26px 34px rgba(10, 6, 14, 0.45));
+}
+
+/* top bar --------------------------------------------------------------- */
+#livebar {
+  position: absolute;
+  top: 34px;
+  left: 46px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px 10px 14px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+}
+
+#livebar .live {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: var(--live);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+#livebar .who {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+#livebar .sub {
+  font-size: 15px;
+  color: rgba(244, 241, 248, 0.6);
+}
+
+/* AI badge -------------------------------------------------------------- */
+#badge-ai {
+  position: absolute;
+  top: 40px;
+  right: 48px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: rgba(244, 241, 248, 0.82);
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(18, 15, 24, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#badge-ai .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+/* comments -------------------------------------------------------------- */
+#comments {
+  position: absolute;
+  left: 46px;
+  bottom: 210px;
+  width: 520px;
+  max-height: 42vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  overflow: hidden;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 100%);
+}
+
+.comment {
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(16, 13, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 19px;
+  line-height: 1.35;
+  animation: slide 260ms ease-out;
+}
+
+.comment .who {
+  color: var(--accent);
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+@keyframes slide {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* subtitle -------------------------------------------------------------- */
+#subtitle {
+  position: absolute;
+  left: 50%;
+  bottom: 96px;
+  transform: translateX(-50%) translateY(8px);
+  max-width: 1180px;
+  text-align: center;
+  padding: 16px 26px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(20, 16, 28, 0.82), rgba(20, 16, 28, 0.7));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 32px;
+  line-height: 1.42;
+  letter-spacing: 0.01em;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+#subtitle.show {
+  opacity: 1;
+  transform: translateX(-50%);
+}
+
+#subtitle.hidden {
+  display: none;
+}
+

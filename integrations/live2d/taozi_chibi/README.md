@@ -61,3 +61,41 @@ python taozi_chibi/h3_to_webm.py reference/h3_loop_test.mp4 taozi_chibi/final \
 ## 输入尺寸约定
 
 `MiniMaxH3ImageToVideo` 的 `first_frame` 是**直接拉伸**到画布的，所以输入图必须已经是目标画幅比例（16:9），否则人物会被压扁。
+
+## 提高画质的三处杠杆
+
+| 手段 | 效果 | 代价 |
+|---|---|---|
+| 8 步 turbo LoRA（原本 4 步） | 线条和运动更实 | 时间 ×2 |
+| 1080p 而非 480p | 人物 336 → 957 px | 时间 ×2.4（注意力超线性） |
+| 构图 88%（原本 70%） | 同画布塞进更多人物像素 | 免费 |
+
+实测：1920×1088 / 4 步 / 39 帧 = 771 s，单帧 19.8 s；1344×768 / 8 步 / 124 帧 ≈ 30 min。
+
+### Qwen-Image 2.1 先放大再喂视频模型
+
+```bash
+python taozi_chibi/qwen_upscale.py \
+  --image reference/q_front_cutout.png --resolution 1536 \
+  --steps 8 --cfg 1.0 \
+  --unet qwen_image_2.1_turbo_int8_convrot.safetensors
+```
+
+379×594 → 1216×1920，锐度（同尺寸）2711 → 4122。之后用 `make_green_seed.py` 合成绿幕种子。
+
+**两个必踩的坑：**
+
+1. `TextEncodeQwenImage21` 的参考图输入键名必须是**扁平的** `"images.image_1"`。
+   写成嵌套的 `{"images": {"image_1": ...}}` 不会报错，但 `LoadImage` 会被剪枝不执行，
+   节点退化成文生图——输出变成正方形，角色被重新设计。
+
+2. Qwen 默认输出**不透明黑底**（alpha 255、RGB 0）。直接贴到绿幕上会带进黑块，
+   视频模型会把黑块当画框然后推镜头。提示词里要写死"纯绿色背景 #00FF00"，
+   拿到图后再用 `qwen_green_clean` 那一步把背景规范成精确的 (0,255,0)。
+
+### 不要指望的
+
+- **`unsloth/MiniMax-H3-GGUF` 的 Q6/Q8 没有 KV 元数据**（`kv_count = 0`），
+  ComfyUI 报 `Unknown model architecture`。只有 Q5 那份能用。
+  Abiray 的 Q8 有元数据，但是未剪枝的 36 GB，加文本编码器和 VAE 会超过 64 GB 内存。
+- **4x-UltraSharp** 能保住设计，但线条出现描边光晕、眼睛高光变成糊点，是假锐。

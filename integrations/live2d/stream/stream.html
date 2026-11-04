@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>大肥鱼 · 直播画面</title>
+<link rel="stylesheet" href="stream.css?v=5" />
+</head>
+<body>
+<div id="stage">
+  <video id="bg-video" autoplay loop muted playsinline></video>
+  <img id="room" src="../assets/room.png" alt="" />
+  <div id="character" class="video-mode">
+    <video id="pet-video" autoplay loop muted playsinline></video>
+  </div>
+  <div id="vignette"></div>
+
+  <div id="badge-ai"><span class="dot"></span>AI 实时生成</div>
+
+  <header id="livebar">
+    <span class="live">LIVE</span>
+    <span class="who">大肥鱼</span>
+    <span class="sub" id="topic">在线陪聊</span>
+  </header>
+
+  <div id="comments"></div>
+
+  <div id="subtitle" class="hidden"><span id="subtitle-text"></span></div>
+
+</div>
+<script src="stream.js?v=5"></script>
+</body>
+</html>

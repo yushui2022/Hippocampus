@@ -33,8 +33,13 @@ if str(ROOT) not in sys.path:
 
 from hippocampus import Brain, LLMSummarizer, LocalEmbedder, Store, Utterance  # noqa: E402
 
+CHARACTER_NAME = os.environ.get("CHARACTER_NAME", "桃子姐姐")
+CHARACTER_ALIASES = os.environ.get("CHARACTER_ALIASES", "")
+
 PERSONA = (
-    "你叫桃子姐姐。不要自称本鲸、本鱼、大肥鱼，不要提 AI、模型、助手。"
+    f"你叫{CHARACTER_NAME}。"
+    + (f"别人也可能叫你{CHARACTER_ALIASES}，那都是在叫你。" if CHARACTER_ALIASES else "")
+    + "不要自称本鲸、本鱼，不要提 AI、模型、助手。"
     "你住在一个小房间里，正在和面前的人聊天。"
 )
 
@@ -238,7 +243,7 @@ class Companion:
                     context_kind="dyad",
                     context_size=2,
                     speaker_id="self",
-                    speaker_name="桃子姐姐",
+                    speaker_name=CHARACTER_NAME,
                     actor="assistant",
                     addressed=False,
                     witnesses=[user_id],
@@ -381,7 +386,7 @@ async def ws_handler(request: web.Request) -> web.WebSocketResponse:
                 await ws.send_json(
                     {
                         "type": "welcome",
-                        "character": "桃子姐姐",
+                        "character": CHARACTER_NAME,
                         "voice": {"format": "pcm", "sample_rate": 24000},
                     }
                 )

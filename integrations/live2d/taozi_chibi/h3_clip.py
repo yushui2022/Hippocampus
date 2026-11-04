@@ -19,12 +19,14 @@ LORA = "minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors"
 
 
 def build(prompt: str, negative: str, image: str, width: int, height: int,
-          length: int, steps: int, cfg: float, seed: int, prefix: str):
+          length: int, steps: int, cfg: float, seed: int, prefix: str,
+          unet: str, lora: str, lora_strength: float, scheduler: str):
     g = {
         "1": {"class_type": "UnetLoaderGGUF",
-              "inputs": {"unet_name": "MiniMax-H3-FL2VA-Pruned-Q5_K_M.gguf"}},
+              "inputs": {"unet_name": unet}},
         "2": {"class_type": "LoraLoaderModelOnly",
-              "inputs": {"model": ["1", 0], "lora_name": LORA, "strength_model": 1.0}},
+              "inputs": {"model": ["1", 0], "lora_name": lora,
+                         "strength_model": lora_strength}},
         "3": {"class_type": "CLIPLoaderGGUF",
               "inputs": {"clip_name": "qwen3vl_32b_minimax_h3-Q4_K_M.gguf", "type": "minimax"}},
         "4": {"class_type": "VAELoader",
@@ -36,7 +38,7 @@ def build(prompt: str, negative: str, image: str, width: int, height: int,
                          "first_frame": ["5", 0], "last_frame": ["5", 0]}},
         "7": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler"}},
         "8": {"class_type": "BasicScheduler",
-              "inputs": {"model": ["2", 0], "scheduler": "simple",
+              "inputs": {"model": ["2", 0], "scheduler": scheduler,
                          "steps": steps, "denoise": 1.0}},
         "9": {"class_type": "RandomNoise", "inputs": {"noise_seed": seed}},
         "10": {"class_type": "VAEDecode", "inputs": {"samples": ["12", 0], "vae": ["4", 0]}},
@@ -75,13 +77,18 @@ def main() -> None:
     ap.add_argument("--steps", type=int, default=4)
     ap.add_argument("--cfg", type=float, default=1.0)
     ap.add_argument("--seed", type=int, default=20261104)
+    ap.add_argument("--unet", default="MiniMax-H3-FL2VA-Pruned-Q5_K_M.gguf")
+    ap.add_argument("--lora", default=LORA)
+    ap.add_argument("--lora-strength", type=float, default=1.0)
+    ap.add_argument("--scheduler", default="simple")
     args = ap.parse_args()
 
     prompt = Path(args.prompt).read_text().strip()
     negative = args.negative.strip()
     prefix = "video/h3_" + args.name
     body = json.dumps({"prompt": build(prompt, negative, args.image, args.width, args.height,
-                                      args.length, args.steps, args.cfg, args.seed, prefix),
+                                      args.length, args.steps, args.cfg, args.seed, prefix,
+                                      args.unet, args.lora, args.lora_strength, args.scheduler),
                        "client_id": str(uuid.uuid4())}).encode()
     req = urllib.request.Request(C + "/prompt", data=body,
                                  headers={"Content-Type": "application/json"})
