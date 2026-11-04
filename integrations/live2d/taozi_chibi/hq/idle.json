@@ -1,0 +1,18 @@
+{
+  "name": "idle",
+  "source": "reference/h3_loop_test.mp4",
+  "fps": 24.0,
+  "frames": 124,
+  "size": [
+    854,
+    480
+  ],
+  "bbox": [
+    325,
+    86,
+    539,
+    422
+  ],
+  "loop_seam_mean_abs": 1.0,
+  "bytes": 1347405
+}

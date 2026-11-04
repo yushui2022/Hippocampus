@@ -1,0 +1,18 @@
+{
+  "name": "talk",
+  "source": "reference/h3_talk_v1.mp4",
+  "fps": 24.0,
+  "frames": 124,
+  "size": [
+    854,
+    480
+  ],
+  "bbox": [
+    318,
+    86,
+    548,
+    421
+  ],
+  "loop_seam_mean_abs": 1.08,
+  "bytes": 1294728
+}
