@@ -14,6 +14,22 @@ const input = document.getElementById("input");
 const formToggle = document.getElementById("form-toggle");
 const petVideo = document.getElementById("pet-video");
 let videoMode = false;
+let talkWatchdog = null;
+
+function playPetClip(name, loop) {
+  if (!videoMode) {
+    return;
+  }
+  petVideo.loop = Boolean(loop);
+  petVideo.src = "../assets/small/" + name + ".webm";
+  petVideo.play().catch(() => {});
+}
+
+petVideo.addEventListener("ended", () => {
+  if (videoMode) {
+    playPetClip("idle", true);
+  }
+});
 
 let socket = null;
 let retryTimer = null;
@@ -94,14 +110,7 @@ window.addEventListener("pointermove", (event) => {
 character.addEventListener("pointerdown", (event) => {
   event.preventDefault();
   if (videoMode) {
-    petVideo.src = "../assets/small/click.webm";
-    petVideo.play().catch(() => {});
-    window.setTimeout(() => {
-      if (videoMode) {
-        petVideo.src = "../assets/small/idle.webm";
-        petVideo.play().catch(() => {});
-      }
-    }, 1600);
+    playPetClip("click", false);
   }
   dragging = true;
   dragMoved = false;
@@ -378,16 +387,7 @@ async function speak(text) {
   if (!text) {
     return;
   }
-  if (videoMode) {
-    petVideo.src = "../assets/small/talk.webm";
-    petVideo.play().catch(() => {});
-    window.setTimeout(() => {
-      if (videoMode) {
-        petVideo.src = "../assets/small/idle.webm";
-        petVideo.play().catch(() => {});
-      }
-    }, Math.max(1800, text.length * 220));
-  }
+  playPetClip("talk", true);
   try {
     const response = await fetch(TTS_URL, {
       method: "POST",
@@ -408,14 +408,24 @@ async function speak(text) {
     source.connect(analyser);
     analyser.connect(context.destination);
 
+    if (talkWatchdog) {
+      clearTimeout(talkWatchdog);
+    }
     source.onended = () => {
       mouthRunning = false;
       talkLayer.style.opacity = "0";
-      if (videoMode) {
-        petVideo.src = "../assets/small/idle.webm";
-        petVideo.play().catch(() => {});
+      if (talkWatchdog) {
+        clearTimeout(talkWatchdog);
+        talkWatchdog = null;
       }
+      playPetClip("idle", true);
     };
+    // watchdog: never leave the talking clip on screen if onended never fires
+    talkWatchdog = window.setTimeout(() => {
+      if (videoMode) {
+        playPetClip("idle", true);
+      }
+    }, ((audio.duration || 3) + 0.4) * 1000);
     source.start();
     driveMouthFromAnalyser();
   } catch (error) {
@@ -437,6 +447,7 @@ function startTalking(durationMs) {
       talkLayer.style.opacity = "0";
       clearInterval(talkTimer);
       talkTimer = null;
+      playPetClip("idle", true);
     }
   }, 90);
 }
@@ -563,6 +574,7 @@ async function loadForm(name) {
   videoMode = Boolean(manifest.video);
   character.classList.toggle("video-mode", videoMode);
   if (videoMode) {
+    petVideo.loop = true;
     petVideo.src = base + "idle.webm" + v;
     petVideo.play().catch(() => {});
   } else {

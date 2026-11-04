@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>clip preview</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  #stage {
+    position: relative; width: 100vw; height: 100vh;
+    background: url("../assets/room.png") center/cover no-repeat, #1a1418;
+  }
+  #pet {
+    position: absolute; left: 70%; bottom: 14%;
+    height: 62vh; transform: translateX(-50%);
+  }
+</style>
+</head>
+<body>
+  <div id="stage"><video id="pet" autoplay loop muted playsinline></video></div>
+<script>
+  const q = new URLSearchParams(location.search);
+  const src = q.get("src") || "m3.webm";
+  const v = document.getElementById("pet");
+  v.src = src;
+  v.play().catch(() => {});
+</script>
+</body>
+</html>

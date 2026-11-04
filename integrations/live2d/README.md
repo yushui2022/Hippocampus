@@ -80,7 +80,7 @@ live2d/
 ## 两种形态（可切换）
 
 - **大鲸 / 女仆**：**社区原画**，站在房间里；只做呼吸/摆动/拖动，不拆头
-- **小鲸 / chibi**：官方 Q 版 + dsh-pet 透明动画（待机/哼歌/点击反应）
+- **小鲸 / chibi**：官方 Q 版 + 本地生成的透明动画（待机/说话/点击反应）
 
 右上角按钮切换，选择记在 `localStorage`。
 
@@ -101,7 +101,7 @@ assets/small/   chibi 分层 + manifest
 四套：`happy / sad / angry / shy`。
 
 - 大形态未拆头，暂不做眨眼/口型
-- 小形态使用社区 dsh-pet 的透明动画，不再手改脸；待机自带眨眼
+- 小形态的三条动画由本机 MiniMax-H3 生成（见 `taozi_chibi/README.md`），绿幕抠像成透明 WebM；待机自带呼吸和眨眼
 - 由 companion 服务返回的 `expression` 字段驱动
 - 点击她 → 短暂 happy
 - 表情层和口型层分开：说话时嘴仍然动，表情的眼睛还在
