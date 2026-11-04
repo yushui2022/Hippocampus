@@ -17,7 +17,13 @@ import sys
 import urllib.request
 
 # 抖音抓弹幕的控制台格式：【聊天msg】昵称：内容
-DOUYIN_RE = re.compile(r"^[【\[]?\s*(?:聊天|评论|弹幕)[^】\]]*[】\]]\s*([^：:]{1,24})[：:]\s*(.+)$")
+# 抓取库实际格式：【聊天msg】[123456]昵称: 内容
+DOUYIN_RE = re.compile(
+    r"^[【\[]?\s*(?:聊天|评论|弹幕|chat)[^】\]]*[】\]]\s*(?:\[[^\]]*\])?\s*([^：:]{1,24})[：:]\s*(.+)$",
+    re.IGNORECASE,
+)
+# 【进场msg】/【礼物msg】/【点赞msg】 这些不进对话
+NOISE_RE = re.compile(r"^[【\[]?\s*(?:进场|礼物|点赞|关注|分享|在线人数|统计)[^】\]]*[】\]]")
 
 
 def post(base: str, user: str, text: str) -> None:
@@ -44,6 +50,8 @@ def main() -> None:
         for line in sys.stdin:
             line = line.strip()
             if not line:
+                continue
+            if NOISE_RE.match(line):
                 continue
             match = DOUYIN_RE.match(line)
             if match:

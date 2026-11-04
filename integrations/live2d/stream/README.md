@@ -51,6 +51,27 @@ your-danmu-fetcher | ./.venv/bin/python feed.py --stdin
 
 **本仓库不包含抖音抓弹幕的实现。** 抓取依赖平台签名逆向，随时可能失效，也不在官方授权范围内；正式接入走抖音开放平台直播玩法（只推送事先配置的评论指令）。
 
+### 抖音（逆向方案，本地试用）
+
+抓取程序放在仓库外：`~/Documents/直播/douyin-fetcher`（clone 自
+`saermart/DouyinLiveWebFetcher`）。适配层是那个目录里的 `douyin2bridge.py`，
+只保留聊天消息，礼物/进场/榜单全部丢弃，直接 POST 到本桥。
+
+```bash
+cd ~/Documents/直播/douyin-fetcher
+./run.sh 123456789                          # 直播间号
+./run.sh https://live.douyin.com/123456789  # 或直接贴链接
+```
+
+`run.sh` 会先确认 6220 的桥在跑，然后连上直播间，把每条弹幕送进 `/comment`。
+
+限制：
+
+- 需要 `node`（签名脚本用 V8 跑）
+- 房间没人说话时看不到输出，属正常
+- 抖音改版可能随时失效；账号有风险；不属于官方授权范围
+- 抓取代码不进仓库，也不进大肥鱼这套代码树
+
 ## 场景
 
 | 名字 | 画面 | 触发 |
