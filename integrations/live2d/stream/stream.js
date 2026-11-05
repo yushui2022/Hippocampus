@@ -1,15 +1,19 @@
 /* Stream shell: no input box, no dragging. The bridge pushes comments and turns. */
 (() => {
   const BRIDGE = `ws://${location.hostname}:6220/ws`;
-  // ?mute=1 turns the page into a silent preview (subtitles only) so a second
-  // tab does not talk over the OBS browser source
-  const MUTED = new URLSearchParams(location.search).get("mute") === "1";
+  // audio is opt-in: only the OBS browser source passes ?audio=1, so any other
+  // tab previewing the stage stays silent instead of talking over it
+  const MUTED = new URLSearchParams(location.search).get("audio") !== "1";
   const TTS_URL = "http://127.0.0.1:6211/tts";
   const ASSETS = "../assets/small/";
   const BG = "../assets/bg/bedroom.webm";
 
   // which clip is on screen; talking always returns to `resting`
   const CLIPS = { idle: "idle", talk: "talk", work: "work" };
+
+  // several idle takes, chained so the loop is ~20 s instead of 5 s
+  const IDLE_CLIPS = ["idle_a", "idle_b", "idle_c", "idle_d"];
+  let idleIndex = 0;
 
   const video = document.getElementById("pet-video");
   const bgVideo = document.getElementById("bg-video");
@@ -40,7 +44,25 @@
     video.play().catch(() => {});
   }
 
-  video.addEventListener("ended", () => playClip(resting, true));
+  function currentIdle() {
+    return IDLE_CLIPS[idleIndex % IDLE_CLIPS.length];
+  }
+
+  function playRest() {
+    if (resting === "work" && available.has("work")) {
+      playClip("work", true);
+      return;
+    }
+    playClip(currentIdle(), false);   // loop=false so `ended` fires and we rotate
+  }
+
+  video.addEventListener("ended", () => {
+    const clip = video.dataset.clip || "";
+    if (clip.startsWith("idle_")) {
+      idleIndex += 1;
+    }
+    playRest();
+  });
 
   const available = new Set(["idle", "talk"]);
 
@@ -55,7 +77,7 @@
       return;
     }
     resting = available.has(name) ? name : "idle";
-    playClip(resting, true);
+    playRest();
     setTopic(resting);
   }
 
@@ -147,7 +169,7 @@
     setTopic("talk");
     if (MUTED) {
       setTimeout(() => {
-        playClip(resting, true);
+        playRest();
         setTopic(resting);
       }, Math.min(9000, 1500 + text.length * 160));
       return;
@@ -176,7 +198,7 @@
           clearTimeout(talkWatchdog);
           talkWatchdog = null;
         }
-        playClip(resting, true);
+        playRest();
         setTopic(resting);
       };
       source.onended = back;
@@ -187,7 +209,7 @@
       source.start();
     } catch (error) {
       // no audio device or TTS down: keep the mouth moving for a beat, then idle
-      setTimeout(() => playClip(resting, true), 1800 + text.length * 60);
+      setTimeout(() => playRest(), 1800 + text.length * 60);
     }
   }
 
@@ -245,7 +267,7 @@
 
   startBackground();
   Promise.all([probeClip("work"), probeClip("talk")]);
-  playClip("idle", true);
+  playRest();
   setTopic("idle");
   connect();
 

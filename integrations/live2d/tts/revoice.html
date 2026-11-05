@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>大肥鱼 · 换音色</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; padding: 30px 38px 70px; background: #14121a; color: #ece8f4;
+         font: 15px/1.6 -apple-system, "PingFang SC", sans-serif; }
+  h1 { font-size: 21px; margin: 0 0 4px; font-weight: 600; }
+  p.sub { color: #948da6; margin: 0 0 24px; font-size: 13px; }
+  .card { background: #1e1b26; border: 1px solid #322c40; border-radius: 14px;
+          padding: 16px 18px; margin-bottom: 14px; max-width: 760px; }
+  .card h2 { font-size: 17px; margin: 0 0 10px; font-weight: 600; }
+  .row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .row:last-child { margin-bottom: 0; }
+  .kind { width: 74px; font-size: 12px; color: #9d96ad; }
+  audio { flex: 1; height: 32px; }
+  .hint { font-size: 12px; color: #7f7890; margin-top: 8px; }
+</style>
+</head>
+<body>
+  <h1>换音色</h1>
+  <p class="sub">每个音色两条：先听「正常聊天」，再听「挑衅」。音色满意了再谈语气。</p>
+
+  <div class="card">
+    <h2>Vivian</h2>
+    <div class="row"><span class="kind">正常</span><audio controls preload="auto" src="samples/n_vivian_000.wav"></audio></div>
+    <div class="row"><span class="kind">挑衅</span><audio controls preload="auto" src="samples/b_vivian_000.wav"></audio></div>
+  </div>
+
+  <div class="card">
+    <h2>Sohee</h2>
+    <div class="row"><span class="kind">正常</span><audio controls preload="auto" src="samples/n_sohee_000.wav"></audio></div>
+    <div class="row"><span class="kind">挑衅</span><audio controls preload="auto" src="samples/b_sohee_000.wav"></audio></div>
+  </div>
+
+  <div class="card">
+    <h2>Serena</h2>
+    <div class="row"><span class="kind">正常</span><audio controls preload="auto" src="samples/n_serena_000.wav"></audio></div>
+    <div class="row"><span class="kind">挑衅</span><audio controls preload="auto" src="samples/b_serena_000.wav"></audio></div>
+  </div>
+
+  <p class="hint">模型只有这 9 个内置音色，女声就这四个（Ono Anna 已经否掉）。如果四个都不合适，下一步只能用参考音频克隆音色，那是另一套流程。</p>
+</body>
+</html>

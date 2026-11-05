@@ -1,0 +1,18 @@
+{
+  "name": "idle_a",
+  "source": "reference/h3_idle768_771003.mp4",
+  "fps": 24.0,
+  "frames": 124,
+  "size": [
+    1366,
+    768
+  ],
+  "bbox": [
+    494,
+    134,
+    850,
+    672
+  ],
+  "loop_seam_mean_abs": 0.72,
+  "bytes": 2435110
+}
