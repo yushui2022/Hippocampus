@@ -415,6 +415,18 @@
     }
     const joined = lines.join("");
     const site = String(turn.looking_at || "");
+
+    // 自己上网时的自言自语：只留在对话框和顶部，不发声、不弹字幕
+    if (turn.autonomous) {
+      if (site) showWatching(site);
+      pushDialog(joined);
+      if (resting === "idle") {
+        resting = "work";
+        playRest();
+        setTopic("work");
+      }
+      return;
+    }
     if (site) {
       showWatching(site);
       // 先让人看见她“在看”，再开口

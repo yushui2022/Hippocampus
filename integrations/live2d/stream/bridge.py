@@ -33,6 +33,10 @@ MAX_LEN = int(os.environ.get("STREAM_MAX_LEN", "120"))
 DEDUPE_WINDOW = float(os.environ.get("STREAM_DEDUPE", "30"))
 TURN_TIMEOUT = float(os.environ.get("STREAM_TURN_TIMEOUT", "45"))
 QUEUE_MAX = int(os.environ.get("STREAM_QUEUE_MAX", "12"))
+# 自动冲浪：安静多久她自己去上网，以及两次之间至少隔多久
+IDLE_BROWSE_AFTER = float(os.environ.get("STREAM_IDLE_BROWSE_AFTER", "180"))
+BROWSE_GAP_MIN = float(os.environ.get("STREAM_BROWSE_GAP_MIN", "480"))
+BROWSE_GAP_MAX = float(os.environ.get("STREAM_BROWSE_GAP_MAX", "840"))
 
 URL_RE = re.compile(r"https?://\S+|www\.\S+")
 CTRL_RE = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
@@ -60,6 +64,8 @@ class Bridge:
         self.served = 0
         self.dropped = 0
         self.last_reply_at = 0.0
+        self.last_comment_at = time.time()
+        self.next_browse_at = time.time() + BROWSE_GAP_MIN
         self.turn: asyncio.Future | None = None
         self.topic = "在线陪聊"
 
@@ -116,8 +122,19 @@ class Bridge:
                             data = json.loads(msg.data)
                         except json.JSONDecodeError:
                             continue
-                        if data.get("type") == "turn" and self.turn and not self.turn.done():
-                            self.turn.set_result(data)
+                        if data.get("type") == "turn":
+                            if self.turn and not self.turn.done():
+                                self.turn.set_result(data)
+                            elif data.get("autonomous"):
+                                self.last_reply_at = time.time()
+                                await self.broadcast({
+                                    "type": "turn",
+                                    "say": data.get("say", []),
+                                    "expression": data.get("expression", "neutral"),
+                                    "actions": [],
+                                    "looking_at": data.get("looking_at", ""),
+                                    "autonomous": True,
+                                })
             except Exception as error:  # noqa: BLE001
                 log("brain error:", type(error).__name__, error)
             finally:
@@ -125,6 +142,28 @@ class Bridge:
                 self.brain_ws = None
             log("brain disconnected, retry in 3s")
             await asyncio.sleep(3)
+
+    async def browse_loop(self) -> None:
+        """安静一段时间就让她自己去看看网页，隔一阵再允许下一次。"""
+        while True:
+            await asyncio.sleep(20)
+            try:
+                if not self.brain_ready.is_set() or self.brain_ws is None:
+                    continue
+                now = time.time()
+                if now < self.next_browse_at:
+                    continue
+                if now - self.last_comment_at < IDLE_BROWSE_AFTER:
+                    continue
+                if self.turn and not self.turn.done():
+                    continue
+                log("auto browse")
+                await self.brain_ws.send_json({"type": "browse"})
+                self.next_browse_at = now + BROWSE_GAP_MIN + (BROWSE_GAP_MAX - BROWSE_GAP_MIN) * time.time() % 1
+            except asyncio.CancelledError:
+                raise
+            except Exception as error:  # noqa: BLE001
+                log("browse loop error:", type(error).__name__, error)
 
     # ------------------------------------------------------------- consumer
     async def consume(self) -> None:
@@ -194,6 +233,7 @@ async def handle_comment(request: web.Request) -> web.Response:
         BRIDGE.dropped += 1
         return web.json_response({"ok": False, "error": "queue full"}, status=429)
 
+    BRIDGE.last_comment_at = time.time()
     await BRIDGE.q().put({"user": user, "text": text})
     await BRIDGE.broadcast({"type": "comment", "user": user, "text": text})
     return web.json_response({"ok": True, "queued": BRIDGE.q().qsize()})
@@ -210,6 +250,7 @@ async def handle_say(request: web.Request) -> web.Response:
         return web.json_response({"ok": False, "error": "empty"}, status=400)
     if BRIDGE.q().full():
         return web.json_response({"ok": False, "error": "queue full"}, status=429)
+    BRIDGE.last_comment_at = time.time()
     await BRIDGE.q().put({"user": user, "text": text})
     await BRIDGE.broadcast({"type": "comment", "user": user, "text": text})
     return web.json_response({"ok": True, "queued": BRIDGE.q().qsize()})
@@ -270,6 +311,7 @@ async def on_startup(app: web.Application) -> None:
     app["tasks"] = [
         asyncio.create_task(BRIDGE.brain_loop()),
         asyncio.create_task(BRIDGE.consume()),
+        asyncio.create_task(BRIDGE.browse_loop()),
     ]
 
 

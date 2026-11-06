@@ -17,6 +17,7 @@ import argparse
 import asyncio
 import json
 import os
+import re
 import sys
 import time
 import uuid
@@ -352,6 +353,55 @@ class Companion:
             "look": str(data.get("look") or "").strip()[:120],
         }
 
+    async def browse(self, session_state: dict) -> dict:
+        """没人说话时，她自己上网看点东西，嘟囔一句。"""
+        base = [
+            {"role": "system", "content": PERSONA + "\n" + STYLE},
+            {"role": "system", "content":
+                "现在没人跟你说话，你正闲着。挑一个你自己真会感兴趣、又适合搜一下的话题。"
+                '只回 JSON：{"topic":"搜索词"}，不要别的字。'},
+        ]
+        try:
+            raw = await self.chat(base)
+        except Exception as exc:  # noqa: BLE001
+            log("browse topic failed", repr(exc))
+            return {}
+        m = re.search(r'"topic"\s*:\s*"([^"]{2,40})"', raw or "")
+        topic = m.group(1).strip() if m else ""
+        if not topic:
+            return {}
+
+        material, site = await self._lookup(topic)
+        if not material:
+            return {}
+
+        note = ("你刚刚上网看了这些：\n" + material +
+                "\n\n用一句话嘟囔一下你看到的东西，像自言自语，不要对任何人提问，"
+                "不要说“根据搜索”，不要念资料。只回 JSON：{\"say\":[\"一句话\"]}")
+        try:
+            raw2 = await self.chat(base + [
+                {"role": "assistant", "content": raw[:200]},
+                {"role": "system", "content": note},
+            ])
+        except Exception as exc:  # noqa: BLE001
+            log("browse comment failed", repr(exc))
+            return {}
+
+        turn = self._parse_turn(raw2, session_state)
+        text = (turn.get("say") or [{}])[0].get("text", "").strip()
+        if not text or text == "嗯。":
+            return {}
+        session_state["last_look_site"] = site or topic
+        return {
+            "type": "turn",
+            "turn_id": uuid.uuid4().hex[:8],
+            "say": turn.get("say"),
+            "expression": turn.get("expression", "neutral"),
+            "actions": [],
+            "looking_at": site or topic,
+            "autonomous": True,
+        }
+
     async def _lookup(self, query: str) -> tuple[str, str]:
         """Search or fetch, return (material for the model, site label for the UI)."""
         try:
@@ -471,6 +521,11 @@ async def ws_handler(request: web.Request) -> web.WebSocketResponse:
                         "voice": {"format": "pcm", "sample_rate": 24000},
                     }
                 )
+            elif kind == "browse":
+                turn = await companion.browse(state)
+                if turn:
+                    await ws.send_json(turn)
+                    log("browse turn", " | ".join(x.get("text", "") for x in turn["say"]))
             elif kind == "user_text":
                 text = str(data.get("text") or "").strip()
                 if not text:
