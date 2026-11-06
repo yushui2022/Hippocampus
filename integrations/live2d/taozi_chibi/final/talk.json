@@ -1,18 +1,18 @@
 {
   "name": "talk",
-  "source": "reference/h3_talk_v1.mp4",
+  "source": "reference/h3_talk768_660213.mp4",
   "fps": 24.0,
   "frames": 124,
   "size": [
-    640,
-    360
+    1366,
+    768
   ],
   "bbox": [
-    318,
-    86,
-    548,
-    421
+    0,
+    0,
+    1344,
+    768
   ],
-  "loop_seam_mean_abs": 1.09,
-  "bytes": 679430
+  "loop_seam_mean_abs": 0.81,
+  "bytes": 3241308
 }

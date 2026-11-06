@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>摸鱼动作 · 直看</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0d0b11; overflow: hidden;
+               font-family: "PingFang SC", "Hiragino Sans GB", sans-serif; color: #e8e4f0; }
+  #stage { position: relative; width: 100vw; height: 100vh; }
+  #room { position: absolute; inset: -3%; width: 106%; height: 106%;
+          object-fit: cover; filter: brightness(0.86) blur(1px); }
+  #pet { position: absolute; left: 50%; bottom: 8%; height: 78vh;
+         transform: translateX(-50%); object-fit: contain;
+         filter: drop-shadow(0 28px 36px rgba(8,4,12,.45)); }
+  #cap { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%);
+         font-size: 15px; color: rgba(232,228,240,.55); letter-spacing: .04em; }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <img id="room" src="../assets/room.png" alt="" />
+    <video id="pet" autoplay muted playsinline></video>
+    <div id="cap"></div>
+  </div>
+<script>
+  const ROOM = "../assets/room.png";
+  const CLIPS = "../assets/small/";
+  const pet = document.getElementById("pet");
+  const cap = document.getElementById("cap");
+
+  // 一段完整循环：掏出 → 刷（循环 3 遍）→ 收起 → 空站一拍
+  const steps = [
+    ["work_in",   false, "掏出手机"],
+    ["work_loop", true,  "刷手机（循环）"],
+    ["work_loop", true,  ""],
+    ["work_loop", true,  ""],
+    ["work_out",  false, "收起手机"],
+    ["idle_a",    true,  "回到待机"],
+    ["idle_a",    true,  ""],
+  ];
+  let i = 0;
+
+  function play(name, loop, note) {
+    pet.loop = loop;
+    pet.src = CLIPS + name + ".webm";
+    pet.play().catch(() => {});
+    cap.textContent = note ? `${name} · ${note}` : name;
+  }
+
+  pet.addEventListener("ended", () => {
+    i = (i + 1) % steps.length;
+    const [name, loop, note] = steps[i];
+    play(name, loop, note);
+  });
+
+  play(steps[0][0], steps[0][1], steps[0][2]);
+</script>
+</body>
+</html>

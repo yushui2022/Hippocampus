@@ -38,7 +38,8 @@ NEGATIVE = (
 
 
 def build(image: str, resolution: int, steps: int, cfg: float, seed: int,
-          unet: str, sampler: str, scheduler: str, shift: float, prefix: str):
+          unet: str, sampler: str, scheduler: str, shift: float, prefix: str,
+          prompt_text: str = PROMPT):
     return {
         "1": {"class_type": "UNETLoader",
               "inputs": {"unet_name": unet, "weight_dtype": "default"}},
@@ -52,7 +53,7 @@ def build(image: str, resolution: int, steps: int, cfg: float, seed: int,
               "inputs": {"vae_name": "qwen_image_2.1_vae_bf16.safetensors"}},
         "6": {"class_type": "LoadImage", "inputs": {"image": image}},
         "7": {"class_type": "TextEncodeQwenImage21",
-              "inputs": {"clip": ["4", 0], "prompt": PROMPT, "negative_prompt": NEGATIVE,
+              "inputs": {"clip": ["4", 0], "prompt": prompt_text, "negative_prompt": NEGATIVE,
                          "vae": ["5", 0], "resolution": resolution,
                          "images.image_1": ["6", 0]}},
         "8": {"class_type": "KSampler",
@@ -79,6 +80,7 @@ def main() -> None:
     ap.add_argument("--shift", type=float, default=3.1)
     ap.add_argument("--prefix", default="qwen_up")
     ap.add_argument("--out", default="")
+    ap.add_argument("--prompt-file", default="", help="override the built-in prompt")
     args = ap.parse_args()
 
     # LoadImage resolves names inside ComfyUI/input; a missing file silently drops
@@ -91,9 +93,10 @@ def main() -> None:
     else:
         image_name = args.image
 
+    prompt_text = Path(args.prompt_file).read_text().strip() if args.prompt_file else PROMPT
     body = json.dumps({"prompt": build(image_name, args.resolution, args.steps, args.cfg,
                                        args.seed, args.unet, args.sampler, args.scheduler,
-                                       args.shift, args.prefix),
+                                       args.shift, args.prefix, prompt_text),
                        "client_id": str(uuid.uuid4())}).encode()
     req = urllib.request.Request(C + "/prompt", data=body,
                                  headers={"Content-Type": "application/json"})

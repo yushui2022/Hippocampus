@@ -28,6 +28,8 @@
 
   const video = document.getElementById("pet-video");
   const bgVideo = document.getElementById("bg-video");
+  const dustCanvas = document.getElementById("dust");
+  const roomImg = document.getElementById("room");
   const subtitle = document.getElementById("subtitle");
   const subtitleText = document.getElementById("subtitle-text");
   const comments = document.getElementById("comments");
@@ -163,6 +165,65 @@
           available.add(name);
         }
       })
+      .catch(() => {});
+  }
+
+  // 浮尘：慢慢往上飘的光点，让静态背景有空气感
+  function startDust() {
+    if (!dustCanvas) return;
+    const ctx = dustCanvas.getContext("2d");
+    let w = 0, h = 0, dots = [];
+
+    function resize() {
+      const r = dustCanvas.getBoundingClientRect();
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      w = Math.max(1, Math.round(r.width));
+      h = Math.max(1, Math.round(r.height));
+      dustCanvas.width = w * dpr;
+      dustCanvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      dots = Array.from({ length: 26 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: 0.6 + Math.random() * 1.8,
+        vy: 3 + Math.random() * 9,
+        vx: (Math.random() - 0.5) * 4,
+        a: 0.10 + Math.random() * 0.28,
+      }));
+    }
+
+    let last = performance.now();
+    function frame(now) {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      ctx.clearRect(0, 0, w, h);
+      for (const d of dots) {
+        d.y -= d.vy * dt;
+        d.x += d.vx * dt;
+        if (d.y < -6) { d.y = h + 6; d.x = Math.random() * w; }
+        if (d.x < -6) d.x = w + 6;
+        if (d.x > w + 6) d.x = -6;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 246, 224, ${d.a})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+    requestAnimationFrame(frame);
+  }
+
+  // 白天 7:00-18:59，其余时间用夜晚配色
+  function applyTimeOfDay() {
+    const hour = new Date().getHours();
+    const night = hour >= 19 || hour < 7;
+    document.body.classList.toggle("night", night);
+    const name = night ? "../assets/room_night.png" : "../assets/room_day.png";
+    fetch(name, { method: "HEAD" })
+      .then((res) => { if (res.ok) roomImg.src = name; })
       .catch(() => {});
   }
 
@@ -345,6 +406,8 @@
   }
 
   startBackground();
+  startDust();
+  applyTimeOfDay();
   Promise.all([
     probeClip("work_in"), probeClip("work_loop"), probeClip("work_out"), probeClip("talk"),
     probeClip("expr_happy"), probeClip("expr_angry"),

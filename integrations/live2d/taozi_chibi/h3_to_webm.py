@@ -139,6 +139,52 @@ def kill_green(rgb: np.ndarray, alpha: np.ndarray) -> tuple[np.ndarray, np.ndarr
     return np.clip(out, 0, 255).astype(np.uint8), new_alpha
 
 
+def stabilize(rgb, alpha, thresh: int = 24, target_h: int = 0, target_top: int = 0):
+    """Lock the character's height and head position across the clip.
+
+    Each frame is scaled so the alpha bbox height matches the clip median, then
+    shifted so the bbox top and centre land on the same spot. Without this the
+    model creeps forward over a long take and the swap between clips jumps.
+    """
+    tops, bots, lefts, rights = [], [], [], []
+    for a in alpha:
+        ys, xs = np.where(a > thresh)
+        if ys.size == 0:
+            tops.append(None); bots.append(None); lefts.append(None); rights.append(None)
+        else:
+            tops.append(int(ys.min())); bots.append(int(ys.max()))
+            lefts.append(int(xs.min())); rights.append(int(xs.max()))
+
+    ok = [i for i in range(len(alpha)) if tops[i] is not None and bots[i] - tops[i] > 8]
+    if not ok:
+        return rgb, alpha
+
+    if not target_h:
+        target_h = int(np.median([bots[i] - tops[i] for i in ok]))
+    if not target_top:
+        target_top = int(np.median([tops[i] for i in ok]))
+    target_cx = float(np.median([(lefts[i] + rights[i]) / 2 for i in ok]))
+
+    out_rgb, out_a = [], []
+    for r, a, top, bot, lx, rx in zip(rgb, alpha, tops, bots, lefts, rights):
+        if top is None:
+            out_rgb.append(r); out_a.append(a); continue
+        h = max(1, bot - top)
+        scale = target_h / h
+        if abs(scale - 1.0) < 0.005:
+            out_rgb.append(r); out_a.append(a); continue
+        im = Image.fromarray(np.dstack([r, a]), "RGBA")
+        w2, h2 = max(1, int(round(im.width * scale))), max(1, int(round(im.height * scale)))
+        im = im.resize((w2, h2), Image.LANCZOS)
+        canvas = Image.new("RGBA", (r.shape[1], r.shape[0]), (0, 0, 0, 0))
+        paste_y = int(round(target_top - top * scale))
+        paste_x = int(round(target_cx - ((lx + rx) / 2) * scale))
+        canvas.alpha_composite(im, (paste_x, paste_y))
+        arr = np.array(canvas)
+        out_rgb.append(arr[..., :3]); out_a.append(arr[..., 3])
+    return out_rgb, out_a
+
+
 def compose(rgb: np.ndarray, alpha: np.ndarray, box, out_w: int, out_h: int,
             height_frac: float = 0.70, feet_frac: float = 0.88) -> np.ndarray:
     x0, y0, x1, y1 = box
@@ -205,6 +251,12 @@ def main() -> None:
     ap.add_argument("--crf", type=int, default=30)
     ap.add_argument("--matte", help="PNG with alpha; forces the character silhouette")
     ap.add_argument("--matte-box", default="", help="x,y,w,h where the matte sits in the frame")
+    ap.add_argument("--stabilize", action="store_true",
+                    help="lock the character's height and head position across frames")
+    ap.add_argument("--target-height", type=int, default=0,
+                    help="absolute character height in the composed frame (default: clip median)")
+    ap.add_argument("--target-top", type=int, default=0,
+                    help="absolute y of the character's top (default: clip median)")
     ap.add_argument("--erode", type=int, default=4)
     ap.add_argument("--dilate", type=int, default=8)
     args = ap.parse_args()
@@ -227,8 +279,28 @@ def main() -> None:
     keyed = [kill_green(rgb, a) for rgb, a in keyed]
     alphas = [a for _, a in keyed]
 
+    if args.stabilize:
+        rgbs, alphas = zip(*keyed)
+        rgbs, alphas = stabilize(list(rgbs), list(alphas),
+                                  target_h=args.target_height, target_top=args.target_top)
+        keyed = list(zip(rgbs, alphas))
+
     out_w = int(round(args.height * 16 / 9 / 2) * 2)
-    composed = [compose(rgb, a, box, out_w, args.height) for rgb, a in keyed]
+
+    if args.stabilize and args.target_height:
+        # geometry is already fixed by stabilize(); crop the whole frame and let
+        # the canvas scale decide, so a prop widening the bbox cannot shrink her
+        fh, fw = keyed[0][0].shape[:2]
+        box = (0, 0, fw, fh)
+        height_frac = args.height / fh
+        feet_frac = 1.0        # keep the stabilized y so the feet stay on the floor line
+    else:
+        height_frac = 0.70
+        feet_frac = 0.88
+
+    composed = [compose(rgb, a, box, out_w, args.height,
+                        height_frac=height_frac, feet_frac=feet_frac)
+                for rgb, a in keyed]
 
     webm = outdir / f"{args.name}.webm"
     encode_webm(composed, webm, fps, args.crf)

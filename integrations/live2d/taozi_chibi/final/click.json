@@ -1,18 +1,18 @@
 {
   "name": "click",
-  "source": "reference/h3_click_v1.mp4",
+  "source": "reference/h3_click768.mp4",
   "fps": 24.0,
   "frames": 124,
   "size": [
-    640,
-    360
+    1366,
+    768
   ],
   "bbox": [
-    308,
-    82,
-    556,
-    422
+    0,
+    0,
+    1344,
+    768
   ],
-  "loop_seam_mean_abs": 0.97,
-  "bytes": 701581
+  "loop_seam_mean_abs": 0.75,
+  "bytes": 3457541
 }
