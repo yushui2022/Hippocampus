@@ -34,7 +34,6 @@
   const roomImg = document.getElementById("room");
   const subtitle = document.getElementById("subtitle");
   const subtitleText = document.getElementById("subtitle-text");
-  const comments = document.getElementById("comments");
   const dialog = document.getElementById("dialog");
   const dialogLines = document.getElementById("dialog-lines");
   let dialogTimer = null;
@@ -275,20 +274,8 @@
     });
   }
 
-  function addComment(user, text) {
-    const row = document.createElement("div");
-    row.className = "comment";
-    const who = document.createElement("span");
-    who.className = "who";
-    who.textContent = user || "观众";
-    const body = document.createElement("span");
-    body.textContent = text;
-    row.append(who, body);
-    comments.appendChild(row);
-    while (comments.children.length > 6) {
-      comments.removeChild(comments.firstChild);
-    }
-  }
+  // 弹幕由直播平台自己叠在画面上，这里不再重复显示
+  function addComment() {}
 
   // 顶部回复框常驻，开局先放一句占位，不至于是个空框
   function dialogPlaceholder() {
