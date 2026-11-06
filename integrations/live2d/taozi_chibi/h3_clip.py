@@ -20,7 +20,7 @@ LORA = "minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors"
 
 def build(prompt: str, negative: str, image: str, width: int, height: int,
           length: int, steps: int, cfg: float, seed: int, prefix: str,
-          unet: str, lora: str, lora_strength: float, scheduler: str):
+          unet: str, lora: str, lora_strength: float, scheduler: str, no_last: bool):
     g = {
         "1": {"class_type": "UnetLoaderGGUF",
               "inputs": {"unet_name": unet}},
@@ -35,7 +35,8 @@ def build(prompt: str, negative: str, image: str, width: int, height: int,
         "6": {"class_type": "MiniMaxH3ImageToVideo",
               "inputs": {"clip": ["3", 0], "vae": ["4", 0], "prompt": prompt,
                          "width": width, "height": height, "length": length,
-                         "first_frame": ["5", 0], "last_frame": ["5", 0]}},
+                         "first_frame": ["5", 0],
+                         **({} if no_last else {"last_frame": ["5", 0]})}},
         "7": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler"}},
         "8": {"class_type": "BasicScheduler",
               "inputs": {"model": ["2", 0], "scheduler": scheduler,
@@ -81,6 +82,9 @@ def main() -> None:
     ap.add_argument("--lora", default=LORA)
     ap.add_argument("--lora-strength", type=float, default=1.0)
     ap.add_argument("--scheduler", default="simple")
+    ap.add_argument("--no-last", action="store_true",
+                    help="omit the last-frame anchor; use for transitions where the "
+                         "pose must change across the clip (prop appears/disappears)")
     args = ap.parse_args()
 
     prompt = Path(args.prompt).read_text().strip()
@@ -88,7 +92,8 @@ def main() -> None:
     prefix = "video/h3_" + args.name
     body = json.dumps({"prompt": build(prompt, negative, args.image, args.width, args.height,
                                       args.length, args.steps, args.cfg, args.seed, prefix,
-                                      args.unet, args.lora, args.lora_strength, args.scheduler),
+                                      args.unet, args.lora, args.lora_strength, args.scheduler,
+                                      args.no_last),
                        "client_id": str(uuid.uuid4())}).encode()
     req = urllib.request.Request(C + "/prompt", data=body,
                                  headers={"Content-Type": "application/json"})

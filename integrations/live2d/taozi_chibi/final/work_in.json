@@ -1,0 +1,18 @@
+{
+  "name": "work_in",
+  "source": "reference/h3_work_in_v2.mp4",
+  "fps": 24.0,
+  "frames": 73,
+  "size": [
+    1366,
+    768
+  ],
+  "bbox": [
+    406,
+    116,
+    868,
+    720
+  ],
+  "loop_seam_mean_abs": 9.2,
+  "bytes": 1666544
+}

@@ -13,7 +13,18 @@
 
   // several idle takes, chained so the loop is ~20 s instead of 5 s
   const IDLE_CLIPS = ["idle_a", "idle_b", "idle_c", "idle_d"];
+
+  // brain expression -> one-shot clip; played after the line is spoken
+  const EXPR_CLIPS = {
+    happy: "expr_happy",
+    angry: "expr_angry",
+    confused: "expr_confused",
+    smirk: "expr_smirk",
+  };
+  let pendingExpr = "";
   let idleIndex = 0;
+  // work scene is a three-stage sequence: pull the tablet out, loop, put it away
+  let workPhase = null;   // "in" | "loop" | "out"
 
   const video = document.getElementById("pet-video");
   const bgVideo = document.getElementById("bg-video");
@@ -44,22 +55,77 @@
     video.play().catch(() => {});
   }
 
+  function playPendingExpr() {
+    if (!pendingExpr) {
+      return;
+    }
+    const clip = EXPR_CLIPS[pendingExpr];
+    pendingExpr = "";
+    if (clip && available.has(clip)) {
+      playClip(clip, false);
+    }
+  }
+
   function currentIdle() {
     return IDLE_CLIPS[idleIndex % IDLE_CLIPS.length];
   }
 
   function playRest() {
-    if (resting === "work" && available.has("work")) {
-      playClip("work", true);
+    if (resting === "work" && workPhase === "loop" && available.has("work_loop")) {
+      playClip("work_loop", true);
+      return;
+    }
+    if (resting === "work" && available.has("work_loop")) {
+      workPhase = "loop";
+      playClip("work_loop", true);
       return;
     }
     playClip(currentIdle(), false);   // loop=false so `ended` fires and we rotate
   }
 
+  function startWork() {
+    resting = "work";
+    setTopic("work");
+    if (available.has("work_in") && available.has("work_loop")) {
+      workPhase = "in";
+      playClip("work_in", false);
+    } else {
+      workPhase = "loop";
+      playRest();
+    }
+  }
+
+  function stopWork() {
+    if (available.has("work_out") && video.dataset.clip !== "work_out") {
+      workPhase = "out";
+      playClip("work_out", false);
+      return;
+    }
+    workPhase = null;
+    resting = "idle";
+    playRest();
+    setTopic("idle");
+  }
+
   video.addEventListener("ended", () => {
     const clip = video.dataset.clip || "";
+    if (clip.startsWith("expr_") && pendingExpr) {
+      pendingExpr = "";
+    }
     if (clip.startsWith("idle_")) {
       idleIndex += 1;
+    }
+    if (clip === "work_in") {
+      workPhase = "loop";
+      playRest();
+      return;
+    }
+    if (clip === "work_out") {
+      workPhase = null;
+      resting = "idle";
+      playRest();
+      setTopic("idle");
+      return;
     }
     playRest();
   });
@@ -74,6 +140,14 @@
 
   function setScene(name) {
     if (!CLIPS[name]) {
+      return;
+    }
+    if (name === "work") {
+      startWork();
+      return;
+    }
+    if (resting === "work") {
+      stopWork();
       return;
     }
     resting = available.has(name) ? name : "idle";
@@ -200,6 +274,7 @@
         }
         playRest();
         setTopic(resting);
+        playPendingExpr();
       };
       source.onended = back;
       if (talkWatchdog) {
@@ -219,6 +294,10 @@
       return;
     }
     const joined = lines.join("");
+    pendingExpr = String(turn.expression || "").toLowerCase();
+    if (!EXPR_CLIPS[pendingExpr]) {
+      pendingExpr = "";
+    }
     pushDialog(joined);
     lines.forEach((line, index) => {
       setTimeout(() => showSubtitle(line, 5200), index * 900);
@@ -266,7 +345,11 @@
   }
 
   startBackground();
-  Promise.all([probeClip("work"), probeClip("talk")]);
+  Promise.all([
+    probeClip("work_in"), probeClip("work_loop"), probeClip("work_out"), probeClip("talk"),
+    probeClip("expr_happy"), probeClip("expr_angry"),
+    probeClip("expr_confused"), probeClip("expr_smirk"),
+  ]);
   playRest();
   setTopic("idle");
   connect();
