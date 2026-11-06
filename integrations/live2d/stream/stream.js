@@ -288,10 +288,24 @@
     }
   }
 
+  // 顶部回复框常驻，开局先放一句占位，不至于是个空框
+  function dialogPlaceholder() {
+    dialog.classList.add("show");
+    if (!dialogLines.children.length) {
+      const line = document.createElement("div");
+      line.className = "line old";
+      line.id = "dialog-placeholder";
+      line.textContent = "……";
+      dialogLines.appendChild(line);
+    }
+  }
+
   function pushDialog(text) {
     if (!text) {
       return;
     }
+    const ph = document.getElementById("dialog-placeholder");
+    if (ph) ph.remove();
     const line = document.createElement("div");
     line.className = "line";
     line.textContent = text;
@@ -303,10 +317,6 @@
       el.classList.toggle("old", i < all.length - 1);
     });
     dialog.classList.add("show");
-    if (dialogTimer) {
-      clearTimeout(dialogTimer);
-    }
-    dialogTimer = setTimeout(() => dialog.classList.remove("show"), 22000);
   }
 
   function showSubtitle(text, holdMs) {
@@ -461,15 +471,17 @@
   }
 
   startBackground();
+  dialogPlaceholder();
   startDust();
   applyTimeOfDay();
+  // 默认就在刷手机，不是傻站着：等可用性探测完再进
   Promise.all([
     probeClip("work_in"), probeClip("work_loop"), probeClip("work_out"), probeClip("talk"),
     probeClip("expr_happy"), probeClip("expr_angry"),
     probeClip("expr_confused"), probeClip("expr_smirk"),
-  ]);
-  playRest();
-  setTopic("idle");
+  ]).then(() => {
+    startWork();
+  });
   connect();
 
   // keep the idle clip alive if the browser pauses it (tab switch etc.)

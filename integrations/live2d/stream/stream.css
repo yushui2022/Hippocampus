@@ -242,7 +242,7 @@ body.night .comment {
 /* reply log (top) -------------------------------------------------------- */
 #dialog {
   position: absolute;
-  top: 104px;
+  top: 152px;
   left: 50%;
   transform: translateX(-50%);
   width: min(760px, 46vw);
@@ -251,11 +251,6 @@ body.night .comment {
   background: linear-gradient(180deg, rgba(18, 15, 26, 0.72), rgba(18, 15, 26, 0.5));
   border: 1px solid rgba(255, 255, 255, 0.10);
   backdrop-filter: blur(10px);
-  opacity: 0;
-  transition: opacity 240ms ease;
-}
-
-#dialog.show {
   opacity: 1;
 }
 

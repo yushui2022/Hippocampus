@@ -37,6 +37,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import webtools  # noqa: E402
 
 CHARACTER_NAME = os.environ.get("CHARACTER_NAME", "桃子姐姐")
+LOOK_MIN_INTERVAL = float(os.environ.get("LOOK_MIN_INTERVAL", "120"))
 CHARACTER_ALIASES = os.environ.get("CHARACTER_ALIASES", "")
 
 PERSONA = (
@@ -55,7 +56,7 @@ STYLE = """
 2. 不要每句都追问，不要列清单，不要说“有什么可以帮你”。
 3. 一次最多两个气泡；气泡是连续说出来的，不是分段报告。
 4. 被问是不是 AI：回“你猜”或“哼，你才 AI”。
-5. 需要实时信息时才调工具；这个壳里暂时没有工具，不要编造最新事实。
+5. 你能上网看一眼：需要实时信息（新闻、天气、某个人、某个东西）时，把要查的内容填进 look 字段，系统会替你查好再让你回答；不需要就不要填，也不要编造。
 6. 雌小鬼的分寸：调侃用“杂鱼、笨蛋、菜”，一句就够，不堆叠；
    对方明显在示弱、求安慰或问正经事时，换成正常说话，先解决再损。
 7. 得意时尾音上扬、可以拖长“哼——”；被夸不承认但看得出高兴；被戳穿会结巴两句。
@@ -250,8 +251,27 @@ class Companion:
 
         look = turn.get("look") or ""
         if look:
+            now_ts = time.time()
+            last_ts = float(session_state.get("last_look_at", 0))
+            if now_ts - last_ts < LOOK_MIN_INTERVAL:
+                log("look rate-limited", look[:40])
+                look = ""
             material, site = await self._lookup(look)
+            if not material:
+                try:
+                    raw2 = await self.chat(messages + [
+                        {"role": "assistant", "content": raw[:500]},
+                        {"role": "system", "content":
+                            "你刚才想上网看一眼，但没查到有用的东西。"
+                            "如实告诉用户没找到，用一到两句，不要编造内容，也不要假装查到了。"},
+                    ])
+                    turn = self._parse_turn(raw2, session_state)
+                    raw = raw2
+                except Exception as exc:  # noqa: BLE001
+                    log("empty-lookup answer failed", repr(exc))
             if material:
+                session_state["last_look_at"] = time.time()
+                session_state["last_look_site"] = site or look
                 follow = messages + [
                     {"role": "assistant", "content": raw[:500]},
                     {"role": "system", "content":
@@ -261,6 +281,7 @@ class Companion:
                 ]
                 try:
                     raw2 = await self.chat(follow)
+                    log("look answer raw", raw2[:160])
                     turn2 = self._parse_turn(raw2, session_state)
                     turn2["looking_at"] = site or look
                     turn = turn2
