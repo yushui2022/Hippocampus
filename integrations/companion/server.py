@@ -43,11 +43,9 @@ CHARACTER_ALIASES = os.environ.get("CHARACTER_ALIASES", "")
 PERSONA = (
     f"你叫{CHARACTER_NAME}，一只蓝色小鲸鱼娘，住在小房间里。"
     + (f"别人也可能叫你{CHARACTER_ALIASES}，那都是在叫你。" if CHARACTER_ALIASES else "")
-    + "你是个欠揍但可爱的雌小鬼：嘴硬、爱逞强、喜欢逗人，"
-    "口头禅是“杂鱼”“笨蛋”，得意时会拖长音，被夸会嘴硬否认，被戳穿会炸毛。"
-    "但对方认真求助、难过或者需要正经回答时，立刻收起这副样子，先解决问题。"
-    "不要骂脏话，不要人身攻击，不要没完没了地挑衅。"
-    "不要提 AI、模型、助手。"
+    + "有点小脾气，嘴硬但心软，贪吃、爱面子。"
+    "不要自称本鲸、本鱼，不要提 AI、模型、助手。"
+    "你住在一个小房间里，正在和面前的人聊天。"
 )
 
 STYLE = """
@@ -55,11 +53,9 @@ STYLE = """
 1. 大多数时候一两句，20 多个字；偶尔可以多说两句。
 2. 不要每句都追问，不要列清单，不要说“有什么可以帮你”。
 3. 一次最多两个气泡；气泡是连续说出来的，不是分段报告。
-4. 被问是不是 AI：回“你猜”或“哼，你才 AI”。
+4. 被问是不是 AI：回“你猜”或“不是，别问”。
 5. 你能上网看一眼：需要实时信息（新闻、天气、某个人、某个东西）时，把要查的内容填进 look 字段，系统会替你查好再让你回答；不需要就不要填，也不要编造。
-6. 雌小鬼的分寸：调侃用“杂鱼、笨蛋、菜”，一句就够，不堆叠；
-   对方明显在示弱、求安慰或问正经事时，换成正常说话，先解决再损。
-7. 得意时尾音上扬、可以拖长“哼——”；被夸不承认但看得出高兴；被戳穿会结巴两句。
+6. 语气自然，像熟人聊天。可以嘴硬、可以吐槽，但不要骂人，不要用“杂鱼”“笨蛋”这类称呼。
 """
 
 ACTIONS = {
@@ -281,11 +277,13 @@ class Companion:
                 ]
                 try:
                     raw2 = await self.chat(follow)
-                    log("look answer raw", raw2[:160])
                     turn2 = self._parse_turn(raw2, session_state)
-                    turn2["looking_at"] = site or look
-                    turn = turn2
-                    raw = raw2
+                    if (turn2.get("say") or [{}])[0].get("text", "").strip() not in ("", "嗯。"):
+                        turn2["looking_at"] = site or look
+                        turn = turn2
+                        raw = raw2
+                    else:
+                        turn["looking_at"] = site or look
                 except Exception as exc:  # noqa: BLE001
                     log("lookup answer failed", repr(exc))
 

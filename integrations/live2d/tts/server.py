@@ -23,7 +23,7 @@ from pathlib import Path
 from mlx_audio.tts.generate import generate_audio
 from mlx_audio.tts.utils import load_model
 
-MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-8bit"
+MODEL_ID = os.environ.get("TTS_MODEL", "mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-8bit")
 VOICE = os.environ.get("TTS_VOICE", "sohee")
 
 INSTRUCT = {
