@@ -39,7 +39,7 @@
   const dialogLines = document.getElementById("dialog-lines");
   let dialogTimer = null;
   const DIALOG_KEEP = 3;
-  const topic = document.getElementById("topic");
+  const topic = document.getElementById("topic");   // 可缺失（标签已去掉）
   const watching = document.getElementById("watching");
   const watchingText = document.getElementById("watching-text");
   let watchingTimer = null;
@@ -176,7 +176,9 @@
   const TOPIC = { idle: "在线陪聊", work: "在摸鱼", talk: "说话中" };
 
   function setTopic(name) {
-    topic.textContent = TOPIC[name] || "在线陪聊";
+    if (topic) {
+      topic.textContent = TOPIC[name] || "在线陪聊";
+    }
   }
 
   function setScene(name) {
@@ -295,7 +297,7 @@
       const line = document.createElement("div");
       line.className = "line old";
       line.id = "dialog-placeholder";
-      line.textContent = "……";
+      line.textContent = "还没人说话…";
       dialogLines.appendChild(line);
     }
   }

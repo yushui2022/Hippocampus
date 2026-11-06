@@ -169,6 +169,17 @@ body.night .comment {
   color: rgba(244, 241, 248, 0.6);
 }
 
+/* 极简合规标注：不抢画面，但不能没有 */
+#disclosure {
+  position: absolute;
+  right: 22px;
+  bottom: 16px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(244, 241, 248, 0.32);
+  pointer-events: none;
+}
+
 /* 正在看什么网站 -------------------------------------------------------- */
 #watching {
   position: absolute;
@@ -275,8 +286,8 @@ body.night .comment {
 }
 
 #dialog-lines .line.old {
-  color: rgba(244, 241, 248, 0.45);
-  font-size: 18px;
+  color: rgba(244, 241, 248, 0.38);
+  font-size: 17px;
 }
 
 @keyframes dlgIn {
