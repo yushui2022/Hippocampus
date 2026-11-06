@@ -475,3 +475,12 @@ See the design notes in `docs/` for the full plan.
 ## License
 
 MIT.
+
+## 直播
+
+把记忆、形象、声音和弹幕拼成一场直播的完整说明在 **[docs/LIVE.md](docs/LIVE.md)**：
+端口、启动顺序、OBS 配置、状态机、环境变量都在那里。
+
+- 形象动画与素材流水线：`integrations/live2d/taozi_chibi/README.md`
+- 弹幕桥：`integrations/live2d/stream/README.md`
+- B 站弹幕接入：`integrations/bilibili/README.md`

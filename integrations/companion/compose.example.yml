@@ -1,0 +1,21 @@
+# 大脑服务：Hippocampus + DeepSeek
+# 用法：cp compose.example.yml compose.yml，填好 API key 后 docker compose up -d
+services:
+  companion:
+    image: python:3.12-slim
+    container_name: companion
+    restart: unless-stopped
+    working_dir: /opt/hippocampus
+    entrypoint: ["sh", "-lc", "pip install -q aiohttp && python integrations/companion/server.py --db /data/brain.db --port 6200"]
+    environment:
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:?need a key}
+      - CHAT_MODEL=deepseek-flash
+      - CHAT_BASE=https://api.deepseek.com/v1
+      - CHARACTER_NAME=${CHARACTER_NAME:-大肥鱼}
+      - CHARACTER_ALIASES=${CHARACTER_ALIASES:-桃子姐姐,肥鱼}
+      - LOOK_MIN_INTERVAL=${LOOK_MIN_INTERVAL:-120}
+    ports:
+      - "6200:6200"
+    volumes:
+      - ..:/opt/hippocampus:ro
+      - ./data:/data
