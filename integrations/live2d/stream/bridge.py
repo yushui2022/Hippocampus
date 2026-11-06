@@ -154,6 +154,7 @@ class Bridge:
                         "say": turn.get("say", []),
                         "expression": turn.get("expression", ""),
                         "actions": turn.get("actions", []),
+                        "looking_at": turn.get("looking_at", ""),
                         "reply_to": item["user"],
                     }
                 )

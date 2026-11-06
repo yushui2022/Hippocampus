@@ -169,6 +169,51 @@ body.night .comment {
   color: rgba(244, 241, 248, 0.6);
 }
 
+/* 正在看什么网站 -------------------------------------------------------- */
+#watching {
+  position: absolute;
+  top: 104px;
+  left: 50%;
+  transform: translate(-50%, -8px);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(18, 15, 26, 0.72);
+  border: 1px solid rgba(126, 199, 255, 0.28);
+  backdrop-filter: blur(10px);
+  font-size: 15px;
+  color: rgba(244, 241, 248, 0.9);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease, transform 260ms ease;
+  z-index: 5;
+}
+
+#watching.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+#watching .w-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  animation: wpulse 1.6s ease-in-out infinite;
+}
+
+#watching .w-label { color: rgba(126, 199, 255, 0.85); font-size: 13px; }
+
+#watching-text { font-weight: 500; letter-spacing: 0.01em; }
+
+@keyframes wpulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .35; }
+}
+
 /* AI badge -------------------------------------------------------------- */
 #badge-ai {
   position: absolute;

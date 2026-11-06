@@ -33,6 +33,9 @@ if str(ROOT) not in sys.path:
 
 from hippocampus import Brain, LLMSummarizer, LocalEmbedder, Store, Utterance  # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import webtools  # noqa: E402
+
 CHARACTER_NAME = os.environ.get("CHARACTER_NAME", "桃子姐姐")
 CHARACTER_ALIASES = os.environ.get("CHARACTER_ALIASES", "")
 
@@ -74,8 +77,11 @@ ACTIONS = {
 OUTPUT_RULES = """
 输出必须是 JSON，不要 markdown：
 {"say":["第一句","可选第二句"],"expression":"neutral|happy|sad|shy|angry|confused|smirk",
+ "look":"要上网查的关键词或网址，没有就留空",
  "actions":[{"action":"动作名","target":"目标id或空"}]}
 say 里每句都会作为一个气泡发出去，最多 2 句。
+look 只在真的需要外部信息时填（新闻、天气、某个网站、某个不熟的东西）；
+闲聊一律留空。填了之后你会先被允许上网看一眼，然后再回答。
 expression 选最贴近当前情绪的一个：
 happy=开心、angry=生气、sad=难过、shy=害羞、
 confused=疑惑（没听懂、觉得对方说的离谱）、smirk=坏笑（准备损人、抓到你把柄）。
@@ -241,6 +247,27 @@ class Companion:
             }
 
         turn = self._parse_turn(raw, session_state)
+
+        look = turn.get("look") or ""
+        if look:
+            material, site = await self._lookup(look)
+            if material:
+                follow = messages + [
+                    {"role": "assistant", "content": raw[:500]},
+                    {"role": "system", "content":
+                        "你刚刚上网看了一眼，看到这些：\n" + material +
+                        "\n\n现在用一到两句回应用户。像刚看完东西开口说话那样，"
+                        "不要念资料，不要说“根据搜索结果”，不要提你查了资料。"},
+                ]
+                try:
+                    raw2 = await self.chat(follow)
+                    turn2 = self._parse_turn(raw2, session_state)
+                    turn2["looking_at"] = site or look
+                    turn = turn2
+                    raw = raw2
+                except Exception as exc:  # noqa: BLE001
+                    log("lookup answer failed", repr(exc))
+
         history.append({"role": "user", "content": text})
         history.append({"role": "assistant", "content": raw[:500]})
 
@@ -303,7 +330,32 @@ class Companion:
             "say": say,
             "expression": str(data.get("expression") or "neutral"),
             "actions": actions,
+            "look": str(data.get("look") or "").strip()[:120],
         }
+
+    async def _lookup(self, query: str) -> tuple[str, str]:
+        """Search or fetch, return (material for the model, site label for the UI)."""
+        try:
+            session = await self.http()
+            if query.startswith("http://") or query.startswith("https://"):
+                page = await webtools.fetch_page(session, query)
+                if not page:
+                    return "", ""
+                return webtools.brief([], [page]), page.get("site") or "网页"
+            results = await webtools.search(session, query, limit=4)
+            if not results:
+                return "", ""
+            pages = []
+            top = results[0]["url"]
+            if top.startswith("http"):
+                page = await webtools.fetch_page(session, top)
+                if page:
+                    pages.append(page)
+            label = webtools.site_of(top) or "网页"
+            return webtools.brief(results, pages), label
+        except Exception as exc:  # noqa: BLE001
+            log("lookup failed", repr(exc))
+            return "", ""
 
     def _validate_actions(self, actions: Any, scene: dict) -> List[dict]:
         if not isinstance(actions, list):

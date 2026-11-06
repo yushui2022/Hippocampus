@@ -40,6 +40,9 @@
   let dialogTimer = null;
   const DIALOG_KEEP = 3;
   const topic = document.getElementById("topic");
+  const watching = document.getElementById("watching");
+  const watchingText = document.getElementById("watching-text");
+  let watchingTimer = null;
 
   let audioCtx = null;
   let socket = null;
@@ -385,12 +388,28 @@
     }
   }
 
+  function showWatching(site) {
+    if (!site) return;
+    watchingText.textContent = site;
+    watching.classList.add("show");
+    if (watchingTimer) clearTimeout(watchingTimer);
+    watchingTimer = setTimeout(() => watching.classList.remove("show"), 24000);
+  }
+
   async function handleTurn(turn) {
     const lines = (turn.say || []).map((line) => line.text).filter(Boolean);
     if (!lines.length) {
       return;
     }
     const joined = lines.join("");
+    const site = String(turn.looking_at || "");
+    if (site) {
+      showWatching(site);
+      // 先让人看见她“在看”，再开口
+      playClip("work_loop", true);
+      setTopic("work");
+      await new Promise((r) => setTimeout(r, 1800));
+    }
     pendingExpr = String(turn.expression || "").toLowerCase();
     if (!EXPR_CLIPS[pendingExpr]) {
       pendingExpr = "";
