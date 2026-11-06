@@ -120,12 +120,18 @@ body.night .comment {
   transform-origin: 50% 100%;
 }
 
-#pet-video {
+#pet-video, #pet-video-b {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 26px 34px rgba(10, 6, 14, 0.45));
+  transition: opacity 380ms ease;
+  will-change: opacity;
 }
+
+#pet-video-b { opacity: 0; }
 
 /* top bar --------------------------------------------------------------- */
 #livebar {

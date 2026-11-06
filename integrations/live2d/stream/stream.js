@@ -26,7 +26,9 @@
   // work scene is a three-stage sequence: pull the tablet out, loop, put it away
   let workPhase = null;   // "in" | "loop" | "out"
 
-  const video = document.getElementById("pet-video");
+  const vids = [document.getElementById("pet-video"), document.getElementById("pet-video-b")];
+  let front = 0;                 // which <video> is currently visible
+  let currentClip = "";
   const bgVideo = document.getElementById("bg-video");
   const dustCanvas = document.getElementById("dust");
   const roomImg = document.getElementById("room");
@@ -47,14 +49,45 @@
   let currentSource = null;
   let resting = "idle";
 
+  // Two stacked <video> elements: the new clip fades in on the hidden one while
+  // the old keeps playing underneath, so a decoder restart or a pose difference
+  // between takes is never visible as a jump.
   function playClip(name, loop) {
-    if (video.dataset.clip === name && !video.ended) {
+    if (currentClip === name) {
       return;
     }
-    video.dataset.clip = name;
-    video.loop = Boolean(loop);
-    video.src = ASSETS + name + ".webm";
-    video.play().catch(() => {});
+    const back = 1 - front;
+    const next = vids[back];
+    const prev = vids[front];
+    let done = false;
+
+    const reveal = () => {
+      if (done) return;
+      done = true;
+      next.loop = Boolean(loop);
+      next.dataset.clip = name;
+      next.play().catch(() => {});
+      next.style.opacity = "1";
+      prev.style.opacity = "0";
+      front = back;
+      currentClip = name;
+    };
+
+    next.loop = Boolean(loop);
+    next.src = ASSETS + name + ".webm";
+    next.dataset.clip = name;
+    if (next.readyState >= 2) {
+      reveal();
+    } else {
+      next.addEventListener("canplay", reveal, { once: true });
+      // never stall the stage if the decode is slow
+      setTimeout(reveal, 220);
+      next.play().catch(() => {});
+    }
+  }
+
+  function frontVideo() {
+    return vids[front];
   }
 
   function playPendingExpr() {
@@ -98,7 +131,7 @@
   }
 
   function stopWork() {
-    if (available.has("work_out") && video.dataset.clip !== "work_out") {
+    if (available.has("work_out") && currentClip !== "work_out") {
       workPhase = "out";
       playClip("work_out", false);
       return;
@@ -109,8 +142,11 @@
     setTopic("idle");
   }
 
-  video.addEventListener("ended", () => {
-    const clip = video.dataset.clip || "";
+  vids.forEach((v) => v.addEventListener("ended", () => {
+    if (v !== frontVideo()) {
+      return;
+    }
+    const clip = v.dataset.clip || "";
     if (clip.startsWith("expr_") && pendingExpr) {
       pendingExpr = "";
     }
@@ -130,7 +166,7 @@
       return;
     }
     playRest();
-  });
+  }));
 
   const available = new Set(["idle", "talk"]);
 
@@ -419,8 +455,9 @@
 
   // keep the idle clip alive if the browser pauses it (tab switch etc.)
   setInterval(() => {
-    if (video.paused) {
-      video.play().catch(() => {});
+    const v = frontVideo();
+    if (v.paused) {
+      v.play().catch(() => {});
     }
   }, 4000);
 })();
