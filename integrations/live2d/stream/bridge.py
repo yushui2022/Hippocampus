@@ -34,9 +34,9 @@ DEDUPE_WINDOW = float(os.environ.get("STREAM_DEDUPE", "30"))
 TURN_TIMEOUT = float(os.environ.get("STREAM_TURN_TIMEOUT", "45"))
 QUEUE_MAX = int(os.environ.get("STREAM_QUEUE_MAX", "12"))
 # 自动冲浪：安静多久她自己去上网，以及两次之间至少隔多久
-IDLE_BROWSE_AFTER = float(os.environ.get("STREAM_IDLE_BROWSE_AFTER", "180"))
-BROWSE_GAP_MIN = float(os.environ.get("STREAM_BROWSE_GAP_MIN", "480"))
-BROWSE_GAP_MAX = float(os.environ.get("STREAM_BROWSE_GAP_MAX", "840"))
+BROWSE_TICK = float(os.environ.get("STREAM_BROWSE_TICK", "15"))
+BROWSE_QUIET = float(os.environ.get("STREAM_BROWSE_QUIET", "20"))
+BROWSE_COMMENT_EVERY = int(os.environ.get("STREAM_BROWSE_COMMENT_EVERY", "4"))
 
 URL_RE = re.compile(r"https?://\S+|www\.\S+")
 CTRL_RE = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
@@ -65,7 +65,7 @@ class Bridge:
         self.dropped = 0
         self.last_reply_at = 0.0
         self.last_comment_at = time.time()
-        self.next_browse_at = time.time() + BROWSE_GAP_MIN
+        self.browsing_future = None
         self.turn: asyncio.Future | None = None
         self.topic = "在线陪聊"
 
@@ -122,6 +122,10 @@ class Bridge:
                             data = json.loads(msg.data)
                         except json.JSONDecodeError:
                             continue
+                        if data.get("type") == "browsing":
+                            if self.browsing_future and not self.browsing_future.done():
+                                self.browsing_future.set_result(data)
+                            continue
                         if data.get("type") == "turn":
                             if self.turn and not self.turn.done():
                                 self.turn.set_result(data)
@@ -144,22 +148,38 @@ class Bridge:
             await asyncio.sleep(3)
 
     async def browse_loop(self) -> None:
-        """安静一段时间就让她自己去看看网页，隔一阵再允许下一次。"""
+        """安静时高频换页面，偶尔对当前页面嘟囔一句。"""
+        ticks = 0
         while True:
-            await asyncio.sleep(20)
+            await asyncio.sleep(BROWSE_TICK)
             try:
                 if not self.brain_ready.is_set() or self.brain_ws is None:
                     continue
-                now = time.time()
-                if now < self.next_browse_at:
-                    continue
-                if now - self.last_comment_at < IDLE_BROWSE_AFTER:
+                if time.time() - self.last_comment_at < BROWSE_QUIET:
                     continue
                 if self.turn and not self.turn.done():
                     continue
-                log("auto browse")
-                await self.brain_ws.send_json({"type": "browse"})
-                self.next_browse_at = now + BROWSE_GAP_MIN + (BROWSE_GAP_MAX - BROWSE_GAP_MIN) * time.time() % 1
+
+                self.browsing_future = asyncio.get_running_loop().create_future()
+                await self.brain_ws.send_json({"type": "browse_tick"})
+                try:
+                    page = await asyncio.wait_for(self.browsing_future, timeout=30)
+                except asyncio.TimeoutError:
+                    page = {"ok": False}
+                finally:
+                    self.browsing_future = None
+
+                if page.get("ok"):
+                    ticks += 1
+                    await self.broadcast({
+                        "type": "browsing",
+                        "site": page.get("site", ""),
+                        "title": page.get("title", ""),
+                        "summary": page.get("summary", ""),
+                        "url": page.get("url", ""),
+                    })
+                    if ticks % BROWSE_COMMENT_EVERY == 0:
+                        await self.brain_ws.send_json({"type": "browse_comment"})
             except asyncio.CancelledError:
                 raise
             except Exception as error:  # noqa: BLE001

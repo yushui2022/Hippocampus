@@ -35,6 +35,8 @@
   const subtitle = document.getElementById("subtitle");
   const subtitleText = document.getElementById("subtitle-text");
   const dialog = document.getElementById("dialog");
+  const dialogLabel = document.getElementById("dialog-label");
+  const dialogSite = document.getElementById("dialog-site");
   const dialogLines = document.getElementById("dialog-lines");
   let dialogTimer = null;
   const DIALOG_KEEP = 3;
@@ -289,12 +291,36 @@
     }
   }
 
+  function showBrowsing(site, title, summary) {
+    if (!dialogLines) return;
+    dialog.classList.add("show");
+    if (dialogLabel) dialogLabel.textContent = "上网中";
+    if (dialogSite) dialogSite.textContent = site || "";
+    dialogLines.textContent = "";
+    if (title) {
+      const t = document.createElement("div");
+      t.className = "line title";
+      t.textContent = title;
+      dialogLines.appendChild(t);
+    }
+    if (summary) {
+      const s2 = document.createElement("div");
+      s2.className = "line summary";
+      s2.textContent = summary;
+      dialogLines.appendChild(s2);
+    }
+  }
+
   function pushDialog(text) {
+    if (dialogLabel) dialogLabel.textContent = "她在说";
+    if (dialogSite) dialogSite.textContent = "";
     if (!text) {
       return;
     }
     const ph = document.getElementById("dialog-placeholder");
     if (ph) ph.remove();
+    // 从“上网实况”切回说话时，把标题和摘要清掉
+    dialogLines.querySelectorAll(".title, .summary").forEach((el) => el.remove());
     const line = document.createElement("div");
     line.className = "line";
     line.textContent = text;
@@ -456,6 +482,9 @@
         addComment(msg.user, msg.text);
       } else if (msg.type === "turn") {
         handleTurn(msg);
+      } else if (msg.type === "browsing") {
+        showBrowsing(msg.site, msg.title, msg.summary);
+        setScene("work");
       } else if (msg.type === "scene") {
         setScene(msg.name);
       }

@@ -99,9 +99,15 @@ async def fetch_page(session: aiohttp.ClientSession, url: str, limit: int = 1800
 
     title_m = re.search(r"<title[^>]*>(.*?)</title>", raw, re.S | re.I)
     title = plain(title_m.group(1)) if title_m else ""
-    body = re.sub(r"(?is)<(script|style|noscript|svg)[^>]*>.*?</\1>", " ", raw)
-    body = re.sub(r"(?is)<br\s*/?>|</p>|</div>|</li>", "\n", body)
-    text = plain(body)
+    body = re.sub(r"(?is)<(script|style|noscript|svg|nav|header|footer|aside)[^>]*>.*?</\1>", " ", raw)
+    # 优先取正文段落，避免把导航菜单当成内容
+    paras = [plain(p) for p in re.findall(r"(?is)<p[^>]*>(.*?)</p>", body)]
+    paras = [p for p in paras if len(p) >= 40]
+    if paras:
+        text = " ".join(paras)
+    else:
+        body = re.sub(r"(?is)<br\s*/?>|</p>|</div>|</li>", "\n", body)
+        text = plain(body)
     if not text:
         return {}
     return {

@@ -266,10 +266,34 @@ body.night .comment {
 }
 
 #dialog .dlg-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 12px;
   letter-spacing: 0.14em;
   color: rgba(126, 199, 255, 0.85);
   margin-bottom: 6px;
+}
+
+#dialog-site {
+  letter-spacing: 0.02em;
+  color: rgba(244, 241, 248, 0.45);
+  font-size: 12px;
+}
+
+#dialog-lines .title {
+  font-size: 20px;
+  color: rgba(244, 241, 248, 0.95);
+}
+
+#dialog-lines .summary {
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(244, 241, 248, 0.55);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 #dialog-lines {

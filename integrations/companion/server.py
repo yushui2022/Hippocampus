@@ -17,6 +17,7 @@ import argparse
 import asyncio
 import json
 import os
+import random
 import re
 import sys
 import time
@@ -353,52 +354,111 @@ class Companion:
             "look": str(data.get("look") or "").strip()[:120],
         }
 
-    async def browse(self, session_state: dict) -> dict:
-        """没人说话时，她自己上网看点东西，嘟囔一句。"""
-        base = [
-            {"role": "system", "content": PERSONA + "\n" + STYLE},
-            {"role": "system", "content":
-                "现在没人跟你说话，你正闲着。挑一个你自己真会感兴趣、又适合搜一下的话题。"
-                '只回 JSON：{"topic":"搜索词"}，不要别的字。'},
-        ]
+    JUNK_HOSTS = (
+        "baike.baidu.com", "zhidao.baidu.com", "wenda.so.com", "baike.so.com",
+        "dict.", "fanyi.", "youdao.com", "iciba.com",
+    )
+    JUNK_WORDS = ("广告", "下载", "登录", "注册", "优惠", "促销", "代理", "招商")
+    TOPIC_POOL = (
+        "零食 推荐", "猫 纸箱", "猫 品种", "深海鱼", "家常菜 做法",
+        "动画 推荐", "下雨 原因", "旧手机 用途", "窗台 植物", "入睡 方法",
+        "仓鼠 饲养", "拉面 做法", "多肉 浇水", "城市 夜景", "雨伞 修理",
+        "草莓 保存", "咖啡 种类", "自行车 保养", "旅行 收拾行李", "面条 做法",
+        "老照片 修复", "阳台 种菜", "手机 省电", "耳机 推荐", "云 形状",
+        "花火 大会", "饼干 做法", "洗衣 技巧", "书桌 收纳", "热可可 做法",
+    )
+
+    async def _topics(self, session_state: dict) -> list[str]:
+        pool = session_state.get("topics") or []
+        if pool:
+            return pool
+        items = list(self.TOPIC_POOL)
+        random.shuffle(items)
+        session_state["topics"] = items
+        return items
+
+    async def _open_page(self, topic: str) -> dict:
+        """搜一个话题，挑一条像样的结果，用搜索结果自带的摘要，不去抓正文。
+
+        抓网页现在被百度/知乎 403、维基超时，搜索结果里的摘要反而更稳。
+        """
         try:
-            raw = await self.chat(base)
+            session = await self.http()
+            results = await webtools.search(session, topic, limit=6)
+            words = [w for w in re.split(r"[\s,，]+", topic) if w]
+            best = None
+            best_score = 0
+            for r in results:
+                url = r.get("url") or ""
+                host = webtools.site_of(url)
+                if any(b in host for b in self.JUNK_HOSTS):
+                    continue
+                title = (r.get("title") or "").strip()
+                snippet = (r.get("snippet") or "").strip()
+                if len(snippet) < 30 or any(w in title for w in self.JUNK_WORDS):
+                    continue
+                hay = title + snippet
+                score = sum(1 for w in words if w in hay)
+                if score > best_score:
+                    best_score = score
+                    best = {
+                        "ok": True,
+                        "topic": topic,
+                        "site": host,
+                        "url": url,
+                        "title": title[:70],
+                        "summary": snippet[:110],
+                        "text": snippet[:600],
+                    }
+            if best and best_score >= 1:
+                return best
         except Exception as exc:  # noqa: BLE001
-            log("browse topic failed", repr(exc))
-            return {}
-        m = re.search(r'"topic"\s*:\s*"([^"]{2,40})"', raw or "")
-        topic = m.group(1).strip() if m else ""
-        if not topic:
-            return {}
+            log("open page failed", repr(exc))
+        return {"ok": False, "topic": topic}
 
-        material, site = await self._lookup(topic)
-        if not material:
-            return {}
+    async def browse_tick(self, session_state: dict) -> dict:
+        """开一个新页面；不好看就换，最多试三个话题。"""
+        pool = await self._topics(session_state)
+        for _ in range(3):
+            if not pool:
+                pool = list(self.TOPIC_POOL)
+            topic = pool.pop(0)
+            session_state["topics"] = pool
+            page = await self._open_page(topic)
+            if page.get("ok"):
+                session_state["current_page"] = page
+                session_state["pages_opened"] = int(session_state.get("pages_opened", 0)) + 1
+                return page
+        session_state["current_page"] = {}
+        return {"ok": False}
 
-        note = ("你刚刚上网看了这些：\n" + material +
-                "\n\n用一句话嘟囔一下你看到的东西，像自言自语，不要对任何人提问，"
-                "不要说“根据搜索”，不要念资料。只回 JSON：{\"say\":[\"一句话\"]}")
+    async def browse_comment(self, session_state: dict) -> dict:
+        """对当前页面嘟囔一句。"""
+        page = session_state.get("current_page") or {}
+        if not page.get("ok"):
+            return {}
         try:
-            raw2 = await self.chat(base + [
-                {"role": "assistant", "content": raw[:200]},
-                {"role": "system", "content": note},
+            raw = await self.chat([
+                {"role": "system", "content": PERSONA + "\n" + STYLE},
+                {"role": "system", "content":
+                    "你正在看这个网页：\n标题：" + page.get("title", "") +
+                    "\n内容：" + page.get("text", "")[:800] +
+                    '\n\n用一句话嘟囔一下，像自言自语，不要提问。只回 JSON：{"say":["一句话"]}'},
             ])
         except Exception as exc:  # noqa: BLE001
             log("browse comment failed", repr(exc))
             return {}
-
-        turn = self._parse_turn(raw2, session_state)
+        turn = self._parse_turn(raw, session_state)
         text = (turn.get("say") or [{}])[0].get("text", "").strip()
         if not text or text == "嗯。":
             return {}
-        session_state["last_look_site"] = site or topic
         return {
             "type": "turn",
             "turn_id": uuid.uuid4().hex[:8],
             "say": turn.get("say"),
             "expression": turn.get("expression", "neutral"),
             "actions": [],
-            "looking_at": site or topic,
+            "looking_at": page.get("site", ""),
             "autonomous": True,
         }
 
@@ -521,8 +581,11 @@ async def ws_handler(request: web.Request) -> web.WebSocketResponse:
                         "voice": {"format": "pcm", "sample_rate": 24000},
                     }
                 )
-            elif kind == "browse":
-                turn = await companion.browse(state)
+            elif kind == "browse_tick":
+                page = await companion.browse_tick(state)
+                await ws.send_json({"type": "browsing", **page})
+            elif kind == "browse_comment":
+                turn = await companion.browse_comment(state)
                 if turn:
                     await ws.send_json(turn)
                     log("browse turn", " | ".join(x.get("text", "") for x in turn["say"]))
