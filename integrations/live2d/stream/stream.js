@@ -43,6 +43,7 @@
   const topic = document.getElementById("topic");   // 可缺失（标签已去掉）
   const watching = document.getElementById("watching");
   const watchingText = document.getElementById("watching-text");
+  const usageValue = document.getElementById("usage-value");
   let watchingTimer = null;
 
   let audioCtx = null;
@@ -413,6 +414,22 @@
     }
   }
 
+  // 今日 token 用量：走桥的 /stats，避免页面直连大脑（跨域）
+  async function refreshUsage() {
+    if (!usageValue) return;
+    try {
+      const res = await fetch(`http://${location.hostname}:6220/stats`, { cache: "no-store" });
+      const d = await res.json();
+      const t = d.tokens || {};
+      const total = Number(t.total || (Number(t.prompt || 0) + Number(t.completion || 0)));
+      usageValue.textContent = total > 0
+        ? (total >= 10000 ? (total / 1000).toFixed(1) + "k" : String(total))
+        : "0";
+    } catch (e) {
+      /* 桥没起来就先不显示 */
+    }
+  }
+
   function showWatching(site) {
     if (!site) return;
     watchingText.textContent = site;
@@ -501,6 +518,8 @@
   }
 
   startBackground();
+  refreshUsage();
+  setInterval(refreshUsage, 30000);
   dialogPlaceholder();
   startDust();
   applyTimeOfDay();

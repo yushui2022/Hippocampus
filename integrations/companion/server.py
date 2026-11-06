@@ -140,6 +140,8 @@ class Companion:
         self.session: Optional[ClientSession] = None
         self.model = os.environ.get("CHAT_MODEL", "deepseek-flash")
         self.base = os.environ.get("CHAT_BASE", "https://api.deepseek.com/v1")
+        self.usage = {"date": "", "prompt": 0, "completion": 0, "total": 0}
+        self._load_usage()
         self.api_key = os.environ.get("DEEPSEEK_API_KEY", "")
 
     async def http(self) -> ClientSession:
@@ -152,6 +154,32 @@ class Companion:
         self.store.close()
         if self.session is not None:
             await self.session.close()
+
+    # -- token 统计 -----------------------------------------------------------
+    def _usage_path(self) -> Path:
+        db = Path(os.environ.get("BRAIN_DB", "/data/brain.db"))
+        return db.parent / "token_usage.json"
+
+    def _load_usage(self) -> None:
+        self.usage = {"date": "", "prompt": 0, "completion": 0}
+        try:
+            data = json.loads(self._usage_path().read_text())
+            if data.get("date") == datetime.now().strftime("%Y-%m-%d"):
+                self.usage.update(data)
+        except Exception:  # noqa: BLE001
+            pass
+
+    def _add_usage(self, usage: dict) -> None:
+        today = datetime.now().strftime("%Y-%m-%d")
+        if self.usage.get("date") != today:
+            self.usage = {"date": today, "prompt": 0, "completion": 0}
+        self.usage["prompt"] += int(usage.get("prompt_tokens") or 0)
+        self.usage["completion"] += int(usage.get("completion_tokens") or 0)
+        self.usage["total"] = self.usage["prompt"] + self.usage["completion"]
+        try:
+            self._usage_path().write_text(json.dumps(self.usage, ensure_ascii=False))
+        except Exception:  # noqa: BLE001
+            pass
 
     # -- model ---------------------------------------------------------------
     async def chat(self, messages: List[dict], *, json_mode: bool = True) -> str:
@@ -177,6 +205,8 @@ class Companion:
             body = await resp.json()
         if resp.status >= 400:
             raise RuntimeError("chat {}: {}".format(resp.status, body))
+        if body.get("usage"):
+            self._add_usage(body["usage"])
         choices = body.get("choices") or []
         if not choices:
             raise RuntimeError("no choices")
@@ -610,6 +640,7 @@ async def health(request: web.Request) -> web.Response:
     return web.json_response(
         {
             "ok": True,
+            "tokens": companion.usage,
             "scope": companion.brain.scope,
             "engrams": stats.get("total"),
             "buffer": stats.get("buffer_pending"),

@@ -310,6 +310,20 @@ async def handle_ws(request: web.Request) -> web.WebSocketResponse:
     return ws
 
 
+async def handle_stats(request: web.Request) -> web.Response:
+    """给画面用：今日 token 用量，顺带大脑是否在线。"""
+    out = {"ok": True, "tokens": {}, "brain": BRIDGE.brain_ready.is_set()}
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get("http://127.0.0.1:6200/health", timeout=5) as resp:
+                if resp.status < 400:
+                    data = await resp.json()
+                    out["tokens"] = data.get("tokens") or {}
+    except Exception:  # noqa: BLE001
+        pass
+    return web.json_response(out, headers={"Access-Control-Allow-Origin": "*"})
+
+
 async def handle_health(request: web.Request) -> web.Response:
     return web.json_response(
         {
@@ -349,6 +363,7 @@ def main() -> None:
     app.router.add_post("/scene", handle_scene)
     app.router.add_get("/ws", handle_ws)
     app.router.add_get("/health", handle_health)
+    app.router.add_get("/stats", handle_stats)
     app.router.add_get("/", handle_index)
     app.on_startup.append(on_startup)
     app.on_cleanup.append(on_cleanup)
