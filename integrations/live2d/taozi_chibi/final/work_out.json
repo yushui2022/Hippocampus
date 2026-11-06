@@ -1,6 +1,6 @@
 {
   "name": "work_out",
-  "source": "reference/h3_work_out_991513.mp4",
+  "source": "reference/h3_work_out_phone.mp4",
   "fps": 24.0,
   "frames": 73,
   "size": [
@@ -8,11 +8,11 @@
     768
   ],
   "bbox": [
-    384,
-    118,
-    874,
-    722
+    470,
+    94,
+    900,
+    748
   ],
-  "loop_seam_mean_abs": 3.5,
-  "bytes": 1754779
+  "loop_seam_mean_abs": 6.55,
+  "bytes": 1763968
 }

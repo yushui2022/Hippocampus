@@ -1,6 +1,6 @@
 {
   "name": "work_in",
-  "source": "reference/h3_work_in_v2.mp4",
+  "source": "reference/h3_work_in_phone.mp4",
   "fps": 24.0,
   "frames": 73,
   "size": [
@@ -8,11 +8,11 @@
     768
   ],
   "bbox": [
-    406,
-    116,
-    868,
-    720
+    478,
+    114,
+    880,
+    728
   ],
-  "loop_seam_mean_abs": 9.2,
-  "bytes": 1666544
+  "loop_seam_mean_abs": 9.08,
+  "bytes": 1842362
 }
