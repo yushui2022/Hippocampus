@@ -113,8 +113,8 @@ body.night .comment {
 #character {
   position: absolute;
   left: 50%;
-  bottom: 12%;
-  height: 68vh;
+  bottom: 7%;
+  height: 74vh;
   transform: translateX(-50%);
   aspect-ratio: 16 / 9;
   transform-origin: 50% 100%;
