@@ -20,6 +20,7 @@
     angry: "expr_angry",
     confused: "expr_confused",
     smirk: "expr_smirk",
+    shy: "expr_shy",
   };
   let pendingExpr = "";
   let idleIndex = 0;
@@ -45,6 +46,8 @@
   const watchingText = document.getElementById("watching-text");
   const usageValue = document.getElementById("usage-value");
   let watchingTimer = null;
+  let thinkTimer = null;
+  let lastCommentAt = 0;
 
   let audioCtx = null;
   let socket = null;
@@ -400,6 +403,10 @@
         }
         playRest();
         setTopic(resting);
+        if (wantsNod && available.has("nod")) {
+          playClip("nod", false);
+          return;
+        }
         playPendingExpr();
       };
       source.onended = back;
@@ -443,8 +450,13 @@
     if (!lines.length) {
       return;
     }
+    if (thinkTimer) {
+      clearTimeout(thinkTimer);
+      thinkTimer = null;
+    }
     const joined = lines.join("");
     const site = String(turn.looking_at || "");
+    const wantsNod = (turn.actions || []).some((a) => a && a.action === "nod");
 
     // 自己上网时的自言自语：只留在对话框和顶部，不发声、不弹字幕
     if (turn.autonomous) {
@@ -497,11 +509,28 @@
       }
       if (msg.type === "comment") {
         addComment(msg.user, msg.text);
+        lastCommentAt = Date.now();
+        if (available.has("think")) {
+          playClip("think", true);
+          setTopic("idle");
+          // 回复迟迟不来时别一直托腮
+          if (thinkTimer) clearTimeout(thinkTimer);
+          thinkTimer = setTimeout(() => {
+            thinkTimer = null;
+            if (currentClip === "think") {
+              playRest();
+            }
+          }, 25000);
+        }
       } else if (msg.type === "turn") {
         handleTurn(msg);
       } else if (msg.type === "browsing") {
         showBrowsing(msg.site, msg.title, msg.summary);
-        setScene("work");
+        // 正在说话/思考时不要被自动上网打断
+        const busy = currentClip === "talk" || currentClip === "think";
+        if (!busy && Date.now() - lastCommentAt > 12000) {
+          setScene("work");
+        }
       } else if (msg.type === "scene") {
         setScene(msg.name);
       }
@@ -527,7 +556,8 @@
   Promise.all([
     probeClip("work_in"), probeClip("work_loop"), probeClip("work_out"), probeClip("talk"),
     probeClip("expr_happy"), probeClip("expr_angry"),
-    probeClip("expr_confused"), probeClip("expr_smirk"),
+    probeClip("expr_confused"), probeClip("expr_smirk"), probeClip("expr_shy"),
+    probeClip("think"), probeClip("nod"),
   ]).then(() => {
     startWork();
   });
