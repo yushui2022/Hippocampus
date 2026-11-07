@@ -53,6 +53,7 @@ open http://127.0.0.1:6210/stream/stream.html
 说话      收到回复 → talk 动画 + 字幕 + TTS
 表情      回复附带 expression → 播一次 happy/angry/confused/smirk/shy/sad/laugh/sigh/surprised
 动作      回复带 nod → 点一下头；收礼物/上舰 → 挥手
+手动动作  场控面板可触发 挥手/点头/思考/比心/鼓掌/大笑/叹气/惊讶/委屈
 摸鱼      默认状态：掏出手机 → 循环刷 → 收起
 思考      弹幕进来立刻托腮，回复到达即切说话，25 秒没回复自动退出
 零食/看书  安静 100 秒后自己掏出饼干或书，40 秒循环；有人说话先收起来再开口
