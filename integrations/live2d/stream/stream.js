@@ -57,6 +57,42 @@
   ]);
 
   let idleStreak = 0;
+
+  // 弹幕关键词 → 动作，写在场控面板旁边的互动指南里
+  const KEYWORDS = [
+    [["比心", "爱心", "爱你"], "expr_heart"],
+    [["贴贴", "害羞"], "expr_shy"],
+    [["跳"], "jump"],
+    [["摇头"], "shake_head"],
+    [["摸头"], "touch_head"],
+    [["理头发", "头发乱"], "fix_hair"],
+    [["伸懒腰"], "stretch"],
+    [["哈欠", "困了"], "yawn"],
+    [["鼓掌", "拍手"], "expr_clap"],
+    [["笑"], "expr_laugh"],
+    [["叹气", "唉"], "expr_sigh"],
+    [["惊讶", "真的假的", "不会吧"], "expr_surprised"],
+    [["委屈", "难过"], "expr_sad"],
+  ];
+
+  // 礼物名字 → 动作
+  const GIFT_CLIPS = [
+    [["小心心", "爱心", "心动"], "expr_heart"],
+    [["辣条", "打call", "牛哇"], "expr_laugh"],
+    [["上舰", "舰长", "提督"], "expr_clap"],
+    [["小花花", "花花", "玫瑰"], "expr_shy"],
+  ];
+  let lastGiftAt = 0;
+
+  function pickClip(table, text) {
+    const t = String(text || "");
+    for (const [words, clip] of table) {
+      if (words.some((w) => t.includes(w))) {
+        return clip;
+      }
+    }
+    return "";
+  }
   let pendingExpr = "";
   let pendingAction = "";
   let idleIndex = 0;
@@ -86,6 +122,8 @@
   const watching = document.getElementById("watching");
   const watchingText = document.getElementById("watching-text");
   const usageValue = document.getElementById("usage-value");
+  const boardList = document.getElementById("board-list");
+  const boardStats = document.getElementById("board-stats");
   let watchingTimer = null;
   let thinkTimer = null;
   let lastCommentAt = 0;
@@ -250,8 +288,7 @@
   }
 
   function isTalking() {
-    return currentClip === "talk" || currentClip === "think" ||
-      currentClip === "nod" || currentClip === "wave" ||
+    return currentClip === "talk" || ACTION_CLIPS.has(currentClip) ||
       currentClip.startsWith("expr_");
   }
 
@@ -599,9 +636,59 @@
       usageValue.textContent = total > 0
         ? (total >= 10000 ? (total / 1000).toFixed(1) + "k" : String(total))
         : "0";
+      renderStats(d.stats);
     } catch (e) {
       /* 桥没起来就先不显示 */
     }
+  }
+
+  function renderStats(stats) {
+    if (!boardList || !stats) {
+      return;
+    }
+    const users = Array.isArray(stats.users) ? stats.users : [];
+    boardList.textContent = "";
+    if (!users.length) {
+      const li = document.createElement("li");
+      li.className = "empty";
+      li.textContent = "还没有人上榜";
+      boardList.appendChild(li);
+    } else {
+      users.slice(0, 5).forEach((u, i) => {
+        const li = document.createElement("li");
+        if (i === 0) {
+          li.className = "top";
+        }
+        const rank = document.createElement("span");
+        rank.className = "rank";
+        rank.textContent = String(i + 1);
+        const name = document.createElement("span");
+        name.className = "name";
+        name.textContent = String(u.name || "观众");
+        const count = document.createElement("span");
+        count.className = "count";
+        count.textContent = String(u.count || 0);
+        li.append(rank, name, count);
+        boardList.appendChild(li);
+      });
+    }
+    if (boardStats) {
+      boardStats.textContent =
+        `弹幕 ${stats.comments || 0} · 互动 ${stats.people || 0} 人 · 礼物 ${stats.gifts || 0}`;
+    }
+  }
+
+  function onGift(msg) {
+    const user = String(msg.user || "观众");
+    const gift = String(msg.gift || "礼物");
+    const count = Number(msg.count || 1);
+    showSubtitle(count > 1 ? `谢谢 ${user} 的 ${gift} ×${count}` : `谢谢 ${user} 的 ${gift}`, 5000);
+    const clip = pickClip(GIFT_CLIPS, gift);
+    if (clip && available.has(clip) && !inBreak() && Date.now() - lastGiftAt > 4000) {
+      lastGiftAt = Date.now();
+      playClip(clip, false);
+    }
+    refreshUsage();
   }
 
   function showWatching(site) {
@@ -701,10 +788,18 @@
             }
           }, 25000);
         };
+        const keyword = pickClip(KEYWORDS, msg.text);
+        const react = () => {
+          if (keyword && available.has(keyword)) {
+            playClip(keyword, false);
+          } else {
+            thinking();
+          }
+        };
         if (inBreak()) {
-          ensureStanding().then(thinking);
+          ensureStanding().then(react);
         } else {
-          thinking();
+          react();
         }
       } else if (msg.type === "turn") {
         handleTurn(msg);
@@ -719,6 +814,8 @@
         if (!isTalking() && !inBreak() && Date.now() - lastCommentAt > 12000) {
           setScene("work");
         }
+      } else if (msg.type === "gift") {
+        onGift(msg);
       } else if (msg.type === "scene") {
         setScene(msg.name);
       }

@@ -18,6 +18,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+from pathlib import Path
 import re
 import time
 from collections import deque
@@ -38,6 +39,8 @@ BROWSE_TICK = float(os.environ.get("STREAM_BROWSE_TICK", "15"))
 BROWSE_QUIET = float(os.environ.get("STREAM_BROWSE_QUIET", "20"))
 BROWSE_COMMENT_EVERY = int(os.environ.get("STREAM_BROWSE_COMMENT_EVERY", "4"))
 
+STATS_PATH = Path(__file__).resolve().parent / ".stats.json"
+
 URL_RE = re.compile(r"https?://\S+|www\.\S+")
 CTRL_RE = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
 
@@ -51,6 +54,26 @@ def clean(text: str) -> str:
     text = URL_RE.sub("", text)
     text = re.sub(r"\s+", " ", text).strip()
     return text[:MAX_LEN]
+
+
+def load_stats() -> dict:
+    today = time.strftime("%Y-%m-%d")
+    try:
+        data = json.loads(STATS_PATH.read_text("utf-8"))
+    except Exception:  # noqa: BLE001
+        data = {}
+    if data.get("date") != today:
+        data = {"date": today, "comments": 0, "gifts": 0, "users": {}, "gifters": {}}
+    data.setdefault("users", {})
+    data.setdefault("gifters", {})
+    return data
+
+
+def save_stats(stats: dict) -> None:
+    try:
+        STATS_PATH.write_text(json.dumps(stats, ensure_ascii=False), "utf-8")
+    except Exception:  # noqa: BLE001
+        pass
 
 
 class Bridge:
@@ -68,6 +91,19 @@ class Bridge:
         self.browsing_future = None
         self.turn: asyncio.Future | None = None
         self.topic = "在线陪聊"
+        self.stats = load_stats()
+
+    def count_comment(self, user: str) -> None:
+        self.stats["comments"] = int(self.stats.get("comments", 0)) + 1
+        users = self.stats.setdefault("users", {})
+        users[user] = int(users.get(user, 0)) + 1
+        save_stats(self.stats)
+
+    def count_gift(self, user: str, count: int = 1) -> None:
+        self.stats["gifts"] = int(self.stats.get("gifts", 0)) + max(1, count)
+        gifters = self.stats.setdefault("gifters", {})
+        gifters[user] = int(gifters.get(user, 0)) + 1
+        save_stats(self.stats)
 
     # ---------------------------------------------------------------- stage
     def q(self) -> asyncio.Queue:
@@ -254,6 +290,7 @@ async def handle_comment(request: web.Request) -> web.Response:
         return web.json_response({"ok": False, "error": "queue full"}, status=429)
 
     BRIDGE.last_comment_at = time.time()
+    BRIDGE.count_comment(user)
     await BRIDGE.q().put({"user": user, "text": text})
     await BRIDGE.broadcast({"type": "comment", "user": user, "text": text})
     return web.json_response({"ok": True, "queued": BRIDGE.q().qsize()})
@@ -271,9 +308,28 @@ async def handle_say(request: web.Request) -> web.Response:
     if BRIDGE.q().full():
         return web.json_response({"ok": False, "error": "queue full"}, status=429)
     BRIDGE.last_comment_at = time.time()
+    BRIDGE.count_comment(user)
     await BRIDGE.q().put({"user": user, "text": text})
     await BRIDGE.broadcast({"type": "comment", "user": user, "text": text})
     return web.json_response({"ok": True, "queued": BRIDGE.q().qsize()})
+
+
+async def handle_gift(request: web.Request) -> web.Response:
+    """B 站礼物 / 上舰：记一次互动，画面自己决定播什么动作。"""
+    try:
+        data = await request.json()
+    except Exception:
+        data = {}
+    user = clean(data.get("user") or "")[:24] or "观众"
+    gift = clean(data.get("gift") or "")[:24] or "礼物"
+    try:
+        count = max(1, int(data.get("count") or 1))
+    except (TypeError, ValueError):
+        count = 1
+    BRIDGE.last_comment_at = time.time()
+    BRIDGE.count_gift(user, count)
+    await BRIDGE.broadcast({"type": "gift", "user": user, "gift": gift, "count": count})
+    return web.json_response({"ok": True})
 
 
 async def handle_event(request: web.Request) -> web.Response:
@@ -328,7 +384,19 @@ async def handle_ws(request: web.Request) -> web.WebSocketResponse:
 
 async def handle_stats(request: web.Request) -> web.Response:
     """给画面用：今日 token 用量，顺带大脑是否在线。"""
-    out = {"ok": True, "tokens": {}, "brain": BRIDGE.brain_ready.is_set()}
+    users = sorted(BRIDGE.stats.get("users", {}).items(), key=lambda kv: -kv[1])[:8]
+    out = {
+        "ok": True,
+        "tokens": {},
+        "brain": BRIDGE.brain_ready.is_set(),
+        "stats": {
+            "date": BRIDGE.stats.get("date", ""),
+            "comments": int(BRIDGE.stats.get("comments", 0)),
+            "gifts": int(BRIDGE.stats.get("gifts", 0)),
+            "people": len(BRIDGE.stats.get("users", {})),
+            "users": [{"name": name, "count": int(n)} for name, n in users],
+        },
+    }
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get("http://127.0.0.1:6200/health", timeout=5) as resp:
@@ -375,6 +443,7 @@ async def on_cleanup(app: web.Application) -> None:
 def main() -> None:
     app = web.Application(client_max_size=1 << 20)
     app.router.add_post("/comment", handle_comment)
+    app.router.add_post("/gift", handle_gift)
     app.router.add_post("/say", handle_say)
     app.router.add_post("/scene", handle_scene)
     app.router.add_post("/event", handle_event)

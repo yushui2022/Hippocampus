@@ -12,7 +12,7 @@ Cookie 三种来源，优先级从高到低：
     2. 同目录 cookie.txt（内容形如 SESSDATA=xxx）
     3. 无（只能连上极少数不需要风控的接口，通常拿不到弹幕）
 
-只转发聊天和醒目留言，礼物/进场/榜单全部丢弃。
+转发聊天、醒目留言、礼物和上舰；进场/榜单仍然丢弃。
 """
 
 from __future__ import annotations
@@ -33,6 +33,7 @@ from blivedm.handlers import BaseHandler
 
 BRIDGE = os.environ.get("STREAM_BRIDGE", "http://127.0.0.1:6220/comment")
 EVENT_URL = BRIDGE.rsplit("/", 1)[0] + "/event"
+GIFT_URL = BRIDGE.rsplit("/", 1)[0] + "/gift"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36")
 
@@ -135,12 +136,33 @@ def post_event(name: str, cooldown: float = 20.0) -> None:
         pass
 
 
+def post_gift(user: str, gift: str, count: int = 1) -> None:
+    """礼物交给画面自己决定动作，同时进互动榜。"""
+    body = json.dumps({"user": user, "gift": gift, "count": count}).encode()
+    req = urllib.request.Request(GIFT_URL, data=body,
+                                 headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=6) as res:
+            res.read()
+    except Exception:  # noqa: BLE001
+        pass
+
+
 class ChatHandler(BaseHandler):
     def _on_gift(self, client, message):  # noqa: N802
-        post_event("wave")
+        name = getattr(message, "uname", "") or "观众"
+        gift = getattr(message, "gift_name", "") or "礼物"
+        try:
+            num = max(1, int(getattr(message, "num", 1) or 1))
+        except (TypeError, ValueError):
+            num = 1
+        print(f"[gift] {name} x{num} {gift}", flush=True)
+        post_gift(name, gift, num)
 
     def _on_buy_guard(self, client, message):  # noqa: N802
-        post_event("wave")
+        name = getattr(message, "username", "") or "观众"
+        print(f"[guard] {name} 上舰", flush=True)
+        post_gift(name, "上舰", 1)
 
     def _on_danmaku(self, client, message):  # noqa: N802
         uid = getattr(getattr(message, "user_info", None), "uid", "")
