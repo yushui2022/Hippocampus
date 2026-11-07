@@ -1,0 +1,18 @@
+{
+  "name": "eat_loop",
+  "source": "reference/h3_eat_loop_v1.mp4",
+  "fps": 24.0,
+  "frames": 73,
+  "size": [
+    1366,
+    768
+  ],
+  "bbox": [
+    494,
+    136,
+    852,
+    672
+  ],
+  "loop_seam_mean_abs": 0.68,
+  "bytes": 1280771
+}

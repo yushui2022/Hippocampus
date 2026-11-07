@@ -298,8 +298,16 @@ def main() -> None:
                     help="shift the whole clip so the body's median bottom (= feet) lands here")
     ap.add_argument("--align-top", type=int, default=0,
                     help="shift the whole clip so the body's median top (= head) lands here")
+    ap.add_argument("--align-ref", choices=["median", "first", "last"], default="median",
+                    help="which frame defines the alignment target; in/out clips should use "
+                         "their shared frame so the cut does not jump")
     ap.add_argument("--align-cx", type=int, default=0,
                     help="shift the whole clip so the body's median centre x lands here")
+    ap.add_argument("--track-top", action="store_true",
+                    help="remove slow vertical drift by tracking the body top with a moving "
+                         "average; fast bobbing is kept, no scaling involved")
+    ap.add_argument("--track-window", type=int, default=25,
+                    help="moving-average window in frames for --track-top")
     ap.add_argument("--keep-frame", action="store_true",
                     help="skip compose(): keep the aligned frames at their real size instead of "
                          "re-cropping and rescaling everything to a fixed height")
@@ -354,15 +362,25 @@ def main() -> None:
                 keyed = list(zip(out_r, out_a))
 
     if args.align_bottom or args.align_top or args.align_cx:
-        boxes = [b for b in (body_box(a) for _, a in keyed) if b]
+        all_boxes = [body_box(a) for _, a in keyed]
+        boxes = [b for b in all_boxes if b]
         if boxes:
+            if args.align_ref == "first":
+                ref = all_boxes[0] or boxes[0]
+            elif args.align_ref == "last":
+                ref = all_boxes[-1] or boxes[-1]
+            else:
+                ref = None
             dx = dy = 0
             if args.align_bottom:
-                dy = args.align_bottom - int(np.median([b[3] for b in boxes]))
+                ground = ref[3] if ref else int(np.median([b[3] for b in boxes]))
+                dy = args.align_bottom - ground
             elif args.align_top:
-                dy = args.align_top - int(np.median([b[1] for b in boxes]))
+                head = ref[1] if ref else int(np.median([b[1] for b in boxes]))
+                dy = args.align_top - head
             if args.align_cx:
-                dx = args.align_cx - int(np.median([(b[0] + b[2]) / 2 for b in boxes]))
+                cx = ((ref[0] + ref[2]) / 2) if ref else float(np.median([(b[0] + b[2]) / 2 for b in boxes]))
+                dx = args.align_cx - int(round(cx))
             if dx or dy:
                 print("align shift", dx, dy)
                 out = []
@@ -373,6 +391,30 @@ def main() -> None:
                     arr = np.array(canvas)
                     out.append((arr[..., :3], arr[..., 3]))
                 keyed = out
+
+    if args.track_top:
+        tops = []
+        for _, a in keyed:
+            b = body_box(a)
+            tops.append(b[1] if b else None)
+        valid = [t for t in tops if t is not None]
+        if valid:
+            target = int(np.median(valid))
+            arr = np.array([t if t is not None else target for t in tops], dtype=np.float32)
+            win = max(1, args.track_window)
+            pad = win // 2
+            kernel = np.ones(win, dtype=np.float32) / win
+            smooth = np.convolve(np.pad(arr, (pad, pad), mode="edge"), kernel, mode="valid")[:len(arr)]
+            shifts = np.round(target - smooth).astype(int)
+            print("track-top", target, "shift", int(shifts.min()), "...", int(shifts.max()))
+            out = []
+            for (r, a), dy in zip(keyed, shifts):
+                canvas = Image.new("RGBA", (r.shape[1], r.shape[0]), (0, 0, 0, 0))
+                im = Image.fromarray(np.dstack([r, a]), "RGBA")
+                canvas.paste(im, (0, int(dy)), im)
+                arr2 = np.array(canvas)
+                out.append((arr2[..., :3], arr2[..., 3]))
+            keyed = out
 
     if args.stabilize:
         rgbs, alphas = zip(*keyed)

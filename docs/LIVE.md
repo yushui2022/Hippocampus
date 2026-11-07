@@ -92,6 +92,8 @@ B 站那条需要 `SESSDATA`，原因和做法见 `integrations/bilibili/README.
 - 几何统一用「头宽」，不要用包围盒高度：她抬手、拿手机都会把包围盒撑大，
   按高度缩放会把她整个人压小
 - 所有素材统一 `--anchor-head 311 --align-bottom 671 --align-cx 683 --keep-frame`
+- `in` 用 `--align-ref last`、`loop`/`out` 用 `--align-ref first`，接缝才不会跳
+- 长镜头若有缓慢漂移，加 `--track-top`（只做平移，不缩放）
 - `--keep-frame` 必须加：默认的 `compose()` 会再裁切并按总高度缩放到 537，
   把前面的对齐全部抵消
 - 单条通过率约三分之一，按 3 倍排产

@@ -38,7 +38,8 @@
   let seated = false;
   let wantStand = false;
   let pendingSit = "";
-  let satAt = 0;
+  let breakUntil = 0;
+  let nextBreakAt = Date.now() + 90000;   // 两段休息之间至少隔一会儿
 
   const vids = [document.getElementById("pet-video"), document.getElementById("pet-video-b")];
   let front = 0;                 // which <video> is currently visible
@@ -158,6 +159,11 @@
     }
     pendingSit = "";
     resting = name;
+    if (name === "eat" || name === "read") {
+      breakUntil = Date.now() + 40000;      // 吃一会儿/看一会儿就收
+    } else if (name === "sit") {
+      breakUntil = Date.now() + 240000;
+    }
     setTopic(name);
     if (!skipIn && available.has(seq[0])) {
       seqPhase = "in";
@@ -171,6 +177,7 @@
   // 把道具收回去，回到普通待机（坐着的还会站起来）
   function stopSequence() {
     const seq = SEQUENCES[resting];
+    nextBreakAt = Date.now() + 240000;
     if (!seq) {
       resting = "idle";
       seqPhase = null;
@@ -236,7 +243,6 @@
       seqPhase = "loop";
       if (resting === "sit") {
         seated = true;
-        satAt = Date.now();
       }
       playRest();
       return;
@@ -696,9 +702,8 @@
   connect();
 
   // 安静太久就自己找点事做：坐下 → 掏零食或书 → 起身
-  const SIT_AFTER = 100000;       // 没人说话 100 秒后坐下
+  const SIT_AFTER = 100000;       // 没人说话 100 秒后自己找点事
   const ACTIVITY_AFTER = 45000;   // 坐着 45 秒后掏点东西
-  const SIT_FOR = 240000;         // 最多坐 4 分钟
   function pickBreak() {
     if (available.has("sit_in")) {
       return "sit";
@@ -713,20 +718,22 @@
 
   setInterval(() => {
     const quiet = Date.now() - lastCommentAt;
-    if (seated) {
-      if (resting === "sit" && seqPhase === "loop" && quiet > ACTIVITY_AFTER) {
+    if (inBreak()) {
+      if (seqPhase === "loop" && Date.now() > breakUntil && !isTalking()) {
+        stopSequence();
+        return;
+      }
+      if (seated && resting === "sit" && seqPhase === "loop" && quiet > ACTIVITY_AFTER) {
         const pick = Math.random() < 0.5 ? "eat" : "read";
         if (available.has(pick + "_in") && available.has(pick + "_loop")) {
           startSequence(pick);
           return;
         }
       }
-      if (seqPhase === "loop" && Date.now() - satAt > SIT_FOR && !isTalking()) {
-        stopSequence();
-      }
       return;
     }
-    if (quiet > SIT_AFTER && !isTalking() && (resting === "idle" || resting === "work")) {
+    if (quiet > SIT_AFTER && Date.now() > nextBreakAt && !isTalking() &&
+        (resting === "idle" || resting === "work")) {
       const target = pickBreak();
       if (!target) {
         return;
