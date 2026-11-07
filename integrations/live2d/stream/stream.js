@@ -524,6 +524,11 @@
         }
       } else if (msg.type === "turn") {
         handleTurn(msg);
+      } else if (msg.type === "action") {
+        const name = String(msg.name || "");
+        if (name && available.has(name)) {
+          playClip(name, false);
+        }
       } else if (msg.type === "browsing") {
         showBrowsing(msg.site, msg.title, msg.summary);
         // 正在说话/思考时不要被自动上网打断
@@ -557,7 +562,7 @@
     probeClip("work_in"), probeClip("work_loop"), probeClip("work_out"), probeClip("talk"),
     probeClip("expr_happy"), probeClip("expr_angry"),
     probeClip("expr_confused"), probeClip("expr_smirk"), probeClip("expr_shy"),
-    probeClip("think"), probeClip("nod"),
+    probeClip("think"), probeClip("nod"), probeClip("wave"),
   ]).then(() => {
     startWork();
   });

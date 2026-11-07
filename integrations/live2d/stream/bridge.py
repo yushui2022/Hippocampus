@@ -276,6 +276,19 @@ async def handle_say(request: web.Request) -> web.Response:
     return web.json_response({"ok": True, "queued": BRIDGE.q().qsize()})
 
 
+async def handle_event(request: web.Request) -> web.Response:
+    """一次性动作：wave / nod / think 等，播一遍就回常驻状态。"""
+    try:
+        data = await request.json()
+    except Exception:
+        data = {}
+    name = str(data.get("name") or "").strip()
+    if name not in {"wave", "nod", "think"}:
+        return web.json_response({"ok": False, "error": "unknown event"}, status=400)
+    await BRIDGE.broadcast({"type": "action", "name": name})
+    return web.json_response({"ok": True, "event": name})
+
+
 async def handle_scene(request: web.Request) -> web.Response:
     try:
         data = await request.json()
@@ -361,6 +374,7 @@ def main() -> None:
     app.router.add_post("/comment", handle_comment)
     app.router.add_post("/say", handle_say)
     app.router.add_post("/scene", handle_scene)
+    app.router.add_post("/event", handle_event)
     app.router.add_get("/ws", handle_ws)
     app.router.add_get("/health", handle_health)
     app.router.add_get("/stats", handle_stats)

@@ -32,6 +32,7 @@ from blivedm import client as bclient
 from blivedm.handlers import BaseHandler
 
 BRIDGE = os.environ.get("STREAM_BRIDGE", "http://127.0.0.1:6220/comment")
+EVENT_URL = BRIDGE.rsplit("/", 1)[0] + "/event"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36")
 
@@ -114,7 +115,33 @@ class SignedClient(bclient.BLiveClient):
             return False
 
 
+_last_event = 0.0
+
+
+def post_event(name: str, cooldown: float = 20.0) -> None:
+    """给画面发一次性动作（礼物 → 挥手），带冷却，避免刷屏。"""
+    global _last_event
+    now = time.time()
+    if now - _last_event < cooldown:
+        return
+    _last_event = now
+    body = json.dumps({"name": name}).encode()
+    req = urllib.request.Request(EVENT_URL, data=body,
+                                 headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=6) as res:
+            res.read()
+    except Exception:  # noqa: BLE001
+        pass
+
+
 class ChatHandler(BaseHandler):
+    def _on_gift(self, client, message):  # noqa: N802
+        post_event("wave")
+
+    def _on_buy_guard(self, client, message):  # noqa: N802
+        post_event("wave")
+
     def _on_danmaku(self, client, message):  # noqa: N802
         uid = getattr(getattr(message, "user_info", None), "uid", "")
         name = getattr(getattr(message, "user_info", None), "uname", "") or uid or "观众"
