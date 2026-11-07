@@ -67,9 +67,14 @@ open http://127.0.0.1:6210/stream/stream.html
 ## 弹幕怎么进来
 
 ```text
-B 站  → integrations/bilibili/danmaku.py  →  POST :6220/comment
-手动  → live2d/stream/feed.py 或场控页
+B 站弹幕    → integrations/bilibili/danmaku.py  →  POST :6220/comment
+B 站礼物/上舰 → 同一个适配器                    →  POST :6220/gift
+手动        → live2d/stream/feed.py 或场控页
 ```
+
+画面左边是互动指南，右边是今日互动榜；数据由桥统计，写在
+`integrations/live2d/stream/.stats.json`，按日期自动清零。
+今日 token 用量也在右侧面板里，来自大脑的 /health。
 
 B 站那条需要 `SESSDATA`，原因和做法见 `integrations/bilibili/README.md`。
 

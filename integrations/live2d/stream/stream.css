@@ -170,29 +170,26 @@ body.night .comment {
 }
 
 /* 极简合规标注：不抢画面，但不能没有 */
-#usage {
-  position: absolute;
-  left: 24px;
-  bottom: 16px;
+#board-token {
   display: flex;
   align-items: baseline;
+  justify-content: space-between;
   gap: 8px;
-  padding: 6px 12px;
-  border-radius: 10px;
-  background: rgba(18, 15, 26, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 12px;
-  color: rgba(244, 241, 248, 0.5);
+  margin-top: 0.55em;
+  padding-top: 0.6em;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.86em;
+  color: rgba(255, 255, 255, 0.5);
   letter-spacing: 0.04em;
   pointer-events: none;
 }
 
-#usage .u-label { font-size: 11px; letter-spacing: 0.1em; }
+#board-token .u-label { letter-spacing: 0.08em; }
 
 #usage-value {
-  font-size: 15px;
+  font-size: 1.15em;
   font-weight: 600;
-  color: rgba(244, 241, 248, 0.86);
+  color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 
