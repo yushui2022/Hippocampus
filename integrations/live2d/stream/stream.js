@@ -42,6 +42,8 @@
     laugh: "expr_laugh", sigh: "expr_sigh",
     surprised: "expr_surprised", sad: "expr_sad",
     shake_head: "shake_head", jump: "jump",
+    stretch: "stretch", yawn: "yawn",
+    touch_head: "touch_head", fix_hair: "fix_hair",
   };
 
   // 待机时的随机小动作，减少循环感

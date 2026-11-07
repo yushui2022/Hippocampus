@@ -1,0 +1,18 @@
+{
+  "name": "jump",
+  "source": "reference/h3_jump_v1.mp4",
+  "fps": 24.0,
+  "frames": 73,
+  "size": [
+    1366,
+    768
+  ],
+  "bbox": [
+    478,
+    92,
+    864,
+    672
+  ],
+  "loop_seam_mean_abs": 0.88,
+  "bytes": 1974785
+}
