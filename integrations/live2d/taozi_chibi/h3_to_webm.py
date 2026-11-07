@@ -17,6 +17,7 @@ from pathlib import Path
 import av
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
+from scipy import ndimage
 
 HUE_MIN, HUE_MAX = 70.0, 170.0
 SAT_MIN, VAL_MIN = 0.15, 0.15
@@ -139,6 +140,39 @@ def kill_green(rgb: np.ndarray, alpha: np.ndarray) -> tuple[np.ndarray, np.ndarr
     return np.clip(out, 0, 255).astype(np.uint8), new_alpha
 
 
+def body_box(alpha, thresh: int = 24):
+    """最大连通块的 bbox。符号、粒子等独立小块会被排除。"""
+    m = alpha > thresh
+    lbl, n = ndimage.label(m)
+    if n == 0:
+        return None
+    sizes = ndimage.sum(m, lbl, range(1, n + 1))
+    ys, xs = np.where(lbl == int(np.argmax(sizes)) + 1)
+    if ys.size == 0:
+        return None
+    return int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
+
+
+def head_width(alpha, thresh: int = 24, top_frac: float = 0.42):
+    """最大连通块上 42% 区域的横向跨度 ≈ 头宽。
+
+    只看人物本体：符号、手机、粒子都是独立连通块，不能算进头宽。
+    """
+    m = alpha > thresh
+    lbl, n = ndimage.label(m)
+    if n == 0:
+        return None
+    sizes = ndimage.sum(m, lbl, range(1, n + 1))
+    ys, xs = np.where(lbl == int(np.argmax(sizes)) + 1)
+    if ys.size == 0:
+        return None
+    top, bot = ys.min(), ys.max()
+    band = ys < top + (bot - top) * top_frac
+    if not band.any():
+        return None
+    return int(xs[band].max() - xs[band].min())
+
+
 def stabilize(rgb, alpha, thresh: int = 24, target_h: int = 0, target_top: int = 0):
     """Lock the character's height and head position across the clip.
 
@@ -257,6 +291,18 @@ def main() -> None:
                     help="absolute character height in the composed frame (default: clip median)")
     ap.add_argument("--target-top", type=int, default=0,
                     help="absolute y of the character's top (default: clip median)")
+    ap.add_argument("--anchor-head", type=int, default=0,
+                    help="scale every frame so the head width matches this px value "
+                         "(pose independent; use for seated clips too)")
+    ap.add_argument("--align-bottom", type=int, default=0,
+                    help="shift the whole clip so the body's median bottom (= feet) lands here")
+    ap.add_argument("--align-top", type=int, default=0,
+                    help="shift the whole clip so the body's median top (= head) lands here")
+    ap.add_argument("--align-cx", type=int, default=0,
+                    help="shift the whole clip so the body's median centre x lands here")
+    ap.add_argument("--keep-frame", action="store_true",
+                    help="skip compose(): keep the aligned frames at their real size instead of "
+                         "re-cropping and rescaling everything to a fixed height")
     ap.add_argument("--erode", type=int, default=4)
     ap.add_argument("--dilate", type=int, default=8)
     args = ap.parse_args()
@@ -279,6 +325,55 @@ def main() -> None:
     keyed = [kill_green(rgb, a) for rgb, a in keyed]
     alphas = [a for _, a in keyed]
 
+    if args.anchor_head:
+        rgbs, alphas = zip(*keyed)
+        rgbs, alphas = list(rgbs), list(alphas)
+        widths = [w for w in (head_width(a) for a in alphas) if w]
+        if widths:
+            median_w = int(np.median(widths))
+            scale = args.anchor_head / median_w
+            print("head width median", median_w, "->", args.anchor_head, f"scale {scale:.3f}")
+            if abs(scale - 1.0) > 0.01:
+                out_r, out_a = [], []
+                for r, a in zip(rgbs, alphas):
+                    ys, xs = np.where(a > 24)
+                    im = Image.fromarray(np.dstack([r, a]), "RGBA")
+                    w2 = max(1, int(round(im.width * scale)))
+                    h2 = max(1, int(round(im.height * scale)))
+                    im = im.resize((w2, h2), Image.LANCZOS)
+                    canvas = Image.new("RGBA", (r.shape[1], r.shape[0]), (0, 0, 0, 0))
+                    if ys.size:
+                        cx = (xs.min() + xs.max()) / 2
+                        bot = ys.max()
+                        pos = (int(round(cx - cx * scale)), int(round(bot - bot * scale)))
+                    else:
+                        pos = (0, 0)
+                    canvas.alpha_composite(im, pos)
+                    arr = np.array(canvas)
+                    out_r.append(arr[..., :3]); out_a.append(arr[..., 3])
+                keyed = list(zip(out_r, out_a))
+
+    if args.align_bottom or args.align_top or args.align_cx:
+        boxes = [b for b in (body_box(a) for _, a in keyed) if b]
+        if boxes:
+            dx = dy = 0
+            if args.align_bottom:
+                dy = args.align_bottom - int(np.median([b[3] for b in boxes]))
+            elif args.align_top:
+                dy = args.align_top - int(np.median([b[1] for b in boxes]))
+            if args.align_cx:
+                dx = args.align_cx - int(np.median([(b[0] + b[2]) / 2 for b in boxes]))
+            if dx or dy:
+                print("align shift", dx, dy)
+                out = []
+                for r, a in keyed:
+                    canvas = Image.new("RGBA", (r.shape[1], r.shape[0]), (0, 0, 0, 0))
+                    im = Image.fromarray(np.dstack([r, a]), "RGBA")
+                    canvas.paste(im, (dx, dy), im)
+                    arr = np.array(canvas)
+                    out.append((arr[..., :3], arr[..., 3]))
+                keyed = out
+
     if args.stabilize:
         rgbs, alphas = zip(*keyed)
         rgbs, alphas = stabilize(list(rgbs), list(alphas),
@@ -298,9 +393,18 @@ def main() -> None:
         height_frac = 0.70
         feet_frac = 0.88
 
-    composed = [compose(rgb, a, box, out_w, args.height,
-                        height_frac=height_frac, feet_frac=feet_frac)
-                for rgb, a in keyed]
+    if args.keep_frame:
+        # 已经用 --anchor-head / --align-* 定好尺寸和站位，别再裁切缩放
+        composed = []
+        for rgb, a in keyed:
+            im = Image.fromarray(np.dstack([rgb, a]), "RGBA")
+            canvas = Image.new("RGBA", (out_w, args.height), (0, 0, 0, 0))
+            canvas.paste(im, ((out_w - im.width) // 2, 0), im)
+            composed.append(np.array(canvas))
+    else:
+        composed = [compose(rgb, a, box, out_w, args.height,
+                            height_frac=height_frac, feet_frac=feet_frac)
+                    for rgb, a in keyed]
 
     webm = outdir / f"{args.name}.webm"
     encode_webm(composed, webm, fps, args.crf)

@@ -8,8 +8,16 @@
   const ASSETS = "../assets/small/";
   const BG = "../assets/bg/bedroom.webm";
 
+  // 每个道具动作都是三段：掏出来 / 循环 / 收回去
+  const SEQUENCES = {
+    work: ["work_in", "work_loop", "work_out"],
+    sit: ["sit_in", "sit_loop", "sit_out"],
+    eat: ["eat_in", "eat_loop", "eat_out"],
+    read: ["read_in", "read_loop", "read_out"],
+  };
+
   // which clip is on screen; talking always returns to `resting`
-  const CLIPS = { idle: "idle", talk: "talk", work: "work" };
+  const CLIPS = { idle: "idle", talk: "talk", work: "work", sit: "sit", eat: "eat", read: "read" };
 
   // several idle takes, chained so the loop is ~20 s instead of 5 s
   const IDLE_CLIPS = ["idle_a", "idle_b", "idle_c", "idle_d"];
@@ -24,8 +32,12 @@
   };
   let pendingExpr = "";
   let idleIndex = 0;
-  // work scene is a three-stage sequence: pull the tablet out, loop, put it away
-  let workPhase = null;   // "in" | "loop" | "out"
+  // 道具动作的三段状态
+  let seqPhase = null;    // "in" | "loop" | "out"
+  let seated = false;
+  let wantStand = false;
+  let pendingSit = "";
+  let satAt = 0;
 
   const vids = [document.getElementById("pet-video"), document.getElementById("pet-video-b")];
   let front = 0;                 // which <video> is currently visible
@@ -114,40 +126,90 @@
   }
 
   function playRest() {
-    if (resting === "work" && workPhase === "loop" && available.has("work_loop")) {
-      playClip("work_loop", true);
+    if (resting === "idle") {
+      playClip(currentIdle(), false);   // loop=false so `ended` fires and we rotate
       return;
     }
-    if (resting === "work" && available.has("work_loop")) {
-      workPhase = "loop";
-      playClip("work_loop", true);
+    const seq = SEQUENCES[resting];
+    if (!seq) {
+      resting = "idle";
+      playClip(currentIdle(), false);
       return;
     }
-    playClip(currentIdle(), false);   // loop=false so `ended` fires and we rotate
+    if (seqPhase === "in") {
+      playClip(seq[0], false);
+      return;
+    }
+    playClip(seq[1], true);
   }
 
-  function startWork() {
-    resting = "work";
-    setTopic("work");
-    if (available.has("work_in") && available.has("work_loop")) {
-      workPhase = "in";
-      playClip("work_in", false);
-    } else {
-      workPhase = "loop";
+  // 进入一套道具动作；skipIn 用于坐姿之间的直接切换
+  function startSequence(name, skipIn) {
+    const seq = SEQUENCES[name];
+    if (!seq) {
+      return;
+    }
+    resting = name;
+    setTopic(name);
+    if (!skipIn && available.has(seq[0])) {
+      seqPhase = "in";
+      playClip(seq[0], false);
+      return;
+    }
+    seqPhase = "loop";
+    playClip(seq[1], true);
+  }
+
+  // 把道具收回去，回到普通待机（坐着的还会站起来）
+  function stopSequence() {
+    const seq = SEQUENCES[resting];
+    if (!seq) {
+      resting = "idle";
+      seqPhase = null;
       playRest();
-    }
-  }
-
-  function stopWork() {
-    if (available.has("work_out") && currentClip !== "work_out") {
-      workPhase = "out";
-      playClip("work_out", false);
+      setTopic("idle");
       return;
     }
-    workPhase = null;
+    if (available.has(seq[2])) {
+      seqPhase = "out";
+      playClip(seq[2], false);
+      return;
+    }
+    seqPhase = null;
+    seated = false;
     resting = "idle";
     playRest();
     setTopic("idle");
+  }
+
+  // 坐着/吃东西/看书时有人说话：先把手上的事收尾，回到站姿再开口
+  function inBreak() {
+    return resting === "sit" || resting === "eat" || resting === "read";
+  }
+
+  function ensureStanding(timeoutMs) {
+    if (!inBreak()) {
+      return Promise.resolve();
+    }
+    wantStand = true;
+    stopSequence();
+    return new Promise((resolve) => {
+      const t0 = Date.now();
+      const tick = () => {
+        if (!inBreak() || Date.now() - t0 > (timeoutMs || 8000)) {
+          wantStand = false;
+          resolve();
+          return;
+        }
+        setTimeout(tick, 120);
+      };
+      tick();
+    });
+  }
+
+  function isTalking() {
+    return currentClip === "talk" || currentClip === "think" ||
+      currentClip === "nod" || currentClip === "wave";
   }
 
   vids.forEach((v) => v.addEventListener("ended", () => {
@@ -161,13 +223,43 @@
     if (clip.startsWith("idle_")) {
       idleIndex += 1;
     }
-    if (clip === "work_in") {
-      workPhase = "loop";
+    const seq = SEQUENCES[resting];
+    if (seq && clip === seq[0]) {          // 掏出来的动画放完，进入循环
+      seqPhase = "loop";
+      if (resting === "sit") {
+        seated = true;
+        satAt = Date.now();
+      }
       playRest();
       return;
     }
-    if (clip === "work_out") {
-      workPhase = null;
+    if (seq && clip === seq[2]) {          // 收回去的动画放完
+      seqPhase = null;
+      if (wantStand && seated && (resting === "eat" || resting === "read")) {
+        // 还坐着，吃完的东西也收好了，再补一个起身
+        resting = "sit";
+        seqPhase = "loop";
+        stopSequence();
+        return;
+      }
+      if (pendingSit && !wantStand) {
+        const target = pendingSit;
+        pendingSit = "";
+        startSequence(target);
+        return;
+      }
+      if (resting === "eat" || resting === "read") {
+        if (seated && available.has("sit_loop")) {
+          startSequence("sit", true);      // 吃完/看完，回到坐姿
+        } else {
+          resting = "idle";
+          playRest();
+          setTopic("idle");
+        }
+        return;
+      }
+      seated = false;
+      wantStand = false;
       resting = "idle";
       playRest();
       setTopic("idle");
@@ -178,7 +270,10 @@
 
   const available = new Set(["idle", "talk"]);
 
-  const TOPIC = { idle: "在线陪聊", work: "在摸鱼", talk: "说话中" };
+  const TOPIC = {
+    idle: "在线陪聊", work: "在摸鱼", talk: "说话中",
+    sit: "坐着歇会儿", eat: "在吃零食", read: "在看书",
+  };
 
   function setTopic(name) {
     if (topic) {
@@ -190,17 +285,24 @@
     if (!CLIPS[name]) {
       return;
     }
-    if (name === "work") {
-      startWork();
+    if (SEQUENCES[name]) {
+      if (inBreak() && name === "work") {
+        return;                            // 休息时自动上网别把她拽起来
+      }
+      if (resting === name && seqPhase === "loop") {
+        return;                            // 已经在做这件事，别重播「掏出来」
+      }
+      startSequence(name);
       return;
     }
-    if (resting === "work") {
-      stopWork();
+    // idle / talk：先把道具收回来
+    if (SEQUENCES[resting]) {
+      stopSequence();
       return;
     }
-    resting = available.has(name) ? name : "idle";
+    resting = "idle";
     playRest();
-    setTopic(resting);
+    setTopic("idle");
   }
 
   function probeClip(name) {
@@ -462,14 +564,14 @@
     if (turn.autonomous) {
       if (site) showWatching(site);
       pushDialog(joined);
-      if (resting === "idle") {
-        resting = "work";
-        playRest();
-        setTopic("work");
+      if (resting === "idle" && !seated) {
+        startSequence("work", true);
       }
       return;
     }
-    if (site) {
+    // 坐着的时候先站起来，站好了再开口
+    await ensureStanding();
+    if (site && !seated) {
       showWatching(site);
       // 先让人看见她“在看”，再开口
       playClip("work_loop", true);
@@ -510,7 +612,11 @@
       if (msg.type === "comment") {
         addComment(msg.user, msg.text);
         lastCommentAt = Date.now();
-        if (available.has("think")) {
+        // 坐着的时候先起身，托腮放到站好之后
+        const thinking = () => {
+          if (!available.has("think")) {
+            return;
+          }
           playClip("think", true);
           setTopic("idle");
           // 回复迟迟不来时别一直托腮
@@ -521,19 +627,23 @@
               playRest();
             }
           }, 25000);
+        };
+        if (inBreak()) {
+          ensureStanding().then(thinking);
+        } else {
+          thinking();
         }
       } else if (msg.type === "turn") {
         handleTurn(msg);
       } else if (msg.type === "action") {
         const name = String(msg.name || "");
-        if (name && available.has(name)) {
+        if (name && available.has(name) && !inBreak()) {
           playClip(name, false);
         }
       } else if (msg.type === "browsing") {
         showBrowsing(msg.site, msg.title, msg.summary);
-        // 正在说话/思考时不要被自动上网打断
-        const busy = currentClip === "talk" || currentClip === "think";
-        if (!busy && Date.now() - lastCommentAt > 12000) {
+        // 正在说话/思考/休息时不要被自动上网打断
+        if (!isTalking() && !inBreak() && Date.now() - lastCommentAt > 12000) {
           setScene("work");
         }
       } else if (msg.type === "scene") {
@@ -563,10 +673,58 @@
     probeClip("expr_happy"), probeClip("expr_angry"),
     probeClip("expr_confused"), probeClip("expr_smirk"), probeClip("expr_shy"),
     probeClip("think"), probeClip("nod"), probeClip("wave"),
+    probeClip("sit_in"), probeClip("sit_loop"), probeClip("sit_out"),
+    probeClip("eat_in"), probeClip("eat_loop"), probeClip("eat_out"),
+    probeClip("read_in"), probeClip("read_loop"), probeClip("read_out"),
   ]).then(() => {
-    startWork();
+    startSequence("work");
   });
   connect();
+
+  // 安静太久就自己找点事做：坐下 → 掏零食或书 → 起身
+  const SIT_AFTER = 100000;       // 没人说话 100 秒后坐下
+  const ACTIVITY_AFTER = 45000;   // 坐着 45 秒后掏点东西
+  const SIT_FOR = 240000;         // 最多坐 4 分钟
+  function pickBreak() {
+    if (available.has("sit_in")) {
+      return "sit";
+    }
+    // 没有坐下的素材就站着掏零食/书
+    const pick = Math.random() < 0.5 ? "eat" : "read";
+    if (available.has(pick + "_in")) {
+      return pick;
+    }
+    return "";
+  }
+
+  setInterval(() => {
+    const quiet = Date.now() - lastCommentAt;
+    if (seated) {
+      if (resting === "sit" && seqPhase === "loop" && quiet > ACTIVITY_AFTER) {
+        const pick = Math.random() < 0.5 ? "eat" : "read";
+        if (available.has(pick + "_in") && available.has(pick + "_loop")) {
+          startSequence(pick);
+          return;
+        }
+      }
+      if (seqPhase === "loop" && Date.now() - satAt > SIT_FOR && !isTalking()) {
+        stopSequence();
+      }
+      return;
+    }
+    if (quiet > SIT_AFTER && !isTalking() && (resting === "idle" || resting === "work")) {
+      const target = pickBreak();
+      if (!target) {
+        return;
+      }
+      if (SEQUENCES[resting]) {
+        pendingSit = target;       // 先把手机收好，再换下一个动作
+        stopSequence();
+        return;
+      }
+      startSequence(target);
+    }
+  }, 10000);
 
   // keep the idle clip alive if the browser pauses it (tab switch etc.)
   setInterval(() => {
