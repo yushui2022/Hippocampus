@@ -41,9 +41,22 @@
     heart: "expr_heart", clap: "expr_clap",
     laugh: "expr_laugh", sigh: "expr_sigh",
     surprised: "expr_surprised", sad: "expr_sad",
+    shake_head: "shake_head", jump: "jump",
   };
+
+  // 待机时的随机小动作，减少循环感
+  const MICRO_CLIPS = ["stretch", "yawn", "touch_head", "fix_hair", "shake_head"];
+
+  // 播完要接着补表情的一次性动作
+  const ACTION_CLIPS = new Set([
+    "nod", "wave", "think", "shake_head", "jump",
+    "stretch", "yawn", "touch_head", "fix_hair",
+    "expr_heart", "expr_clap",
+  ]);
+
+  let idleStreak = 0;
   let pendingExpr = "";
-  let wantsNod = false;
+  let pendingAction = "";
   let idleIndex = 0;
   // 道具动作的三段状态
   let seqPhase = null;    // "in" | "loop" | "out"
@@ -250,6 +263,17 @@
     }
     if (clip.startsWith("idle_")) {
       idleIndex += 1;
+      if (resting === "idle") {
+        idleStreak += 1;
+        if (idleStreak >= 3) {
+          const pool = MICRO_CLIPS.filter((n) => available.has(n));
+          if (pool.length && Math.random() < 0.7) {
+            idleStreak = 0;
+            playClip(pool[Math.floor(Math.random() * pool.length)], false);
+            return;
+          }
+        }
+      }
     }
     const seq = SEQUENCES[resting];
     if (seq && clip === seq[0]) {          // 掏出来的动画放完，进入循环
@@ -293,7 +317,7 @@
       return;
     }
     playRest();
-    if (clip === "nod") {              // 点头之后补上这轮的表情
+    if (ACTION_CLIPS.has(clip)) {       // 动作之后补上这轮的表情
       playPendingExpr();
     }
   }));
@@ -506,12 +530,12 @@
       setTimeout(() => {
         playRest();
         setTopic(resting);
-        if (wantsNod && available.has("nod")) {
-          wantsNod = false;
-          playClip("nod", false);
+        if (pendingAction) {
+          const clip = pendingAction;
+          pendingAction = "";
+          playClip(clip, false);
           return;
         }
-        wantsNod = false;
         playPendingExpr();
       }, Math.min(9000, 1500 + text.length * 160));
       return;
@@ -542,12 +566,12 @@
         }
         playRest();
         setTopic(resting);
-        if (wantsNod && available.has("nod")) {
-          wantsNod = false;
-          playClip("nod", false);
+        if (pendingAction) {
+          const clip = pendingAction;
+          pendingAction = "";
+          playClip(clip, false);
           return;
         }
-        wantsNod = false;
         playPendingExpr();
       };
       source.onended = back;
@@ -597,7 +621,14 @@
     }
     const joined = lines.join("");
     const site = String(turn.looking_at || "");
-    wantsNod = (turn.actions || []).some((a) => a && a.action === "nod");
+    pendingAction = "";
+    for (const a of (turn.actions || [])) {
+      const clip = EVENT_CLIPS[a && a.action];
+      if (clip && available.has(clip)) {
+        pendingAction = clip;
+        break;
+      }
+    }
 
     // 自己上网时的自言自语：只留在对话框和顶部，不发声、不弹字幕
     if (turn.autonomous) {
@@ -714,6 +745,8 @@
     probeClip("expr_confused"), probeClip("expr_smirk"), probeClip("expr_shy"),
     probeClip("expr_sad"), probeClip("expr_laugh"), probeClip("expr_sigh"),
     probeClip("expr_surprised"), probeClip("expr_heart"), probeClip("expr_clap"),
+    probeClip("shake_head"), probeClip("jump"), probeClip("stretch"),
+    probeClip("yawn"), probeClip("touch_head"), probeClip("fix_hair"),
     probeClip("think"), probeClip("nod"), probeClip("wave"),
     probeClip("sit_in"), probeClip("sit_loop"), probeClip("sit_out"),
     probeClip("eat_in"), probeClip("eat_loop"), probeClip("eat_out"),

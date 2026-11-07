@@ -46,6 +46,14 @@
     <button id="surprised">惊讶</button>
     <button id="sad">委屈</button>
   </div>
+  <div class="row" style="margin-top:8px">
+    <button id="shake_head">摇头</button>
+    <button id="jump">跳一下</button>
+    <button id="stretch">伸懒腰</button>
+    <button id="yawn">打哈欠</button>
+    <button id="touch_head">摸头</button>
+    <button id="fix_hair">理头发</button>
+  </div>
   <p class="hint">切换只影响画面，不打断正在进行的一句。</p>
 </section>
 
@@ -79,7 +87,9 @@ document.querySelectorAll("[data-scene]").forEach((btn) => {
   });
 });
 
-for (const name of ["wave", "nod", "think", "heart", "clap", "laugh", "sigh", "surprised", "sad"]) {
+for (const name of ["wave", "nod", "think", "heart", "clap", "laugh", "sigh",
+                    "surprised", "sad", "shake_head", "jump", "stretch", "yawn",
+                    "touch_head", "fix_hair"]) {
   document.getElementById(name).addEventListener("click", async () => {
     await fetch(BRIDGE + "/event", {
       method: "POST",
