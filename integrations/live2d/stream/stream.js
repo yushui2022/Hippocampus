@@ -29,6 +29,18 @@
     confused: "expr_confused",
     smirk: "expr_smirk",
     shy: "expr_shy",
+    sad: "expr_sad",
+    laugh: "expr_laugh",
+    sigh: "expr_sigh",
+    surprised: "expr_surprised",
+  };
+
+  // 一次性动作 /event 的名字 → 素材名
+  const EVENT_CLIPS = {
+    wave: "wave", nod: "nod", think: "think",
+    heart: "expr_heart", clap: "expr_clap",
+    laugh: "expr_laugh", sigh: "expr_sigh",
+    surprised: "expr_surprised", sad: "expr_sad",
   };
   let pendingExpr = "";
   let wantsNod = false;
@@ -224,7 +236,8 @@
 
   function isTalking() {
     return currentClip === "talk" || currentClip === "think" ||
-      currentClip === "nod" || currentClip === "wave";
+      currentClip === "nod" || currentClip === "wave" ||
+      currentClip.startsWith("expr_");
   }
 
   vids.forEach((v) => v.addEventListener("ended", () => {
@@ -493,6 +506,13 @@
       setTimeout(() => {
         playRest();
         setTopic(resting);
+        if (wantsNod && available.has("nod")) {
+          wantsNod = false;
+          playClip("nod", false);
+          return;
+        }
+        wantsNod = false;
+        playPendingExpr();
       }, Math.min(9000, 1500 + text.length * 160));
       return;
     }
@@ -656,9 +676,9 @@
       } else if (msg.type === "turn") {
         handleTurn(msg);
       } else if (msg.type === "action") {
-        const name = String(msg.name || "");
-        if (name && available.has(name) && !inBreak()) {
-          playClip(name, false);
+        const clip = EVENT_CLIPS[String(msg.name || "")];
+        if (clip && available.has(clip) && !inBreak()) {
+          playClip(clip, false);
         }
       } else if (msg.type === "browsing") {
         showBrowsing(msg.site, msg.title, msg.summary);
@@ -692,6 +712,8 @@
     probeClip("work_in"), probeClip("work_loop"), probeClip("work_out"), probeClip("talk"),
     probeClip("expr_happy"), probeClip("expr_angry"),
     probeClip("expr_confused"), probeClip("expr_smirk"), probeClip("expr_shy"),
+    probeClip("expr_sad"), probeClip("expr_laugh"), probeClip("expr_sigh"),
+    probeClip("expr_surprised"), probeClip("expr_heart"), probeClip("expr_clap"),
     probeClip("think"), probeClip("nod"), probeClip("wave"),
     probeClip("sit_in"), probeClip("sit_loop"), probeClip("sit_out"),
     probeClip("eat_in"), probeClip("eat_loop"), probeClip("eat_out"),

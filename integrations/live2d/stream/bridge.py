@@ -283,7 +283,8 @@ async def handle_event(request: web.Request) -> web.Response:
     except Exception:
         data = {}
     name = str(data.get("name") or "").strip()
-    if name not in {"wave", "nod", "think"}:
+    if name not in {"wave", "nod", "think", "heart", "clap",
+                    "laugh", "sigh", "surprised", "sad"}:
         return web.json_response({"ok": False, "error": "unknown event"}, status=400)
     await BRIDGE.broadcast({"type": "action", "name": name})
     return web.json_response({"ok": True, "event": name})

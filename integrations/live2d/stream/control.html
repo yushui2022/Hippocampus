@@ -38,6 +38,14 @@
     <button id="nod">点头</button>
     <button id="think">思考</button>
   </div>
+  <div class="row" style="margin-top:8px">
+    <button id="heart">比心</button>
+    <button id="clap">鼓掌</button>
+    <button id="laugh">大笑</button>
+    <button id="sigh">叹气</button>
+    <button id="surprised">惊讶</button>
+    <button id="sad">委屈</button>
+  </div>
   <p class="hint">切换只影响画面，不打断正在进行的一句。</p>
 </section>
 
@@ -71,7 +79,7 @@ document.querySelectorAll("[data-scene]").forEach((btn) => {
   });
 });
 
-for (const name of ["wave", "nod", "think"]) {
+for (const name of ["wave", "nod", "think", "heart", "clap", "laugh", "sigh", "surprised", "sad"]) {
   document.getElementById(name).addEventListener("click", async () => {
     await fetch(BRIDGE + "/event", {
       method: "POST",

@@ -1,0 +1,18 @@
+{
+  "name": "expr_laugh",
+  "source": "reference/h3_expr_laugh_v1.mp4",
+  "fps": 24.0,
+  "frames": 73,
+  "size": [
+    1366,
+    768
+  ],
+  "bbox": [
+    488,
+    136,
+    856,
+    672
+  ],
+  "loop_seam_mean_abs": 0.73,
+  "bytes": 1471551
+}

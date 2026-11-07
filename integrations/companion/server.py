@@ -75,15 +75,16 @@ ACTIONS = {
 
 OUTPUT_RULES = """
 输出必须是 JSON，不要 markdown：
-{"say":["第一句","可选第二句"],"expression":"neutral|happy|sad|shy|angry|confused|smirk",
+{"say":["第一句","可选第二句"],"expression":"neutral|happy|sad|shy|angry|confused|smirk|laugh|sigh|surprised",
  "look":"要上网查的关键词或网址，没有就留空",
  "actions":[{"action":"动作名","target":"目标id或空"}]}
 say 里每句都会作为一个气泡发出去，最多 2 句。
 look 只在真的需要外部信息时填（新闻、天气、某个网站、某个不熟的东西）；
 闲聊一律留空。填了之后你会先被允许上网看一眼，然后再回答。
 expression 选最贴近当前情绪的一个：
-happy=开心、angry=生气、sad=难过、shy=害羞、
-confused=疑惑（没听懂、觉得对方说的离谱）、smirk=坏笑（准备损人、抓到你把柄）。
+happy=开心、angry=生气、sad=难过委屈、shy=害羞、
+confused=疑惑（没听懂、觉得对方说的离谱）、smirk=坏笑（准备损人、抓到你把柄）、
+laugh=被逗笑、sigh=无奈叹气、surprised=吃惊。
 不确定就用 neutral，不要每句都带表情。
 actions 可以为空；只允许 scene.actions 里出现的动作，只允许 scene 里的目标 id 或 user。
 动作是点缀：大多数回复 actions 为空；偶尔点头、摇头、看她/他、跳一下或走到沙发，不要每句都动。
