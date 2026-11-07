@@ -1,0 +1,18 @@
+{
+  "name": "eat_in",
+  "source": "reference/h3_eat_in_trim.mp4",
+  "fps": 24.0,
+  "frames": 46,
+  "size": [
+    1366,
+    768
+  ],
+  "bbox": [
+    484,
+    136,
+    862,
+    672
+  ],
+  "loop_seam_mean_abs": 2.44,
+  "bytes": 1033325
+}

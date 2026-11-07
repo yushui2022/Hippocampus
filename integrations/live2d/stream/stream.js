@@ -31,6 +31,7 @@
     shy: "expr_shy",
   };
   let pendingExpr = "";
+  let wantsNod = false;
   let idleIndex = 0;
   // 道具动作的三段状态
   let seqPhase = null;    // "in" | "loop" | "out"
@@ -136,8 +137,14 @@
       playClip(currentIdle(), false);
       return;
     }
-    if (seqPhase === "in") {
+    if (seqPhase === "in" && available.has(seq[0])) {
       playClip(seq[0], false);
+      return;
+    }
+    if (!available.has(seq[1])) {        // 素材没齐就别切过去，免得黑屏
+      resting = "idle";
+      seqPhase = null;
+      playClip(currentIdle(), false);
       return;
     }
     playClip(seq[1], true);
@@ -149,6 +156,7 @@
     if (!seq) {
       return;
     }
+    pendingSit = "";
     resting = name;
     setTopic(name);
     if (!skipIn && available.has(seq[0])) {
@@ -266,6 +274,9 @@
       return;
     }
     playRest();
+    if (clip === "nod") {              // 点头之后补上这轮的表情
+      playPendingExpr();
+    }
   }));
 
   const available = new Set(["idle", "talk"]);
@@ -506,9 +517,11 @@
         playRest();
         setTopic(resting);
         if (wantsNod && available.has("nod")) {
+          wantsNod = false;
           playClip("nod", false);
           return;
         }
+        wantsNod = false;
         playPendingExpr();
       };
       source.onended = back;
@@ -558,7 +571,7 @@
     }
     const joined = lines.join("");
     const site = String(turn.looking_at || "");
-    const wantsNod = (turn.actions || []).some((a) => a && a.action === "nod");
+    wantsNod = (turn.actions || []).some((a) => a && a.action === "nod");
 
     // 自己上网时的自言自语：只留在对话框和顶部，不发声、不弹字幕
     if (turn.autonomous) {
@@ -598,7 +611,7 @@
     }
 
     socket.addEventListener("open", () => {
-      topic.textContent = "在线陪聊";
+      setTopic("idle");
       socket.send(JSON.stringify({ type: "hello", role: "stage" }));
     });
 
@@ -612,6 +625,7 @@
       if (msg.type === "comment") {
         addComment(msg.user, msg.text);
         lastCommentAt = Date.now();
+        pendingSit = "";             // 有人来了就先别掏零食/书
         // 坐着的时候先起身，托腮放到站好之后
         const thinking = () => {
           if (!available.has("think")) {
@@ -652,7 +666,7 @@
     });
 
     socket.addEventListener("close", () => {
-      topic.textContent = "重连中…";
+      if (topic) topic.textContent = "重连中…";
       retry = setTimeout(connect, 2500);
     });
 
@@ -691,7 +705,7 @@
     }
     // 没有坐下的素材就站着掏零食/书
     const pick = Math.random() < 0.5 ? "eat" : "read";
-    if (available.has(pick + "_in")) {
+    if (available.has(pick + "_in") && available.has(pick + "_loop")) {
       return pick;
     }
     return "";
@@ -733,4 +747,13 @@
       v.play().catch(() => {});
     }
   }, 4000);
+
+  // 调试用：可以从控制台手动触发一轮对话或某个动作
+  window.__stage = {
+    turn: handleTurn,
+    speak,
+    start: startSequence,
+    stop: stopSequence,
+    state: () => ({ resting, seqPhase, seated, currentClip, front }),
+  };
 })();
