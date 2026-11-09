@@ -135,7 +135,16 @@
   let retry = null;
   let talkWatchdog = null;
   let subtitleTimer = null;
-  let currentSource = null;
+  let ttsEl = null;
+  let ttsUrl = "";
+
+  function ensureAudioEl() {
+    if (!ttsEl) {
+      ttsEl = new Audio();
+      ttsEl.preload = "auto";
+    }
+    return ttsEl;
+  }
   let resting = "idle";
 
   // Two stacked <video> elements: the new clip fades in on the hidden one while
@@ -590,16 +599,10 @@
       if (!res.ok) {
         throw new Error("tts " + res.status);
       }
-      const buffer = await res.arrayBuffer();
-      const ctx = ensureAudio();
-      const audio = await ctx.decodeAudioData(buffer);
-      const source = ctx.createBufferSource();
-      source.buffer = audio;
-      source.connect(ctx.destination);
-      if (currentSource) {
-        try { currentSource.stop(); } catch (e) { /* already stopped */ }
-      }
-      currentSource = source;
+      // 用 <audio> 播：OBS 的浏览器内核会挂起 Web Audio，但允许媒体元素自动播放
+      const blob = await res.blob();
+      const el = ensureAudioEl();
+      const nextUrl = URL.createObjectURL(blob);
       const back = () => {
         if (talkWatchdog) {
           clearTimeout(talkWatchdog);
@@ -615,12 +618,33 @@
         }
         playPendingExpr();
       };
-      source.onended = back;
+      el.onended = null;
+      el.onloadedmetadata = null;
+      el.pause();
+      if (ttsUrl) {
+        URL.revokeObjectURL(ttsUrl);
+      }
+      ttsUrl = nextUrl;
+      el.src = nextUrl;
+      el.onended = back;
+      el.onloadedmetadata = () => {
+        if (talkWatchdog) {
+          clearTimeout(talkWatchdog);
+        }
+        const dur = isFinite(el.duration) && el.duration > 0 ? el.duration : guess;
+        talkWatchdog = setTimeout(back, (dur + 0.6) * 1000);
+      };
       if (talkWatchdog) {
         clearTimeout(talkWatchdog);
       }
-      talkWatchdog = setTimeout(back, ((audio.duration || 3) + 0.5) * 1000);
-      source.start();
+      const guess = Math.max(1.5, text.length * 0.22);
+      talkWatchdog = setTimeout(back, (guess + 3) * 1000);
+      try {
+        await el.play();
+      } catch (err) {
+        // 被拦截时至少让动画在估算时长后回到待机
+        setTimeout(back, (guess + 1) * 1000);
+      }
     } catch (error) {
       // no audio device or TTS down: keep the mouth moving for a beat, then idle
       setTimeout(() => playRest(), 1800 + text.length * 60);

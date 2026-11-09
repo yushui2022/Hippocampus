@@ -79,19 +79,22 @@ def csrf(cookie: str) -> str:
 
 
 def start(cookie: str) -> dict:
-    version, build = livehime_version()
+    # 和 BLiveWeb 一致：appkey + 排序后的 query 做 md5 签名，ts 用秒
+    token = csrf(cookie)
     payload = {
-        "room_id": ROOM_ID,
-        "platform": "pc_link",
-        "backup_stream": "0",
-        "csrf": csrf(cookie),
-        "csrf_token": csrf(cookie),
+        "access_key": "",
+        "appkey": APP_KEY,
         "area_v2": AREA_ID,
-        "version": version,
-        "build": build,
-        "ts": str(int(time.time() * 1000)),
+        "build": "9343",
+        "csrf": token,
+        "csrf_token": token,
+        "platform": "pc_link",
+        "room_id": ROOM_ID,
+        "ts": str(int(time.time())),
     }
-    data = urllib.parse.urlencode(payload).encode()
+    query = urllib.parse.urlencode(sorted(payload.items()))
+    sign = hashlib.md5((query + APP_SEC).encode()).hexdigest()
+    data = (query + "&sign=" + sign).encode()
     return get_json(f"{API}/room/v1/Room/startLive", data=data, cookie=cookie)
 
 
