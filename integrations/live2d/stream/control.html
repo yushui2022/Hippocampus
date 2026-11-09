@@ -89,7 +89,7 @@ document.querySelectorAll("[data-scene]").forEach((btn) => {
 
 for (const name of ["wave", "nod", "think", "heart", "clap", "laugh", "sigh",
                     "surprised", "sad", "shake_head", "jump", "stretch", "yawn",
-                    "touch_head", "fix_hair"]) {
+                    "touch_head", "fix_hair", "blow_kiss"]) {
   document.getElementById(name).addEventListener("click", async () => {
     await fetch(BRIDGE + "/event", {
       method: "POST",

@@ -44,6 +44,7 @@
     shake_head: "shake_head", jump: "jump",
     stretch: "stretch", yawn: "yawn",
     touch_head: "touch_head", fix_hair: "fix_hair",
+    kiss: "blow_kiss", blow_kiss: "blow_kiss",
   };
 
   // 待机时的随机小动作，减少循环感
@@ -53,7 +54,7 @@
   const ACTION_CLIPS = new Set([
     "nod", "wave", "think", "shake_head", "jump",
     "stretch", "yawn", "touch_head", "fix_hair",
-    "expr_heart", "expr_clap",
+    "blow_kiss", "expr_heart", "expr_clap",
   ]);
 
   let idleStreak = 0;
@@ -62,6 +63,7 @@
   const KEYWORDS = [
     [["比心", "爱心", "爱你"], "expr_heart"],
     [["贴贴", "害羞"], "expr_shy"],
+    [["飞吻", "亲一个", "亲亲", "mua", "啵"], "blow_kiss"],
     [["跳"], "jump"],
     [["摇头"], "shake_head"],
     [["摸头"], "touch_head"],
@@ -80,7 +82,7 @@
     [["小心心", "爱心", "心动"], "expr_heart"],
     [["辣条", "打call", "牛哇"], "expr_laugh"],
     [["上舰", "舰长", "提督"], "expr_clap"],
-    [["小花花", "花花", "玫瑰"], "expr_shy"],
+    [["小花花", "花花", "玫瑰"], "blow_kiss"],
   ];
   let lastGiftAt = 0;
 
@@ -846,6 +848,7 @@
     probeClip("expr_surprised"), probeClip("expr_heart"), probeClip("expr_clap"),
     probeClip("shake_head"), probeClip("jump"), probeClip("stretch"),
     probeClip("yawn"), probeClip("touch_head"), probeClip("fix_hair"),
+    probeClip("blow_kiss"),
     probeClip("think"), probeClip("nod"), probeClip("wave"),
     probeClip("sit_in"), probeClip("sit_loop"), probeClip("sit_out"),
     probeClip("eat_in"), probeClip("eat_loop"), probeClip("eat_out"),

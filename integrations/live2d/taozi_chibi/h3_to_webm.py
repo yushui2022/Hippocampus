@@ -303,6 +303,9 @@ def main() -> None:
                          "their shared frame so the cut does not jump")
     ap.add_argument("--align-cx", type=int, default=0,
                     help="shift the whole clip so the body's median centre x lands here")
+    ap.add_argument("--floor", type=int, default=0,
+                    help="zero the alpha below this y; guards against props or symbols "
+                         "that slide off the bottom edge of the frame")
     ap.add_argument("--track-top", action="store_true",
                     help="remove slow vertical drift by tracking the body top with a moving "
                          "average; fast bobbing is kept, no scaling involved")
@@ -391,6 +394,16 @@ def main() -> None:
                     arr = np.array(canvas)
                     out.append((arr[..., :3], arr[..., 3]))
                 keyed = out
+
+    if args.floor > 0:
+        cut = args.floor
+        out = []
+        for r, a in keyed:
+            a2 = a.copy()
+            a2[cut:] = 0
+            out.append((r, a2))
+        keyed = out
+        print("floor cut at", cut)
 
     if args.track_top:
         tops = []
