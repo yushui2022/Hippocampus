@@ -8,7 +8,7 @@ Run:
 
     python integrations/companion/server.py --env ../qq-stack/.env
 
-Protocol: see integrations/companion/unity/README.md
+Protocol: WebSocket on :6200; the live stage in dafeiyu-live is one client.
 """
 
 from __future__ import annotations

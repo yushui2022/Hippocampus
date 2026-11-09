@@ -1,0 +1,253 @@
+{
+  "Nodes": [
+    {
+      "Annotation": "all_tundra_nodes",
+      "DisplayName": null,
+      "Inputs": [],
+      "Outputs": [],
+      "ToBuildDependencies": [
+        1,
+        2,
+        3
+      ],
+      "OverwriteOutputs": false,
+      "DebugActionIndex": 0
+    },
+    {
+      "Annotation": "ScriptAssemblies",
+      "DisplayName": null,
+      "Inputs": [],
+      "Outputs": [],
+      "OverwriteOutputs": false,
+      "DebugActionIndex": 1
+    },
+    {
+      "Annotation": "BuildPlayerDataGenerator Library/BuildPlayerData/Editor/TypeDb-All.json",
+      "DisplayName": "BuildPlayerDataGenerator TypeDb-All",
+      "Action": "\"/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/netcorerun/netcorerun\" \"/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPlayerDataGenerator/BuildPlayerDataGenerator.exe\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/Assembly-CSharp.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/MToon.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/SpringBoneJobs.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/UniGLTF.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/UniGLTF.UniUnlit.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/UniGLTF.Utils.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/UniHumanoid.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/Unity.Mathematics.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/UnityEngine.TestRunner.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/UnityEngine.UI.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies/VRM.dll\" -a=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.ext.nunit@2.0.3/net40/unity-custom/nunit.framework.dll\" -s=\"/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Managed/UnityEngine\" -s=\"/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netfx\" -s=\"/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/NetStandard/compat/2.1.0/shims/netstandard\" -s=\"/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/NetStandard/Extensions/2.0.0\" -s=\"/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/NetStandard/ref/2.1.0\" -s=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/ScriptAssemblies\" -s=\"/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.ext.nunit@2.0.3/net40/unity-custom\" -o=\"Library/BuildPlayerData/Editor\" -rn=\"\" -tn=\"TypeDb-All.json\"",
+      "Inputs": [
+        "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/netcorerun/netcorerun",
+        "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPlayerDataGenerator/BuildPlayerDataGenerator.exe",
+        "Library/ScriptAssemblies/Assembly-CSharp.dll",
+        "Library/ScriptAssemblies/MToon.dll",
+        "Library/ScriptAssemblies/SpringBoneJobs.dll",
+        "Library/ScriptAssemblies/UniGLTF.dll",
+        "Library/ScriptAssemblies/UniGLTF.UniUnlit.dll",
+        "Library/ScriptAssemblies/UniGLTF.Utils.dll",
+        "Library/ScriptAssemblies/UniHumanoid.dll",
+        "Library/ScriptAssemblies/Unity.Mathematics.dll",
+        "Library/ScriptAssemblies/UnityEngine.TestRunner.dll",
+        "Library/ScriptAssemblies/UnityEngine.UI.dll",
+        "Library/ScriptAssemblies/VRM.dll",
+        "Library/PackageCache/com.unity.ext.nunit@2.0.3/net40/unity-custom/nunit.framework.dll"
+      ],
+      "Outputs": [
+        "Library/BuildPlayerData/Editor/TypeDb-All.json"
+      ],
+      "AllowUnexpectedOutput": true,
+      "Env": [],
+      "DebugActionIndex": 2
+    },
+    {
+      "Annotation": "ScriptAssembliesAndTypeDB",
+      "DisplayName": null,
+      "Inputs": [],
+      "Outputs": [],
+      "ToBuildDependencies": [
+        1,
+        2
+      ],
+      "OverwriteOutputs": false,
+      "DebugActionIndex": 3
+    }
+  ],
+  "FileSignatures": [
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.BuildTools.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.Core.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.CSharpSupport.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.DotNet.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.NativeProgramSupport.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.Stevedore.Program.exe"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.TinyProfiler2.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.Toolchain.GNU.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.Toolchain.LLVM.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.Toolchain.VisualStudio.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.Toolchain.Xcode.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.Tools.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.TundraBackend.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Bee.VisualStudioSolution.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/BeeBuildProgramCommon.Data.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/BeeBuildProgramCommon.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Newtonsoft.Json.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/NiceIO.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/PlayerBuildProgramLibrary.Data.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/PlayerBuildProgramLibrary.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/ScriptCompilationBuildProgram.Data.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/ScriptCompilationBuildProgram.exe"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/SharpYaml.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Unity.Api.Attributes.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Unity.Cecil.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Unity.Cecil.Mdb.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Unity.Cecil.Pdb.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Unity.Cecil.Rocks.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Unity.IL2CPP.Api.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Unity.IL2CPP.Bee.BuildLogic.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Unity.IL2CPP.Bee.IL2CPPExeCompileCppBuildProgram.Data.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Unity.Linker.Api.dll"
+    },
+    {
+      "File": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/Unity.Options.dll"
+    },
+    {
+      "File": "Library/Bee/200b0aESkipCompile-inputdata.json"
+    }
+  ],
+  "StatSignatures": [
+    {
+      "File": "/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/getconf"
+    },
+    {
+      "File": "Assets/csc.rsp"
+    },
+    {
+      "File": "Assets/mcs.rsp"
+    },
+    {
+      "File": "Library/Bee/200b0aESkipCompile-inputdata.json"
+    },
+    {
+      "File": "Library/PackageCache/com.unity.ext.nunit@2.0.3/net40/unity-custom/nunit.framework.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Assembly-CSharp.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/MToon.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/SpringBoneJobs.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UniGLTF.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UniGLTF.UniUnlit.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UniGLTF.Utils.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UniHumanoid.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Mathematics.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.TestRunner.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.UI.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/VRM.dll"
+    }
+  ],
+  "GlobSignatures": [
+    {
+      "Path": "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline"
+    }
+  ],
+  "ContentDigestExtensions": [
+    ".rsp",
+    ".dll",
+    ".exe",
+    ".csproj",
+    ".pdb"
+  ],
+  "StructuredLogFileName": "Library/Bee/tundra.log.json",
+  "StateFileName": "Library/Bee/TundraBuildState.state",
+  "StateFileNameTmp": "Library/Bee/TundraBuildState.state.tmp",
+  "StateFileNameMapped": "Library/Bee/TundraBuildState.state.map",
+  "ScanCacheFileName": "Library/Bee/tundra.scancache",
+  "ScanCacheFileNameTmp": "Library/Bee/tundra.scancache.tmp",
+  "DigestCacheFileName": "Library/Bee/tundra.digestcache",
+  "DigestCacheFileNameTmp": "Library/Bee/tundra.digestcache.tmp",
+  "CachedNodeOutputDirectoryName": "Library/Bee/CachedNodeOutput",
+  "EmitDataForBeeWhy": 0,
+        "NamedNodes": {
+          "all_tundra_nodes": 0,
+          "ScriptAssemblies": 1,
+          "ScriptAssembliesAndTypeDB": 3
+        }
+,  "DefaultNodes": [
+    0
+  ],
+  "SharedResources": [],
+  "Scanners": [],
+  "Identifier": "Library/Bee/200b0aESkipCompile.dag.json",
+  "PayloadsFile": "/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/Bee/200b0aESkipCompile.dag.payloads",
+  "RelativePathToRoot": "../.."
+}

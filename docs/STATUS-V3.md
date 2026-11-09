@@ -62,7 +62,7 @@ adapter follows that rule.
 - feedback: used memory reinforced, corrected memory revised
 - S6 emotional carry-over
 - real-log holdout + human blind test
-- embodied client (Unity / browser)
+- live stage (browser, dafeiyu-live)
 
 ## Operational notes
 

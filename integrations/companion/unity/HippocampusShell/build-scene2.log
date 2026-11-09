@@ -1,0 +1,432 @@
+Unity Editor version:    2022.3.62f3c1 (1623fc0bbb97)
+Branch:                  2022.3/china_unity/release
+Build type:              Release
+Batch mode:              YES
+macOS version:           Version 27.2 (Build 26B123)
+Darwin version:          27.2.0
+Architecture:            arm64
+Running under Rosetta:   NO
+Available memory:        65536 MB
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-orlando" at "2026-11-03T05:23:08.377014Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 52744, path: "/Users/orlando/Applications/Unity Hub.app/Contents/Frameworks/UnityLicensingClient_V1.app/Contents/MacOS/Unity.Licensing.Client")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Error: HandshakeResponse reported an error:
+	ResponseCode: 505
+	ResponseStatus: Unsupported protocol version '1.16.2'.
+[Licensing::Module] Error: Failed to handshake to channel: "LicenseClient-orlando"
+[Licensing::IpcConnector] LicenseClient-orlando channel disconnected successfully.
+[Licensing::IpcConnector] Channel LicenseClient-orlando-2022.3.62 doesn't exist
+Launching external process: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Frameworks/UnityLicensingClient.app/Contents/MacOS/Unity.Licensing.Client
+[Licensing::Module] Successfully launched the LicensingClient (PId: 67245)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-orlando-2022.3.62" at "2026-11-03T05:23:09.152322Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 67245, path: "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Frameworks/UnityLicensingClient.app/Contents/MacOS/Unity.Licensing.Client")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.16.2+bdef8f5
+  Session Id:              16ef51cfa44f42f3b7ff056e89134d96
+  Correlation Id:          5ba22a0066af3d1d6e4edf79b5d22883
+  External correlation Id: 1884418658393316749
+  Machine Id:              GFyThTmnf2Wm31g9RQ2LFyktSgo=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-orlando-2022.3.62" (connect: 0.60s, validation: 0.04s, handshake: 0.17s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-orlando-2022.3.62-notifications" at "2026-11-03T05:23:09.36377Z"
+[Licensing::Module] Connected to LicensingClient (PId: 67245, launch time: 0.00, total connection time: 0.81s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully updated license
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Serial number assigned to: "F4-APCA-WZX4-CFX5-N2WF-XXXX"
+Pro License: NO
+[Licensing::Client] Successfully resolved entitlement details
+Launching external process: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Resources/PackageManager/Server/UnityPackageManager
+
+COMMAND LINE ARGUMENTS:
+/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/MacOS/Unity
+-batchmode
+-nographics
+-quit
+-projectPath
+/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+-executeMethod
+Hippocampus.Shell.EditorTools.SceneBuilder.BuildScene
+-logFile
+/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/build-scene2.log
+Successfully changed project path to: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [8453067520]  Target information:
+
+Player connection [8453067520]  * "[IP] 192.168.31.5 [Port] 55504 [Flags] 2 [Guid] 2572636376 [EditorId] 2572636376 [Version] 1048832 [Id] OSXEditor(0,OrlandodeMac-Studio.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+
+Player connection [8453067520]  * "[IP] 100.115.137.62 [Port] 55504 [Flags] 2 [Guid] 2572636376 [EditorId] 2572636376 [Version] 1048832 [Id] OSXEditor(0,OrlandodeMac-Studio.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+
+Player connection [8453067520] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [8453067520] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+[Package Manager] UpmClient::Connect -- Connected to IPC stream "Upm-67234" after 0.3 seconds.
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 15 packages:
+  Packages from [https://packages.unity.cn]:
+    com.unity.test-framework@1.4.6 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.test-framework@1.4.6)
+    com.unity.mathematics@1.2.6 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.mathematics@1.2.6)
+    com.unity.ext.nunit@2.0.3 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.ext.nunit@2.0.3)
+  Built-in packages:
+    com.unity.ugui@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.ugui@1.0.0)
+    com.unity.modules.animation@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.animation@1.0.0)
+    com.unity.modules.audio@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.audio@1.0.0)
+    com.unity.modules.imgui@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.imgui@1.0.0)
+    com.unity.modules.jsonserialize@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.jsonserialize@1.0.0)
+    com.unity.modules.physics@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.physics@1.0.0)
+    com.unity.modules.ui@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.ui@1.0.0)
+    com.unity.modules.uielements@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.uielements@1.0.0)
+    com.unity.modules.unitywebrequest@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.unitywebrequest@1.0.0)
+    com.unity.modules.imageconversion@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.imageconversion@1.0.0)
+  Embedded packages:
+    com.vrmc.gltf@file:/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Packages/com.vrmc.gltf (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Packages/com.vrmc.gltf)
+    com.vrmc.univrm@file:/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Packages/com.vrmc.univrm (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Packages/com.vrmc.univrm)
+[Subsystems] No new subsystems found in resolved package list.
+Package Manager log level set to [2]
+[Package Manager] Done registering packages in 0.14 seconds
+Refreshing native plugins compatible for Editor in 0.87 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2022.3.62f3c1 (1623fc0bbb97)
+[Subsystems] Discovering subsystems at path /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0; jobified=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+[Licensing::Client] Successfully resolved entitlement details
+Initialize mono
+Mono path[0] = '/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Managed'
+Mono path[1] = '/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/MonoBleedingEdge/lib/mono/unityjit-macos'
+Mono config path = '/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56234
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
+Registered in 0.001194 seconds.
+- Loaded All Assemblies, in  0.135 seconds
+Native extension for OSXStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.086 seconds
+Domain Reload Profiling: 221ms
+	BeginReloadAssembly (47ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (0ms)
+	RebuildCommonClasses (12ms)
+	RebuildNativeTypeToScriptingClass (4ms)
+	initialDomainReloadingComplete (18ms)
+	LoadAllAssembliesAndSetupDomain (54ms)
+		LoadAssemblies (48ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (53ms)
+			TypeCache.Refresh (52ms)
+				TypeCache.ScanAssembly (47ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (86ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (69ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (4ms)
+			SetLoadedEditorAssemblies (3ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (1ms)
+			ProcessInitializeOnLoadAttributes (47ms)
+			ProcessInitializeOnLoadMethodAttributes (15ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://unix:/tmp/ilpp.sock-87a77897adefef0c40f35f2280b61878
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc -
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc - - 200 - application/grpc 17.0804ms
+Starting: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+DisplayProgressbar: Compiling Scripts
+ExitCode: 4 Duration: 1s607ms
+Rebuilding DAG because FileSignature timestamp changed: Library/Bee/200b0aE-inputdata.json
+*** Tundra requires additional run (1.59 seconds), 1 items updated, 287 evaluated
+Starting: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/netcorerun/netcorerun "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/ScriptCompilationBuildProgram.exe" "Library/Bee/200b0aE.dag.json" "Library/Bee/200b0aE-inputdata.json" "Library/Bee/buildprogram0.traceevents"
+WorkingDir: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+ExitCode: 0 Duration: 0s249ms
+Starting: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --dagfilejson="Library/Bee/200b0aE.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssemblies
+WorkingDir: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+ExitCode: 0 Duration: 0s305ms
+Finished compiling graph: 297 nodes, 3136 flattened edges (2754 ToBuild, 50 ToUse), maximum node priority 237
+[187/294    0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.rsp
+[288/294    0s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll (+2 others)
+Assets/Scripts/VrmAvatar.cs(116,13): warning CS0618: 'VRMBlendShapeProxyExtensions.ImmediatelySetValue(VRMBlendShapeProxy, BlendShapePreset, float)' is obsolete: 'Use BlendShapeKey.CreateFromPreset'
+[289/294    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+[290/294    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+[291/294    0s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+[292/294    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[293/294    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+*** Tundra build success (0.30 seconds), 7 items updated, 294 evaluated
+Total cache size 7460208
+Total cache size after purge 7460208
+Assets/Scripts/VrmAvatar.cs(116,13): warning CS0618: 'VRMBlendShapeProxyExtensions.ImmediatelySetValue(VRMBlendShapeProxy, BlendShapePreset, float)' is obsolete: 'Use BlendShapeKey.CreateFromPreset'
+AssetDatabase: script compilation time: 2.442769s
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.123 seconds
+Refreshing native plugins compatible for Editor in 0.14 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Start importing Assets/Editor/SceneBuilder.cs using Guid(00468fbf3de0446de917145066b35ea5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7052daab2bb9d2c2b90c797e2b6e4fdd') in 0.002871 seconds
+Start importing Assets/Scripts/VrmAvatar.cs using Guid(3019decef57e548159ba195fa79babe5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd12f452c6b3b86231c462a742ebd5713') in 0.000554 seconds
+Start importing Assets/Scripts/CompanionClient.cs using Guid(0c96d341e184e4c6d94969c2680ba6ce) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '251ebb6d667b2901f4a7df6d513acfbb') in 0.000483 seconds
+Refreshing native plugins compatible for Editor in 0.06 ms, found 0 plugins.
+Native extension for OSXStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.090 seconds
+Domain Reload Profiling: 212ms
+	BeginReloadAssembly (47ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (2ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (8ms)
+	RebuildCommonClasses (12ms)
+	RebuildNativeTypeToScriptingClass (4ms)
+	initialDomainReloadingComplete (8ms)
+	LoadAllAssembliesAndSetupDomain (52ms)
+		LoadAssemblies (59ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (14ms)
+			TypeCache.Refresh (10ms)
+				TypeCache.ScanAssembly (8ms)
+			ScanForSourceGeneratedMonoScriptInfo (2ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (90ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (54ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (1ms)
+			SetLoadedEditorAssemblies (1ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (5ms)
+			ProcessInitializeOnLoadAttributes (40ms)
+			ProcessInitializeOnLoadMethodAttributes (7ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (1ms)
+Start importing Assets/Models/AvatarSample_A.Textures/Matcap_RimHair.png using Guid(00c3f43da3af54687889093ab7ffddc7) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '82336948fb2d9502985348ff7df14d30') in 0.003616 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_Hair_00_spe.png using Guid(0039f8f3c7e6745b08059fcf14fc87e7) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '71e3a97f6ee0c3cbb116fad6db4cbeec') in 0.004031 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_001_01_Shoes_01.png using Guid(111660c7b3a6c4898af1f8f268f746a3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd2c3b064ddf511407f5b93dde112f615') in 0.002880 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_Body_00.png using Guid(416fefd2cab8c4a6d9768de2e4108283) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a61e788b8321e6df6fb6825e241a65ba') in 0.043609 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_006_01_Tops_01.png using Guid(62cd5245e2d624aa9b1e3addda6ba01c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3f548590462cc1c9eb2b876f0e00a419') in 0.027509 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_Hair_00_nml.normal.png using Guid(82c71f69e6f1144d3bc00d3056c60088) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'fb2a0cef5f89354d4a54f9c7a0645f47') in 0.003677 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_Hair_00_02.png using Guid(e217cdc102b2b443683b8bf28d41172b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8986794cd7e0af4107e56542ef7f7f42') in 0.005199 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_008_01_Bottoms_01.png using Guid(033cf527540aa4a15bcb5074fd45d026) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b6a1888d257be062ab80944ee42f0255') in 0.005440 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_Face_00_nml.normal.png using Guid(44b1575e2d2be4cadacf4a494a95cccb) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'eddfa929e8da283aa930cfdf6b1946a8') in 0.009788 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/Shader_NoneBlack.png using Guid(649539abaddd44923bfc06f71520de02) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9c34987969b523eea6d5ef4dc12a632e') in 0.000373 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_Face_00.png using Guid(f4a9f8e1bff7c4b27955a579605e6057) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '36d037a68773452be2e252de56995331') in 0.012150 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_FaceMouth_00.png using Guid(48cc7c9922d114c4a8eb9fac19b201e9) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ca27d875c96dfb50e77838ea2ec72e8b') in 0.002151 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_Hair_00_01.png using Guid(0939735305987415f94c47327a0a2eda) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b2093d20917353718b56dc84479a500e') in 0.004707 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_Body_00_nml.normal.png using Guid(2944949eec57b4d7b81d92dddc377f3e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4dbe5708f7c6114e12635a54c397006e') in 0.047842 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_EyeExtra_01.png using Guid(293fd480e69304cf9ab99467e1e2e10b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c2acd8d0eef197d2f742643d9220df92') in 0.001364 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_FaceEyelash_00.png using Guid(1ab793710e49e45ed958f213e7909acd) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '655003eeaaed115bf0d38189544d61a3') in 0.001183 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_EyeIris_00.png using Guid(4a698e98f51d84888b358c2bbe3d7e66) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '75a427ff7c189d71bf904c0e095be440') in 0.003605 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/Shader_NoneNormal.normal.png using Guid(7a02814ecac294d6ab1ea9aff9b21025) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8bd0b2157450e26b9ad4e3f04e83103c') in 0.000391 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/Thumbnail.png using Guid(cac3bcdba85104bfca3fa62c898b16f1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9b7fd310e1e788b4822b58eb8cd04a08') in 0.034564 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_Face_00_out.png using Guid(dac6c4837f8a44aaf98fb12d6ee4f05a) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '90964d1a65dd56b2d8c1eba3cdedf730') in 0.001013 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_EyeHighlight_00.png using Guid(5b0ac3cf069654d769d68882973c4d76) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ebe3fcd4fe25bdaed5d6d589d9464860') in 0.002251 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_FaceBrow_00.png using Guid(db7d164901e864a81a1101e88754e649) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd3e1fcc9f685ff3e2a6a57c05f6af66b') in 0.001510 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_FaceEyeline_00.png using Guid(fb98678a541684897b89237a377856e4) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a75352617fa11a24888324e8d2ef9cfe') in 0.001883 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_00_EyeWhite_00.png using Guid(adf1852b07b4f4d1dbd78793e85b133f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a2fcb001e3535c48c6ff6ea2c234e267') in 0.005710 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/Matcap_Rim.png using Guid(ddae2386e92fc4749b816222598caf6a) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '08085be46cd8d4c8d02030201e1e8e61') in 0.002137 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_Hair_00_03.png using Guid(de2b0e3238f1d4b509673895f057a345) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '94721c338d0278de67aa3dd3bc1bada0') in 0.005515 seconds
+Start importing Assets/Models/AvatarSample_A.Textures/F00_000_Hair_00_04.png using Guid(ff071985d705443af9af11d3d58d39a1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9aaa78b40dd0dd4fc98ebc225a7e663b') in 0.004478 seconds
+Refreshing native plugins compatible for Editor in 0.07 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=2d8d7aa0401074964b872abed86bd04f): Total: 3.212 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=30 (actual=30, local cache=0, cache server=0)
+		Asset DB Process Time: managed=1 ms, native=512 ms
+		Asset DB Callback time: managed=28 ms, native=1 ms
+		Scripting: domain reloads=1, domain reload time=218 ms, compile time=2443 ms, other=4 ms
+		Project Asset Count: scripts=1672, non-scripts=168
+		Asset File Changes: new=28, changed=30, moved=0, deleted=0
+		Scan Filter Count: 1
+	InvokeBeforeRefreshCallbacks: 0.220ms
+	ApplyChangesToAssetFolders: 0.012ms
+	Scan: 121.563ms
+	OnSourceAssetsModified: 0.779ms
+	GetAllGuidsForCategorization: 0.065ms
+	CategorizeAssets: 11.963ms
+	ImportOutOfDateAssets: 341.930ms (-2352.219ms without children)
+		ImportManagerImport: 248.293ms (2.492ms without children)
+			ImportInProcess: 245.699ms
+			UpdateCategorizedAssets: 0.103ms
+		CompileScripts: 2443.387ms
+		ReloadNativeAssets: 0.000ms
+		UnloadImportedAssets: 1.934ms
+		ReloadImportedAssets: 0.123ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.236ms
+		InitializingProgressBar: 0.003ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.000ms
+		OnDemandSchedulerStart: 0.171ms
+	PostProcessAllAssets: 28.639ms
+	Hotreload: 0.439ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.000ms
+	UnloadStreamsBegin: 0.079ms
+	PersistCurrentRevisions: 0.121ms
+	UnloadStreamsEnd: 0.003ms
+	GenerateScriptTypeHashes: 0.085ms
+	Untracked: 2705.820ms
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 0.172ms
+Initializing Unity extensions:
+[Licensing::Client] Successfully resolved entitlement details
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-HippocampusShell
+[PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ProgressiveSceneManager::Cancel()
+-- Listing OpenCL platforms(s) --
+ * OpenCL platform 0
+	PROFILE = FULL_PROFILE
+	VERSION = OpenCL 1.2 (Oct  3 2026 15:49:59)
+	NAME = Apple
+	VENDOR = Apple
+-- Listing OpenCL device(s) --
+ * OpenCL platform 0, device 0 
+	DEVICE_TYPE = 4
+	DEVICE_NAME = Apple M5 Max
+	DEVICE_VENDOR = Apple
+	DEVICE_VERSION = OpenCL 1.2 
+	DRIVER_VERSION = 1.2 1.0
+	DEVICE_MAX_COMPUTE_UNITS = 40
+	DEVICE_MAX_CLOCK_FREQUENCY = 1000
+	CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE = 1073741824
+	CL_DEVICE_HOST_UNIFIED_MEMORY = true
+	CL_DEVICE_MAX_MEM_ALLOC_SIZE = 10436771840
+	DEVICE_GLOBAL_MEM_SIZE = 55662788608
+-- GPU Progressive lightmapper will use OpenCL device 'Apple M5 Max' from 'Apple'--
+   use -OpenCL-PlatformAndDeviceIndices <platformIdx> <deviceIdx> as command line arguments if you want to select a specific adapter for OpenCL.
+Unloading 14 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 39 unused Assets / (504.1 KB). Loaded Objects now: 1872.
+Memory consumption went from 99.4 MB to 98.9 MB.
+Total: 1.492750 ms (FindLiveObjects: 0.040917 ms CreateObjectMapping: 0.013292 ms MarkObjects: 1.310000 ms  DeleteObjects: 0.128167 ms)
+
+[PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 0 unused Assets / (0 B). Loaded Objects now: 1872.
+Memory consumption went from 99.0 MB to 99.0 MB.
+Total: 1.202375 ms (FindLiveObjects: 0.032667 ms CreateObjectMapping: 0.011667 ms MarkObjects: 1.156000 ms  DeleteObjects: 0.001833 ms)
+
+Start importing Assets/Scenes/Main.unity using Guid(43c0d61167ef54030a4f76a6de8b35c0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'cf14c51eb8eaa9205b94cce5e8cbb7e1') in 0.000526 seconds
+Refreshing native plugins compatible for Editor in 0.05 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=b75edca6776374b68b6effe0a69bfb52): Total: 0.012 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Scene built: Assets/Scenes/Main.unity
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Volumes/jenkins1/sharedspace/ra_2022.3/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Hippocampus.Shell.EditorTools.SceneBuilder:BuildScene () (at Assets/Editor/SceneBuilder.cs:167)
+
+(Filename: Assets/Editor/SceneBuilder.cs Line: 167)
+
+Batchmode quit successfully invoked - shutting down!
+Curl error 42: Callback aborted
+Curl error 42: Callback aborted
+Thread 0x16bdef000 may have been prematurely finalized
+[PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+Input System module state changed to: ShutdownInProgress.
+Input System polling thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-orlando-2022.3.62-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-orlando-2022.3.62 channel disconnected successfully.
+Thread 0x16c8df000 may have been prematurely finalized
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...

@@ -3,8 +3,8 @@
 > **语音已上线（2026-11-03）。** QQ 回复会附带 Qwen3-TTS 本地语音条；
 > TTS 常驻在 dafeiyu-live 仓库的 `tts/server.py` :6211，NapCat 自动转 silk。
 >
-> **Unity 壳已暂停（2026-11-03）。** 复盘、环境、协议、资产授权全部整理在
-> `/Users/orlando/Documents/Obsidian Vault/unity使用/`。代码和 6200 服务保留，不再投入。
+> **Unity 壳已移除（2026-11-09）。** 复盘和环境保留在
+> `/Users/orlando/Documents/Obsidian Vault/unity使用/`；6200 服务保留。直播画面在 dafeiyu-live。
 >
 > **2026-11-03 更新：v0.9.0，v3 P1 已完成。**
 > 记忆链路已从「v2 内核直连」升级为 `Brain`：感官门控 → 72 小时暂存 →

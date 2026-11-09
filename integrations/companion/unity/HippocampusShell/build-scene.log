@@ -1,0 +1,1354 @@
+Unity Editor version:    2022.3.62f3c1 (1623fc0bbb97)
+Branch:                  2022.3/china_unity/release
+Build type:              Release
+Batch mode:              YES
+macOS version:           Version 27.2 (Build 26B123)
+Darwin version:          27.2.0
+Architecture:            arm64
+Running under Rosetta:   NO
+Available memory:        65536 MB
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-orlando" at "2026-11-03T04:52:41.631784Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 52744, path: "/Users/orlando/Applications/Unity Hub.app/Contents/Frameworks/UnityLicensingClient_V1.app/Contents/MacOS/Unity.Licensing.Client")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Error: HandshakeResponse reported an error:
+	ResponseCode: 505
+	ResponseStatus: Unsupported protocol version '1.16.2'.
+[Licensing::Module] Error: Failed to handshake to channel: "LicenseClient-orlando"
+[Licensing::IpcConnector] LicenseClient-orlando channel disconnected successfully.
+[Licensing::IpcConnector] Channel LicenseClient-orlando-2022.3.62 doesn't exist
+Launching external process: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Frameworks/UnityLicensingClient.app/Contents/MacOS/Unity.Licensing.Client
+[Licensing::Module] Successfully launched the LicensingClient (PId: 77519)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-orlando-2022.3.62" at "2026-11-03T04:52:42.419777Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 77519, path: "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Frameworks/UnityLicensingClient.app/Contents/MacOS/Unity.Licensing.Client")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.16.2+bdef8f5
+  Session Id:              099ba2669c774b6a9cd2122c36c7c1b4
+  Correlation Id:          bd642901d5995c70099be926d63771f2
+  External correlation Id: 1533381051334377254
+  Machine Id:              GFyThTmnf2Wm31g9RQ2LFyktSgo=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-orlando-2022.3.62" (connect: 0.61s, validation: 0.04s, handshake: 0.16s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-orlando-2022.3.62-notifications" at "2026-11-03T04:52:42.62328Z"
+[Licensing::Module] Connected to LicensingClient (PId: 77519, launch time: 0.00, total connection time: 0.81s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully updated license
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Serial number assigned to: "F4-APCA-WZX4-CFX5-N2WF-XXXX"
+Pro License: NO
+[Licensing::Client] Successfully resolved entitlement details
+Launching external process: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Resources/PackageManager/Server/UnityPackageManager
+
+COMMAND LINE ARGUMENTS:
+/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/MacOS/Unity
+-batchmode
+-nographics
+-quit
+-projectPath
+/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+-executeMethod
+Hippocampus.Shell.EditorTools.SceneBuilder.BuildScene
+-logFile
+/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/build-scene.log
+Successfully changed project path to: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+/Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [8453067520]  Target information:
+
+Player connection [8453067520]  * "[IP] 192.168.31.5 [Port] 55504 [Flags] 2 [Guid] 1766151118 [EditorId] 1766151118 [Version] 1048832 [Id] OSXEditor(0,OrlandodeMac-Studio.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+
+Player connection [8453067520]  * "[IP] 100.115.137.62 [Port] 55504 [Flags] 2 [Guid] 1766151118 [EditorId] 1766151118 [Version] 1048832 [Id] OSXEditor(0,OrlandodeMac-Studio.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+
+Player connection [8453067520] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [8453067520] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+[Package Manager] UpmClient::Connect -- Connected to IPC stream "Upm-77508" after 1.9 seconds.
+Rebuilding Library because the asset database could not be found!
+[Package Manager] Done resolving packages in 0.99 seconds
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Lock file was created
+[Package Manager] Registered 9 packages:
+  Built-in packages:
+    com.unity.ugui@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.ugui@1.0.0)
+    com.unity.modules.animation@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.animation@1.0.0)
+    com.unity.modules.audio@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.audio@1.0.0)
+    com.unity.modules.imgui@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.imgui@1.0.0)
+    com.unity.modules.jsonserialize@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.jsonserialize@1.0.0)
+    com.unity.modules.physics@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.physics@1.0.0)
+    com.unity.modules.ui@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.ui@1.0.0)
+    com.unity.modules.uielements@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.uielements@1.0.0)
+    com.unity.modules.unitywebrequest@1.0.0 (location: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Library/PackageCache/com.unity.modules.unitywebrequest@1.0.0)
+[Subsystems] No new subsystems found in resolved package list.
+Package Manager log level set to [2]
+[Package Manager] Done registering packages in 0.13 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2022.3.62f3c1 (1623fc0bbb97)
+[Subsystems] Discovering subsystems at path /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0; jobified=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+[Licensing::Client] Successfully resolved entitlement details
+Initialize mono
+Mono path[0] = '/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Managed'
+Mono path[1] = '/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/MonoBleedingEdge/lib/mono/unityjit-macos'
+Mono config path = '/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56508
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
+Registered in 0.001321 seconds.
+- Loaded All Assemblies, in  0.161 seconds
+Native extension for OSXStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.091 seconds
+Domain Reload Profiling: 252ms
+	BeginReloadAssembly (63ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (0ms)
+	RebuildCommonClasses (17ms)
+	RebuildNativeTypeToScriptingClass (4ms)
+	initialDomainReloadingComplete (19ms)
+	LoadAllAssembliesAndSetupDomain (58ms)
+		LoadAssemblies (63ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (56ms)
+			TypeCache.Refresh (55ms)
+				TypeCache.ScanAssembly (49ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (91ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (75ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (4ms)
+			SetLoadedEditorAssemblies (3ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (1ms)
+			ProcessInitializeOnLoadAttributes (51ms)
+			ProcessInitializeOnLoadMethodAttributes (16ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[ScriptCompilation] Requested script compilation because: Assembly Definition File(s) changed
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://unix:/tmp/ilpp.sock-87a77897adefef0c40f35f2280b61878
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell/
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc -
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc - - 200 - application/grpc 25.6517ms
+Starting: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+ExitCode: 4 Duration: 0s21ms
+[             ] Require frontend run.  Library/Bee/200b0aE.dag couldn't be loaded
+DisplayProgressbar: Compiling Scripts
+Starting: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/netcorerun/netcorerun "/Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/BuildPipeline/ScriptCompilationBuildProgram.exe" "Library/Bee/200b0aE.dag.json" "Library/Bee/200b0aE-inputdata.json" "Library/Bee/buildprogram0.traceevents"
+WorkingDir: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+ExitCode: 0 Duration: 0s233ms
+Starting: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --dagfilejson="Library/Bee/200b0aE.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssemblies
+WorkingDir: /Users/orlando/Documents/蓝色大肥鱼/Hippocampus/integrations/companion/unity/HippocampusShell
+ExitCode: 0 Duration: 2s98ms
+Finished compiling graph: 125 nodes, 594 flattened edges (562 ToBuild, 8 ToUse), maximum node priority 46
+[  1/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.dll_AD4F3DD1E89F6FF5.mvfrm
+[  2/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIElementsSamplesModule.dll_B2C259CD2E027051.mvfrm
+[  3/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TextCoreTextEngineModule.dll_30EDCE4F9B719E3C.mvfrm
+[  4/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AccessibilityModule.dll_A3B2E36AB5F85DA6.mvfrm
+[  5/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.DeviceSimulatorModule.dll_1391DC79EEAA9821.mvfrm
+[  6/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIElementsModule.dll_1BCA7B2B5F1E12DC.mvfrm
+[  7/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SceneViewModule.dll_F2480DEF17725B34.mvfrm
+[  8/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SceneTemplateModule.dll_710D77D3B5823609.mvfrm
+[  9/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UnityConnectModule.dll_381675DDEA312656.mvfrm
+[ 10/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.QuickSearchModule.dll_27B8077154615688.mvfrm
+[ 11/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.EditorToolbarModule.dll_4D6E0715B6958BD1.mvfrm
+[ 12/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIBuilderModule.dll_0820D8039508075A.mvfrm
+[ 13/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.GraphViewModule.dll_B3982AE7224F8E26.mvfrm
+[ 14/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TextCoreFontEngineModule.dll_E90597DE0BEDE51E.mvfrm
+[ 15/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.DiagnosticsModule.dll_9CA88663FB8A5A2F.mvfrm
+[ 16/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UIElementsModule.dll_1C78E87361622C27.mvfrm
+[ 17/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.PresetsUIModule.dll_6EFE63C924A7E62B.mvfrm
+[ 18/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.CoreModule.dll_827DC71BE338A7A0.mvfrm
+[ 19/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AudioModule.dll_24DB39FC2C4E30BE.mvfrm
+[ 20/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AnimationModule.dll_821DA70FFCAC62CC.mvfrm
+[ 21/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ARModule.dll_42F9296DE46F20BD.mvfrm
+[ 22/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ContentLoadModule.dll_04B793A3854AB367.mvfrm
+[ 23/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.rsp2
+[ 24/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.UnityAdditionalFile.txt
+[ 25/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ClusterInputModule.dll_B7B2EAF39BB8F91C.mvfrm
+[ 26/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ClusterRendererModule.dll_193E9EEB5E65A5A5.mvfrm
+[ 27/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.CrashReportingModule.dll_BF5273A0EC04D343.mvfrm
+[ 28/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.IMGUIModule.dll_5D3AD962F27FC49F.mvfrm
+[ 29/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GridModule.dll_830FB65CA392A8C2.mvfrm
+[ 30/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GIModule.dll_21C2AD782300AA0E.mvfrm
+[ 31/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.HotReloadModule.dll_03666515D7DF7E4E.mvfrm
+[ 32/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.CoreModule.dll_A59E9A6E8B3E12CB.mvfrm
+[ 33/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GameCenterModule.dll_C460AE196E7E72A3.mvfrm
+[ 34/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.dll_DFF384AA4712FCDA.mvfrm
+[ 35/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.DSPGraphModule.dll_6FC72BF07BAC0CC9.mvfrm
+[ 36/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.InputLegacyModule.dll_FCE655814EB9C16B.mvfrm
+[ 37/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.InputModule.dll_8B5101ACA2865562.mvfrm
+[ 38/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.JSONSerializeModule.dll_03CA6CA6B533BE30.mvfrm
+[ 39/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PerformanceReportingModule.dll_38C687402735328A.mvfrm
+[ 40/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.LocalizationModule.dll_F5FFB5463334EC15.mvfrm
+[ 41/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VirtualTexturingModule.dll_A10B8DFD18C97DA9.mvfrm
+[ 42/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.iOS.Extensions.Xcode.dll_8777AC4A5DA7B23E.mvfrm
+[ 43/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PhysicsModule.dll_DA270A2103247F4F.mvfrm
+[ 44/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PropertiesModule.dll_F19BED57E169D6DF.mvfrm
+[ 45/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VFXModule.dll_B0A5F975BB214DD0.mvfrm
+[ 46/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityConnectModule.dll_2575F9ECE4B92701.mvfrm
+[ 47/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityTestProtocolModule.dll_6E850FBF87FDC5A7.mvfrm
+[ 48/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TLSModule.dll_2FC76106E4B3E463.mvfrm
+[ 49/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityCurlModule.dll_B53A48416CC054B9.mvfrm
+[ 50/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.dll.mvfrm.rsp
+[ 51/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.rsp
+[ 52/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/UnityEditor.UI.rsp2
+[ 53/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/UnityEditor.UI.UnityAdditionalFile.txt
+[ 54/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UIModule.dll_84FA0297E398C7A0.mvfrm
+[ 55/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityAnalyticsCommonModule.dll_D4054484411DD0E8.mvfrm
+[ 56/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ProfilerModule.dll_9CBC03BDA2A4C2B5.mvfrm
+[ 57/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestModule.dll_96CFA445EB7EF818.mvfrm
+[ 58/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextRenderingModule.dll_46F18C3680D76A87.mvfrm
+[ 59/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextCoreTextEngineModule.dll_AF4D49A2AE6F5D07.mvfrm
+[ 60/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextCoreFontEngineModule.dll_676513311EEBA3E9.mvfrm
+[ 61/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll_C6EBF5263FE10D2A.mvfrm
+[ 62/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SpriteShapeModule.dll_850267BD6C6A4384.mvfrm
+[ 63/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SharedInternalsModule.dll_0941DB7157B858E9.mvfrm
+[ 64/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SubstanceModule.dll_135DA8A997871818.mvfrm
+[ 65/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SpriteMaskModule.dll_AD8D20A98FEE081D.mvfrm
+[ 66/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.StreamingModule.dll_36B294604C341A0A.mvfrm
+[ 67/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AssetBundleModule.dll_6BA13A62B6C80B7A.mvfrm
+[ 68/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.OSXStandalone.Extensions.dll_9672A4296ED2B9AB.mvfrm
+[ 69/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.Graphs.dll_FBA596C788C391D2.mvfrm
+[ 70/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ImageConversionModule.dll_85309C9BE08A5D99.mvfrm
+[ 71/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AndroidJNIModule.dll_9A1363FEA83D81B2.mvfrm
+[ 72/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AIModule.dll_8986646A8751C1F4.mvfrm
+[ 73/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.NVIDIAModule.dll_1675F7A462375E97.mvfrm
+[ 74/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ParticleSystemModule.dll_1264BCED5A165ED1.mvfrm
+[ 75/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.DirectorModule.dll_6A75CA87094B3BA8.mvfrm
+[ 76/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ClothModule.dll_8BC396F7066B0FA2.mvfrm
+[ 77/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ScreenCaptureModule.dll_1DB21A2BC99FEA92.mvfrm
+[ 78/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.Physics2DModule.dll_CEC397009DA95A61.mvfrm
+[ 79/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/UnityEditor.UI.dll.mvfrm.rsp
+[ 80/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.UnityAdditionalFile.txt
+[ 81/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.rsp2
+[ 82/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll.mvfrm.rsp
+[ 83/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.rsp
+[ 84/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.UnityAdditionalFile.txt
+[ 85/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.rsp2
+[ 86/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll.mvfrm.rsp
+[ 87/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.rsp
+[ 88/122    0s] WriteText Library/Bee/artifacts/200b0aE.dag/UnityEditor.UI.rsp
+[ 89/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TilemapModule.dll_9369ED10F09FA946.mvfrm
+[ 90/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UmbraModule.dll_9FAFE614B974DC31.mvfrm
+[ 91/122    0s] MovedFromExtractorCombine Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.dll.mvfrm
+[ 92/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SubsystemsModule.dll_183A870B5E35F030.mvfrm
+[ 93/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TerrainPhysicsModule.dll_12DF65C07359595E.mvfrm
+[ 94/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TerrainModule.dll_F46D858FD8E2C83D.mvfrm
+[ 95/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityAnalyticsModule.dll_32042DB7063DB0CD.mvfrm
+[ 96/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestAssetBundleModule.dll_0EEC2BF0285E255E.mvfrm
+[ 97/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestTextureModule.dll_7CE08B8732766B37.mvfrm
+[ 98/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestWWWModule.dll_7A0F8EFE9E2F1973.mvfrm
+[ 99/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VehiclesModule.dll_E238C40683750B43.mvfrm
+[100/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VideoModule.dll_49E4BE66EEE04C63.mvfrm
+[101/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.WindModule.dll_1BED75971C749134.mvfrm
+[102/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VRModule.dll_D7CC291D85534D18.mvfrm
+[103/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestAudioModule.dll_B0C2DB1EAD9FFD22.mvfrm
+[104/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.XRModule.dll_0A8AEC220E8D9A76.mvfrm
+[105/122    1s] Csc Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[106/122    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.UI.pdb
+[107/122    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.UI.dll
+[108/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UI.ref.dll_79746E5030301F94.mvfrm
+[109/122    0s] MovedFromExtractorCombine Library/Bee/artifacts/200b0aE.dag/UnityEditor.UI.dll.mvfrm
+[110/122    0s] Csc Library/Bee/artifacts/200b0aE.dag/UnityEditor.UI.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/200b0aE.dag/UnityEditor.UI.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[111/122    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.pdb
+[112/122    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.dll
+[113/122    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UI.ref.dll_BD0E97F52A0DF729.mvfrm
+[114/122    0s] MovedFromExtractorCombine Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll.mvfrm
+[115/122    0s] MovedFromExtractorCombine Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll.mvfrm
+[116/122    0s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll (+2 others)
+[117/122    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+[118/122    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+[119/122    0s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+[120/122    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+[121/122    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+*** Tundra build success (2.09 seconds), 121 items updated, 122 evaluated
+Total cache size 668080
+Total cache size after purge 668080
+AssetDatabase: script compilation time: 2.768972s
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.073 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Start importing Assets using Guid(00000000000000001000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '93ad63751633d8931d579dd8b88b788a') in 0.005475 seconds
+Start importing ProjectSettings/InputManager.asset using Guid(00000000000000002000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a3cfdfd5bc6102f343b4829a8ce79dc0') in 0.000478 seconds
+Start importing ProjectSettings/TagManager.asset using Guid(00000000000000003000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '27bc3806c41bdb543a74bc55adc72a8f') in 0.000249 seconds
+Start importing ProjectSettings/ProjectSettings.asset using Guid(00000000000000004000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '0b13f6bdc397bf90f68c267296de0745') in 0.001102 seconds
+Start importing ProjectSettings/AudioManager.asset using Guid(00000000000000006000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'afdb0ac8a66ddb059110e4516dfcd954') in 0.000198 seconds
+Start importing ProjectSettings/TimeManager.asset using Guid(00000000000000007000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c15cae83774660c90452602a6b058633') in 0.000195 seconds
+Start importing ProjectSettings/DynamicsManager.asset using Guid(00000000000000008000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '629e0c014710a9954fe94cf2b97a0f0d') in 0.000269 seconds
+Start importing ProjectSettings/QualitySettings.asset using Guid(00000000000000009000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '501a5b1271de8da946e0d9f62dd70a3d') in 0.001114 seconds
+Start importing ProjectSettings/EditorBuildSettings.asset using Guid(0000000000000000b000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '42a7dea221178c8ff8a7f6c54a05ebc0') in 0.000227 seconds
+Start importing ProjectSettings/EditorSettings.asset using Guid(0000000000000000c000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c6f261d4c6c4951f9201a36c44c36f4a') in 0.000255 seconds
+Start importing ProjectSettings/NavMeshAreas.asset using Guid(00000000000000004100000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '5fe2fb6b529ee761bb20746a7ab1b241') in 0.000279 seconds
+Start importing ProjectSettings/Physics2DSettings.asset using Guid(00000000000000005100000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '38971527cf446bd70982f05c976f6c26') in 0.000205 seconds
+Start importing ProjectSettings/GraphicsSettings.asset using Guid(00000000000000006100000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1a6efcc7357d78aec34b1ea3df512eae') in 0.000239 seconds
+Start importing ProjectSettings/ClusterInputManager.asset using Guid(00000000000000007100000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'eaff7db4dd05d8ff0818f60bff250dfd') in 0.000216 seconds
+Start importing ProjectSettings/UnityConnectSettings.asset using Guid(0000000000000000a100000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c3a39ff2c32568df75109901a2a78ca8') in 0.000257 seconds
+Start importing ProjectSettings/PresetManager.asset using Guid(0000000000000000b100000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f8e82747b2c0e3f6eee0b9346750641f') in 0.000244 seconds
+Start importing ProjectSettings/VFXManager.asset using Guid(0000000000000000c100000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '396c4265c10af43b1b16dd72ffe4ebef') in 0.000200 seconds
+Start importing ProjectSettings/VersionControlSettings.asset using Guid(0000000000000000d100000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f699c8df73f04ae7374a667632b35689') in 0.000189 seconds
+Start importing ProjectSettings/MemorySettings.asset using Guid(0000000000000000f100000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1a756112cecf39e490a601a9eff03275') in 0.000191 seconds
+Start importing Packages/com.unity.modules.imgui using Guid(c060426bfd6e82575228df6656368eaa) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8902333b06588af5029cfee34ad74076') in 0.000140 seconds
+Start importing Packages/com.unity.modules.animation using Guid(1158e311a3101950348dcecb1bebc42d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4b13bed27054d1939cda218eb185d038') in 0.000093 seconds
+Start importing Assets/Editor using Guid(526f65ec3ab1343d6a14dc699c665d26) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '96d7a1bad9220e5780918dd6e8ab40ee') in 0.000306 seconds
+Start importing Assets/Scripts using Guid(a2b3720f73618478eb38f57cef92fcdc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1c78a7a9bad5d0809611010181bd657c') in 0.000265 seconds
+Start importing Packages/com.unity.modules.unitywebrequest using Guid(c522a644a29fcab2eaf63298c118a65b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '24eb8b7b970b4b15175b837494933af7') in 0.000091 seconds
+Start importing Packages/com.unity.modules.physics using Guid(d6db7caf2e852b75ebb9c6098418179c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f9fd01135c8ca7bc4b5b7765199fb38d') in 0.000084 seconds
+Start importing Packages/com.unity.modules.uielements using Guid(2808ba6bccb2478ec9c7209d8bf1f3cc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4965993930d81dfc0a45764e728bf8b1') in 0.000074 seconds
+Start importing Packages/com.unity.modules.ui using Guid(39728903e57c60021f80449a8bbc0096) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b267f7291c549a8f27442256309b573f') in 0.000076 seconds
+Start importing Packages/com.unity.modules.jsonserialize using Guid(fc3a810351931f5e6183e16b9beb5563) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd91970cd8c07bdafe4a386e4a343caec') in 0.000075 seconds
+Start importing Packages/com.unity.modules.audio using Guid(2d6ba5cbe47e6ad3c87474c56174d4e0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f55a45c8f2f862f836c6d034806aa792') in 0.000072 seconds
+Start importing Packages/com.unity.ugui using Guid(8f7652e09069a1943278893d4264401e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3b911f28f22b10ba45ff5c1dd564abfe') in 0.000076 seconds
+Start importing Packages/com.unity.ugui/Tests using Guid(d850db319a63d2546932ff76fe55a498) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '6ebbb714351c13b4d561925b2df2ec14') in 0.000108 seconds
+Start importing Packages/com.unity.ugui/Runtime using Guid(aa14b70e6a58c5b4fa6663623e3dca91) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '2cda5814c814c7547224627290bb63ac') in 0.000105 seconds
+Start importing Packages/com.unity.ugui/Editor using Guid(bee384ad5b4d1a843a018082e7db53cd) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7d0078fe0b3ff09383533b24de72d570') in 0.000093 seconds
+Start importing Packages/com.unity.ugui/Runtime/Properties using Guid(32e2186f4598cff489784aae586f2215) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '580995b27a1adb559cfa1b4ed7b4f81e') in 0.000104 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor using Guid(936bea4b2545c4a4fad2e623b0f6371f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '23fc81d8a4cb9f0ac8623145f0110a8a') in 0.000096 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI using Guid(742654cad2425334696ba6ed4495cfef) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '38fa3ade58dc5867fd7e786b1c7a3bfc') in 0.000096 seconds
+Start importing Packages/com.unity.ugui/Editor/UI using Guid(853edc343b78a7c4c81cbb3851d48c0a) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '793c90a632b2446c8d1cfcfb02a28caa') in 0.000090 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime using Guid(c545241cf2e56ec4997d7677f01ef43d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '33784692978a98b3f74112cba69f9df1') in 0.000099 seconds
+Start importing Packages/com.unity.ugui/Editor/EventSystem using Guid(f525580684527b147b70cf94aaa70dbc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f1fe895a58b694cede7fdb93f25161c7') in 0.000094 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem using Guid(7f27709c942d91541be1fd6aa5cb3d78) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a81796f7b9ed8e4b9abef3169a685479') in 0.000094 seconds
+Start importing Packages/com.unity.ugui/Editor/Properties using Guid(cf97e54bcd5479a46bdbade48da047cc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '93283b3ba0193fa06f297b0355dc5254') in 0.000104 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Image using Guid(1091bc2ad06e3234aac2b2fa2841c09d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ee7a39f499e849646697cfe0cdcbd3c7') in 0.000100 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/RectMask2D using Guid(305ca32be1aa5504aa182f583895dfe4) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'be0c63787b3f5375cc4b57f02482ddad') in 0.000104 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/InputField using Guid(c16c54fe03afb5740bcc0a2a295cb79d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ad679f87ffc67fd793f363579c0dd21e') in 0.000090 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core using Guid(12c42068351bb084abde965d725b9887) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '808d13711fcdbea91a1cd3220db110ff') in 0.000096 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Toggle using Guid(e210c8bf2e9c6514d90a1bd77586af1f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '08bf140c674540e61f666c757c3ae2b8') in 0.000089 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Button using Guid(239dd6edc8e5cd14585c03e09e86a747) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ee90b11748de27de6b0ddd8de3df6283') in 0.000095 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/ScrollBar using Guid(43b1467da3d29ae4597a733828cdd84a) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4d5b08b25e96ec116eff87c8923fdc55') in 0.000105 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Graphic using Guid(8313ea704470a264295ec9e09aec6ebc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4952ef56393df37e1b49beb27bc8334f') in 0.000096 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/TextEditor using Guid(93effba7cf7f3824ab0bd048a27a9c02) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '49a82f5a4fb707605b20f381e0f94b7d') in 0.000098 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/EventData using Guid(b3cdabf2f1e76854d8aab5930305d70d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3141875ec970eedf0420cc2e96710f27') in 0.000091 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Animation using Guid(5472815444de2ce45bf2053a4af04b9d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c893877dfc3a4502f13d215e76c9d31c') in 0.000095 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Slider using Guid(850af9f3bf6d14143baf2ecfbf25db52) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b2a2604902c0ab3cd294fa14497c556e') in 0.000086 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/Raycasters using Guid(46646a5562f14984690c85ee7b946bc9) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f2ce0668868252995e31b3b904f509e0') in 0.000099 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/UI using Guid(e7689eda3a8b1a847a8b197dbe90d9a6) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9984eaddb9953f5b28038f2633f07da3') in 0.000094 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/EventSystem using Guid(98d14ab1acf42df4f88a0561822ac807) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7029449fdf4cdb25f1dd351404ec49a8') in 0.000096 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Canvas using Guid(b86b117346968ac4d9cc63e4385becb7) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1e34952b5537ca31a4ac8f30089ea4ff') in 0.000104 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/UnityEvent using Guid(e90cc37a5ccf4a44dbecc5b7172ec512) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '35ff9660c6588e69f2ccebae4eeaa31b') in 0.000088 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/InputField using Guid(2a28c2fab6b1bb745a844ef6b908e7ee) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4e858b0ef3f298f38d8c39924301fb61') in 0.000088 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas using Guid(9a3557da07c729b4eb774b8e30e157a4) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '2ef4ff638666f6cad0c5a3d2aa64db2c') in 0.000095 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Dropdown using Guid(bae197be297529d4fa735fbe7c91828d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '63a3f6e41ce8cc5bcb768d7d8d621562') in 0.000096 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/MaskClipping using Guid(2bc8a181dfd9de24388de89bb8db7713) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'bbc61587be4175640834d06e46137e0a') in 0.000097 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/ScrollRect using Guid(9bedab6f9886aee42b33e424bffdb640) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '84156a317adbfd2d5e9fa1f2bae2d7cc') in 0.000091 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem using Guid(ab93e1a81defc3243a6e9cd0df3cb443) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'e280e95fe648734cee2b7656c2858cd2') in 0.000096 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Slider using Guid(4cfe5ade9a1375e40aed87618b92bd12) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '80bbaed7c08eda5c77a94ece635212ca') in 0.000091 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/PropertyDrawers using Guid(bc9aa6d5a7945f34882c442e9e201537) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'aee1f24254c1ebb6877467694e35539d') in 0.000097 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Layout using Guid(cc313cc004395df4a9884390556690a5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'e0257f0efe7d67e7f45d3a7039947006') in 0.000086 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/LayoutGroup using Guid(2d9b6ff056b6f484ba6500aa8e06bcf3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'cfb42c7517c3cb1cc02221cbf22be49d') in 0.000091 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/UIElements using Guid(5dc64c943466a44498be3b620c743b45) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '2aaf55daa60970b1b0606e5953aaa22a') in 0.000091 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/InputModules using Guid(8e78f8a8575e4a04f8337a54e241cdc5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ac1570438f658fdeea30593369edaf0b') in 0.000091 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/CanvasRenderer using Guid(ae242449e9279d44789513b922d3178a) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7e198010123672e219bcc40a959f8e7b') in 0.000099 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Dropdown using Guid(1f71aeacc4a9f1a40b22a1a590331f6b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '51b958728bd1923df833ec35cb8f5d84') in 0.000097 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Text using Guid(4f9ac6e545d53f94b9f09c85b9576f36) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9382c25beda11786f6bc4d092870a180') in 0.000121 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Util using Guid(af30a361ab68260438b6ec3fb7e64500) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd2b14f58874bc8041a3a0b7ac72af4c4') in 0.000099 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/NestedLayout using Guid(efad3ddb7270ac241b9b1357ec5ee2f2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9a9ef684c80dd1f612b7edd0679db452') in 0.000111 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/UI/PropertyDrawers using Guid(24333a116497b144f9782b1160984b57) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '2bf21acd25b7b3b123679c418120064c') in 0.000085 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Utility using Guid(d63dd1a776d383248a21ec2a8a6e7868) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1cde6e285bfd3df0e77b50d88d1b058e') in 0.000093 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Culling using Guid(27ed3e221887b3544bd9d6505d4a789f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a808de1a9cab35908466ac9dec6ffe88') in 0.000085 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/SpecializedCollections using Guid(f8ed4321a98682942b9980996131cf26) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'fad8facbd735b4687b96ff8ad2966b4e') in 0.000085 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout using Guid(1999349e7f492c947bb6eb70f624382e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3642937669fb1c66e2c94f7e96b45e56') in 0.000094 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/InputModuleTests using Guid(7a892c920c8ad2848b469ec9579c5219) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1bb8fb660546b4a43ddf8af11fedffa3') in 0.000098 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/MaterialModifiers using Guid(7c6295db74da28645bf49db58b7c9c65) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f4815d69b29ec0165ec5679464a13a7c') in 0.000095 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/VertexModifiers using Guid(cfa73a847eeff06448bb50a8ac6a94e0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '86e1aca01dda60752ea76f53d55a2d1e') in 0.000098 seconds
+Start importing Packages/com.unity.ugui/Editor/UnityEditor.UI.asmdef using Guid(343deaaf83e0cee4ca978e7df0b80d21) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '2eeb21c175363eccb13dedaa68299338') in 0.000353 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/UnityEngine.UI.Tests.asmdef using Guid(e9745f6a32442194c8dc5a43e9ab86f9) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '311ae763825935aaa5da3a9150680168') in 0.000257 seconds
+Start importing Packages/com.unity.ugui/Runtime/UnityEngine.UI.asmdef using Guid(2bafac87e7f4b9b418d9448d219b01ab) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b60cb03738885a0fdf5c9378b72b96e7') in 0.000250 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/UnityEditor.UI.EditorTests.asmdef using Guid(7c04f0dfa9243c04681a55d90d3ff3fc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '173dcac11a0bc549477804e17099a150') in 0.000255 seconds
+Start importing Assets/Editor/SceneBuilder.cs using Guid(00468fbf3de0446de917145066b35ea5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9a01d8be8dbb6b916b93bd5c7dededa6') in 0.000497 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/LayoutRebuilder.cs using Guid(006633c8a6f4ae94aa9babf72234e1a2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '5c04b4901c081bd13a60e152baacdc15') in 0.000283 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/ScrollBar/ScrollBarTests.cs using Guid(00f9a68859b850648902e0c98c25b590) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '6fae510255a70ca304981e12f02d561a') in 0.000205 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/MaterialModifiers/IMaterialModifier.cs using Guid(20ff4283f687e044087714f82c4d6d3f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4724567d321198704519d19220397747') in 0.000255 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/HorizontalLayoutGroup.cs using Guid(30649d3a9faa99c48a7b1166b86bf2a0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '2cc88476a1b65ae1189e8500bd7fbc0f') in 0.000207 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Layout/ContentSizeFitterTests.cs using Guid(309b0604924786544a3786ec4073c5a1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '36fb4b2925e74bbb974d56b7a267bdcb') in 0.000239 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/LayoutElement.cs using Guid(306cc8c2b49d7114eaa3623786fc2126) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'fb3d34a54b0f96c250f78f57e84d0da3') in 0.000251 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Graphic/RawImageTestHook.cs using Guid(40c83ba6a1a64cb4baac27028dd1acc1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b696bad4293d236855823abc449f678c') in 0.000210 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Toggle/ToggleGroupTests.cs using Guid(50081206855385544a5ddd0e3b6ba9be) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f533992a3fd933159f6ed5851ecb4439') in 0.000224 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Toggle.cs using Guid(9085046f02f69544eb97fd06b6048fe2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7f5f1a80dc88bc2b27eeb93e090791af') in 0.000298 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/NestedLayout/SceneWithNestedLayoutElementsLoadScript.cs using Guid(a021b6d2ca2e9404b8a4d94343ecd068) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7efb37099e5211e6b9031a3d4c0beeae') in 0.000294 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Graphic/ImageTests.cs using Guid(a0bae4ff8f5baf64aad3b92b8aea0603) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9ae4735ba8cccb50a8e3c32ca1944900') in 0.000266 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/EventTrigger.cs using Guid(d0b148fe25e99eb48b9724523833bab1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8d0578785070447cdad77f93c1b03588') in 0.000256 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Toggle/TestableToggleGroup.cs using Guid(e0e4f43a3816add4c86c9671d7961f2f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c54bb8ad690c8d9b8a1c5ddabcc80304') in 0.000308 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/NestedLayout/SceneWithNestedLayoutElementsLoads.cs using Guid(01df650e1b86e9f4a8e2b5dc9782506f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c57e900c536da160be471a7e7f2de823') in 0.000251 seconds
+Start importing Packages/com.unity.ugui/Editor/EventSystem/Physics2DRaycasterEditor.cs using Guid(1143ae6bb91836f4a8f8ebfaabb9396d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '12ecbaed7a148c7c8ca343377d9c5cb6') in 0.000247 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/InputFieldEditor.cs using Guid(21d2d5d6901f2ca43a8015c60ada4e2c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '80665be714114360ccf297c22123c8f1') in 0.000645 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Mask.cs using Guid(31a19414c41e5ae4aae2af33fee712f6) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8c465553401f33fa0e70851cdaa4132f') in 0.000314 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/InputField/GenericInputFieldTests.cs using Guid(513613320b52fdb40a26dd5b73d89afe) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '86dde1ae015b97ff18fa06f8486d0e12') in 0.000278 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/IMaskable.cs using Guid(61a20120cddc53849bbc10fc805ffe3e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '51395d84bb0c7391c1768e828cb7c189') in 0.000249 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Navigation.cs using Guid(61d491d99e9292c4a81d7d01a74781ea) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '259ffa36c03d7f326d3a73532cb5d07b') in 0.000234 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/VertexModifiers/BaseMeshEffect.cs using Guid(718966f960cb50643986195e5fe953ca) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '0a75e1cb366bec591f0244caf3f193f3') in 0.000229 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Text/FontCreatedByScript.cs using Guid(812aaaefaab404448a3e4db49dfa5206) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'cae26f14e0e327665e121521b6e03b5f') in 0.000300 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/RectTransformValidAfterEnable.cs using Guid(811d999912a5f3f459a637aad029fbc8) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8658bb218c09515d51271bcfa4dd3f92') in 0.000252 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/EventData/BaseEventData.cs using Guid(91f495459b6e34f419ac123740d798b1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '5c271083451d220b4a44da6e3c77dbbf') in 0.000225 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/CanvasGroupInheritedAlpha.cs using Guid(a14a59f2a5c757e469c3e4e17b798c2e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'daa81ddf3dedad871113d6d8043d09f7') in 0.000222 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Dropdown/DropdownOptionsListDrawer.cs using Guid(b180d0cec21671c45a32a9ce99bff2f5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '39b8af41e745f9a9afe39118ce9a50bc') in 0.000249 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/EventData/AxisEventData.cs using Guid(b180fd8310805e44dbbef545d0231418) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '821dff6829d6eb8f66a7ad6ea6820370') in 0.000287 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/MaskEditor.cs using Guid(b10cb8fee5b39014d8a417bf413f5e5c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f7a82fae79a07e61dd98064c2fb8f2b6') in 0.000221 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/PropertyDrawers/AnimationTriggersDrawer.cs using Guid(c18288a8d31fc9043a807ee8a9f1ae64) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '38549e10c83f1e2a5fbe672b384154ea') in 0.000225 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/InputField.cs using Guid(d199490a83bb2b844b9695cbf13b01ef) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '669f638b96cf1d917fd77831271cb0b7') in 0.000217 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/InputField/DesktopInputFieldTests.cs using Guid(e1b0ab339722791498cc804831a17ad3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '53084661343cf0df908bddfa70bfc8a1') in 0.000289 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/VertexModifiers/Outline.cs using Guid(e19747de3f5aca642ab2be37e372fb86) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b2f069f1bbef96b994c7b8463295b4ba') in 0.000230 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/VertexModifiers/PositionAsUV1.cs using Guid(020ee4c1798a3d243a4b8cbfee6cac2d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '84c5a4e137e2f405fe4be9dc88c10d03') in 0.000215 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/InterceptedEventsPreview.cs using Guid(127023922adddf744b59fa7b0b0c3030) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '850bc654e05cef1221e208b2087cecaf') in 0.000221 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/ScrollBar/ScrollBarClamp.cs using Guid(32a4a0ea998dd6149937d2774781c436) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '227537ab191b9b3d3347db3c5a27c9db') in 0.000253 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/ContentSizeFitter.cs using Guid(3245ec927659c4140ac4f8d17403cc18) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4e9b1079e17761e95d6f62e14221dbc2') in 0.000247 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/Raycasters/BaseRaycaster.cs using Guid(426106349a0ff964fa4e7178c1d3a4f5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a840db47fa802d325710520d85eea699') in 0.000238 seconds
+Start importing Assets/Scripts/ChatUI.cs using Guid(429a4ecc83364442c8e56da9c5ad9fb5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c5a9644efe1655bb4768bf199c30e63b') in 0.000396 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/MaskClipping/RectMask2DClipping.cs using Guid(529fde071171dfd4e99d45ca81a3ac7b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '076b60f5b49e5aeac9c2436a17b249ae') in 0.000312 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Util/GraphicTestHelper.cs using Guid(621a76c0c3927aa45aba7d2ad0c8e1c8) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f4f8a4cf015d2ff8e23d088b86abd77b') in 0.000226 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/ExecuteEvents.cs using Guid(623c79a1e113b4941afdbfc88d19e8fd) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8c3c296f2c5d45dc3fb187658744ffd4') in 0.000218 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/PropertyDrawers/SpriteStateDrawer.cs using Guid(728d2c19676ea3743aaa087aa28c4a16) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '284fc137a389ff9fef1e72caa05aff01') in 0.000225 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Misc.cs using Guid(828075bc53f2de84982a943870529b7b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ecbc683df8cee1146fcdcab280d76851') in 0.000260 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/LayoutUtility.cs using Guid(82bf3f737dec0be43a60891958a8da87) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ce3be4f66f34b8a896708ce7c40b225c') in 0.000242 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/IGraphicEnabledDisabled.cs using Guid(928dc55e2c8c3ee4dad33b6d561cb6ea) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd5fb0b2743f10070dd90fd9f6dad8d1c') in 0.000242 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/CanvasScalerWithChildTextObjectDoesNotCrash.cs using Guid(13d161b14bb3ab74e8a9634e26fb7a5e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '48113129df1d1b3d19781a5ee98aab40') in 0.000252 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/RawImage.cs using Guid(1344c3c82d62a2a41a3576d8abb8e3ea) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '810723779170fbfe683f8cbd9b029a75') in 0.000291 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/PropertyDrawers/DropdownOptionListDrawer.cs using Guid(1385bc74f3945c943be16ecbb1381063) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3245adbe44cc696697ad3d3e31c3f32d') in 0.000292 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/TextEditor.cs using Guid(1336690ece4db2740b4ba38873e00dfb) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'cb2a6cd0c7b897ba849397d87244f27b') in 0.000238 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/InputModuleTests/FakeBaseInput.cs using Guid(138dbec4f8742654fbceb0a19d68b9c5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '88007b14ab7c69564b1f81060011d9b6') in 0.000229 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/FontData.cs using Guid(13cd966480ec3354bb318ee1aeccff6f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8abd228a4b22fbfaf85e094dbc4ea3f4') in 0.000234 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/EventInterfaces.cs using Guid(2359c66dee10c454c97f6aea84e3fe22) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '5057c9920e0e4be2b66f0527d119eae8') in 0.000256 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/InputField/InputFieldTests.cs using Guid(3371106faf8d06f47a73979a3c8d82a1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7a7e12ebef6648126fa1ff01a5299921') in 0.000223 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/RectMask2D.cs using Guid(3312d7739989d2b4e91e6319e9a96d76) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '497e9b61d943029bfd8c54ad482e20fe') in 0.000217 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/UI/PropertyDrawers/PropertyDrawerTests.cs using Guid(433d3b96b2a40a5479d3d7d8495882ed) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3d2a8cdceb695f24f3e58e98e12e9563') in 0.000223 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/RectMask2DWithNestedCanvasCullsUsingCorrectCanvasRect.cs using Guid(735d54f21944f834f931716514c87a84) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '63d9ffcc7c9bc92bde97373d5b1f82c2') in 0.000312 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/PhysicsRaycasterTests.cs using Guid(833143c443f979e44ae0b8ed899e3b59) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '5f99ef0941a957fd82da6bdb805b6ba3') in 0.000330 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/ColorBlock.cs using Guid(83088ba2132cbc940b7ca0c679a02b0d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd6d9c5ce3e3dcfff30535989824cf676') in 0.000301 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/CheckMeshColorsAndColors32Match.cs using Guid(9390296e78291b543b2f4a9761ef8139) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'db4ea7c3f8a232e09ebc2cb3e1df2dd0') in 0.000249 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/SiblingOrderChangesLayout.cs using Guid(c32df609537c54c46adf92992a673693) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '52dd0c5f0a05523fa70d2b66f0d59005') in 0.000228 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/ToggleEditor.cs using Guid(d36a7c7a1ed377c4b8008e53032d7dcf) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '879485f6a247b0fb872d9409d26b9d66') in 0.000251 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Toggle/ToggleTests.cs using Guid(14427eecd0bccea468addc3492aaef57) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7a86dfe4b6386b56b950689fb3088bb9') in 0.000226 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/RectMask2D/RectMask2DCulling.cs using Guid(4402dcee6e9969549bf5b33f11533208) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ca75c4323ab50961293dbfcb03f5dce2') in 0.000301 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/GraphicRebuildTracker.cs using Guid(445cdcfc747eba94288b97f5869aa2fb) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '03dd077ecc7fbd0ffd889f878b2633b1') in 0.000441 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Utility/VertexHelper.cs using Guid(c459424081436584c8cec10767f9ac38) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '794aa8856757563f1614725c7e853cc4') in 0.000404 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/Raycasters/PhysicsRaycaster.cs using Guid(c49b4cc203aa6414fae5c798d1d0e7d6) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c564bb086de5400a928e88350ad3cd15') in 0.000325 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/CanvasResizeCorrectlyForRenderTexture.cs using Guid(d4dbe29df1b294c4f8f0a2fb529d19fd) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '96e3ffc3d4a4201f8b5e92d492ed0586') in 0.000417 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/InputModuleTests.cs using Guid(e4e290d31ab7fb54880746bb8f818e0d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '67407c5f40006284386c01d87af6be0b') in 0.000341 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/InputModuleTests/PointerClickCallbackCheck.cs using Guid(0573713975c6b8246b7544ed524ef1dc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '0b9ab91f3c960a38c375d6b9f562e7c9') in 0.000274 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/DropdownEditor.cs using Guid(05f582d4fbc8e0c40afccb76bbbe0935) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '333374a2a5faee0ba9393c7588b39b54') in 0.000253 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/InputModules/BaseInput.cs using Guid(1511ccae7919cfc46b603b9b337fdc94) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '39502bbedf068a6c31248183c6025742') in 0.000290 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/SpriteState.cs using Guid(25b01819c6e1649428db2a9b274cf364) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9aa86c0be502a563e3befe0d892c651e') in 0.000259 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/RaycastResult.cs using Guid(3550d8ec6f29ab34d895ae9a43d560c2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '6004657ae86ba5710b35a8d27a8f3c6d') in 0.000236 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Canvas/CanvasElementsMaintainValidPositionsWhenCameraOrthoSizeIsZero.cs using Guid(35a0d10199de49f4db0128003bfd3bda) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '824b5df97fc4bfcb67246eb92c9c3d40') in 0.000225 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/ContentSizeFitterEditor.cs using Guid(35d143b352678294ab0f5feb97b67f88) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '04133f9e88ed2f27fc594ae783d1d1af') in 0.000231 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Dropdown/DropdownTests.cs using Guid(358a618bc6bd9354d81cc206fd2ed80e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8e03f173f71287780fb2ceb63c55687c') in 0.000272 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Canvas/CanvasWidthAssertionErrorWithRectTransform.cs using Guid(4585b5feb801bdb44b0e5eafdd95a3be) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd00e51662f06f370955eb73e791f730b') in 0.000216 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/EventData/PointerEventData.cs using Guid(75df57ccb1e44c64085399277405e1ca) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b02904bdc3352d58b322768895f8ba10') in 0.000241 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/CoroutineWorksIfUIObjectIsAttached.cs using Guid(8573c56c34e616248a3881b2c56280ef) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '29cbbaf7b6e462d0fa52ce92f60cfe16') in 0.000218 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/VertexModifiers/IMeshModifier.cs using Guid(85f3c3a3c2623cd4da1661b0479e2ef2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '22d07939b883489ce34b6d3d22ebf951') in 0.000275 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/HorizontalOrVerticalLayoutGroup.cs using Guid(a5c214e5846a99242b348c37e49b2f59) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd67371c21554a156a2dda2b6d6b38218') in 0.000254 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Image/ImageTests.cs using Guid(a598580d0cfc7224ebed8d2b627d9e00) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '6cc0cdedc6cadef6e42b3c564017a510') in 0.000230 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/TextEditor/TextEditorBackspaceDelete.cs using Guid(b5f31b7e60df3e64796fb7ab6f54f489) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '2dab37bdf4b7dca456a4ac47bf901744') in 0.000282 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/AspectRatioFitterEditor.cs using Guid(b5f70efd2f7b286498ca6c00adbb4a13) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8594cd6f1bde394dfee63b792c7225cf') in 0.000309 seconds
+Start importing Packages/com.unity.ugui/Editor/Properties/AssemblyInfo.cs using Guid(d51458b261e0ecc4a98904e53924dc1c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '286cc99b6bf58b9589c5baa5afd65c28') in 0.000340 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Util/UIBehaviourExtensions.cs using Guid(d548f82e7e9c0ed49ae5b4a5eecfb2f7) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '22794c712adc69ec096eea891dd90012') in 0.000349 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/ScrollRect/ScrollRectClamp.cs using Guid(d56dbb97f857c8040beef6dd1bfc97df) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b8a331733ac70192caad2cdaad476b89') in 0.000312 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/InputField/FakeInputModule.cs using Guid(16c6414b77a90ff4098767dce485c495) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ad128a24b064ae987154165b0afea5ac') in 0.000302 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/RaycasterManager.cs using Guid(26570be2af04195458e6f1ac1f5c48e0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '437a8dfc977248525878851091da5c52') in 0.000294 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/SpriteDrawUtility.cs using Guid(260b531edc40677429c0198d6961e448) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3971ad6924f8343bd470acdc794695b0') in 0.000310 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/ILayoutElement.cs using Guid(368d3a0498e78014da578aa5f45e2797) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c98ed3d006292d9656f7d3fb22cca15e') in 0.000344 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/Raycasters/Physics2DRaycaster.cs using Guid(56666c5a40171f54783dd416a44f42bf) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8e258d4aec7a5b02e7dff75f03366db5') in 0.000330 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/ScrollRectEditor.cs using Guid(56ba6cb160ebfc042b48224bd1a35614) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b27ca50164cfb65e07009fbe1189a2b6') in 0.000322 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/LayoutElementEditor.cs using Guid(7693972390a4ed841a986c0c452c1058) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ece5d2c550223b38ae1357588521701c') in 0.000315 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/EventSystem.cs using Guid(76c392e42b5098c458856cdf6ecaaaa1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '379e918216e23ea0a222219aac28a41e') in 0.000352 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/InputModuleTests/DragCallbackCheck.cs using Guid(76c82729ad712f14bae1a8a279c52ac3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '81cc939f3f3710c5377f487662cfc7cd') in 0.000317 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/AspectRatioFitter.cs using Guid(86710e43de46f6f4bac7c8e50813a599) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3d339353cfb91f9b37abcd9a89630c5d') in 0.000310 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Graphic.cs using Guid(a6238e9452bfc704f82ff36791fe1a45) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3693b61608a83ec4776e2257e25bc2e6') in 0.000249 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/PrefabLayoutRebuilder.cs using Guid(a62706dc421fc9b4fa368a8050a930f7) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '325c414e3055b4a1f013898dccae059e') in 0.000222 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Graphic/MaskTests.cs using Guid(b611b0a598aeada419afa9737807c598) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '0619b1ca133779e351a2c646f46df3d8') in 0.000334 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Culling/RectangularVertexClipper.cs using Guid(c606041f02fc7d542b1429806872292b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '13f2b5ce77c6d15f9d6b93de62c88428') in 0.000276 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/AnimationTriggers.cs using Guid(c67ac6e40bbb6fe47a095b949b609ce0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3bfc3ca204f2e51f715cda9d83fe15b6') in 0.000253 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/RawImageEditor.cs using Guid(e6413f4090046814d802ddbff9890878) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b85c06e8ae2116a4eb0c0fd39acc4bc3') in 0.000231 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/GraphicRaycasterTests.cs using Guid(e6323ebef616fee4486ee155cd56d191) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a948449ceca14b8a1dcf7edaeb05e3d5') in 0.000315 seconds
+Start importing Packages/com.unity.ugui/Editor/EventSystem/EventTriggerEditor.cs using Guid(37b164a494cd92a498526852ecceedef) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ac7f3ef6e5555c7b33dff560f13f143e') in 0.000256 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Culling/IClipRegion.cs using Guid(371b6b9c8adc50745ace66a6fdf67481) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3c416dc81a955c44434263848dd88808') in 0.000258 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Slider/SliderRectReferences.cs using Guid(373b4c78c0396334288fa5ff8e7b7350) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '17ae6b4299ae811e1b7d078a54332ecf') in 0.000245 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/ButtonEditor.cs using Guid(472a6f18dd2f97c41af72271d22db869) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'cfe993c68b6c35f7575357c009c14833') in 0.000284 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Culling/Clipping.cs using Guid(67e3583b91179094094c6a188b232262) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '2eccbcbc74a5ddcfdb5a5997e2585f56') in 0.000249 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Slider.cs using Guid(67db9e8f0e2ae9c40bc1e2b64352a6b4) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '99da924a6f7ec68fa8731583a00a0c0e') in 0.000231 seconds
+Start importing Assets/Scripts/AvatarController.cs using Guid(874dd506ee21b4d8abd93f5668e1f0b9) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '98be6956b3c3b81dcfdabd366d9c4074') in 0.000389 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/UnityEvent/UnityEventInvoke.cs using Guid(977190a4db46de442aed27279d247df4) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '316de5f65e0cc8e6d304d5af1fdb5381') in 0.000285 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Image/TestableImage.cs using Guid(9713795381722eb43b623dffba25d115) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd2614a96b3f19bd77e65444f5b91912b') in 0.000239 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/MaskableGraphic.cs using Guid(976acc75bfafe594cb01142ba21947be) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ee0cd6ae79b7d60f7ba03b20e2e532f4') in 0.000296 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/ImageEditor.cs using Guid(b759d61544e231c41bc88530b1d94ee8) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'e9195fdd64521e938fbb7b14f96ab8bb') in 0.000266 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/ScrollbarEditor.cs using Guid(f700f31b2e40d7f4bb69753fdbbbc2b5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '107d533ef6fffee16e6a76f3358bcb2e') in 0.000231 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/RectangleContainsScreenPointTest.cs using Guid(08a8587e5f07fb64f88a0cbe2ebe327e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '2d88f58b31b363a0186735a277dcc86a') in 0.000320 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Layout/LayoutGroupScaling.cs using Guid(589533fb2413e3e4fba7df13a6a75bf2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7d0ffcca4e19c54994c494925dee85ac') in 0.000280 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/RectMask2DEditor.cs using Guid(58e7d991249847640b1534192721c5ea) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b2076a0b28f1a3b12abcbc9fd3991e3b') in 0.000316 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/ScrollRect/ScrollRectStableLayout.cs using Guid(7883cd788d83a71478342eef943e8150) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'aa22f5ba94bf3d02124af2318b02cdd4') in 0.000262 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/SpecializedCollections/IndexedSet.cs using Guid(a8604e8f13b3be84b8bc0c1507d8f3f6) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'da09ef2d179649a4fe323b2a9e8a8249') in 0.000241 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/PropertyDrawers/ColorBlockDrawer.cs using Guid(b825fd5f27403b84f97726dd9c5a5e6f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd5b46d791257b5aaa59ab73e6e865c5b') in 0.000229 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/GraphicEditor.cs using Guid(c890977a36bfdc849872b9337ab89098) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '0b74c165c5f370f331d89c811d2730cb') in 0.000249 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/CanvasRenderer/ChangingHierarchyOfCanvasRenderer.cs using Guid(c825bad77a42dd341a8f0a5ef9cd5f4c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1d8e6d097c168cae81198aa281e08674') in 0.000224 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Graphic/GraphicTests.cs using Guid(e88a766c2b8b47841936c136f4afbba9) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'cd325c9d43c1a43c4cdf9abad3b1c953') in 0.000211 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/InputField/TouchInputFieldTests.cs using Guid(e89ff5e7c669f70409de18c9948164d4) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '5cb1723cea0501ae2a976543885635c3') in 0.000210 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/MenuOptions.cs using Guid(f867743975592a743a3581ff042bcc25) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '6948a2d5744e3b3114db04645b92c3d6') in 0.000240 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/InputModuleTests/MouseUpdate.cs using Guid(19c6f364c1e81cb4f829a057824639ad) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3a9178631297a5fae9f315a308768c38') in 0.000247 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/TestBehaviourBase.cs using Guid(393b15da08c88194dbbcacd6ee15a89c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '83f75e9f8dccf4cdd4aa59fff6547a8c') in 0.000210 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/FontUpdateTracker.cs using Guid(39ab466162988eb4f83443f911bbf5c8) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '113ce8053778e6ee8b07498e130fc4e3') in 0.000223 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/SelectableTests.cs using Guid(39dcddcb5895328489c92214aa73e3bb) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9554b4f97a1587a14d168bab90b6c40a') in 0.000217 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/VerticalLayoutGroup.cs using Guid(59f8146938fff824cb5fd77236b75775) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4dcb3deda044ad31b583b9cddd436a3d') in 0.000281 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/GraphicRegistry.cs using Guid(69e3979b7029e8a4da2d96b714ba5c3a) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '5266356ec7a4656625374e10ad81d755') in 0.000232 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/StencilMaterial.cs using Guid(69ae55f76840b2849ba56cfb53a17df0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '913b1e2a943662fcf61c2372e6a68c45') in 0.000216 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Canvas/RootCanvasTests.cs using Guid(798968d841703b54bb9d08b1da6bc52f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '75d01835ad2562515ded0a9abf4042c6') in 0.000218 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/LayoutPropertiesPreview.cs using Guid(794f3951c48395848920fdb593a2ae38) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'eacf9655bf3b898342116465296b9893') in 0.000274 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/SetPropertyUtility.cs using Guid(b9ba34e0b1884454fbc4257260e22b64) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ace0959ef76ae94a1badc079f9a87f39') in 0.000240 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Layout/GridLayoutGroupTests.cs using Guid(b9eb962217e00bf4fbc734e109991fca) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '794d980c82437cdd7850b6caf6c5be29') in 0.000214 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/ScrollRect/ScrollRectTests.cs using Guid(d925cabd9ecd5074aadab0726b96c38f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ede79064e8520463370427026b484e72') in 0.000213 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/LayoutGroup/LayoutGroupArrangement.cs using Guid(e9a32780b69dcdb438da3e3f43202f54) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'cd60be06d43c918aa441da527cb4199d') in 0.000205 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/SelectableEditor.cs using Guid(e9253e696cd45794d9aec6d4de366b6e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f1751620508edf78ce39f65197ae7e79') in 0.000264 seconds
+Start importing Packages/com.unity.ugui/Editor/EventSystem/PhysicsRaycasterEditor.cs using Guid(e976a5e755c7016418f66e15223c1b90) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '68d39307cbb820e4cf0fa15d327cddf9') in 0.000217 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/ScrollRect/ScrollRectScale.cs using Guid(e9cac674d67385249b2805670e618c24) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '461249e3ec79a81720563693021e98e5') in 0.000207 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/UIBehaviour.cs using Guid(0aaa057ce5566e940b18a0ccd0344693) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '0776c19390cb8ad1573102823992e804') in 0.000351 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Image/ImageFilledGenerateWork.cs using Guid(1a70a790a43cd0d4a96f75746841f764) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1a8817f6e07f7dc3b79aacc36a765f46') in 0.000344 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/ScrollRect.cs using Guid(1aa08ab6e0800fa44ae55d278d1423e3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '6d7ce8e025a33e4827b486b97ab2e818') in 0.000312 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/BridgeScriptForRetainingObjects.cs using Guid(1a26e19d51cbfac42a02631ad1f9e39e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd46180bf5348af037b61a77b3a0d624f') in 0.000280 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Scrollbar.cs using Guid(2a4db7a114972834c8e4117be1d82ba3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '70e28e3050c6af38ecdfc7c8aed132f2') in 0.000240 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/EventSystem/InterceptedEventsPreviewTests.cs using Guid(2aff4fada0516c64a8537a20bfe1b699) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'e7f840e8fbdaa970166335e3b0aa09d6') in 0.000256 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/EventSystem/EventTriggerRemoveDuringExecution.cs using Guid(4adb1f65bbae8004a88d8f5bc3523298) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '732560e592e349da0b56c469c9632e0d') in 0.000260 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Layout/HorizonalLayoutGroupTests.cs using Guid(5af3322745e78aa488fca5a2090f8755) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '81b7dd5025d9540799164fbec82cbf0a') in 0.000276 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/InputField/ContentValidation.cs using Guid(5a2e98b03511c6f43bc645238cd40857) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '999f19b6f3e1cd5eea29e0013356565b') in 0.000278 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/GridLayoutGroupEditor.cs using Guid(6a981cd1456bec84b86e1c66773f57f5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1d40cc611743e9c198e05a07e6f42b22') in 0.000241 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Selectable.cs using Guid(7a98125502f715b4b83cfb77b434e436) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9b1160db41df82b5439d7cbb2f71c199') in 0.000259 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/UIElements/PanelRaycaster.cs using Guid(7a79c4e23d4d4b64bfa5fa9e6671a460) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a2b1c9dd3010eb7339fa1e0a3b5735cb') in 0.000306 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/UIElements/PanelEventHandler.cs using Guid(8a410b213209442fb15a69799f0240a5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '076e0275eba05cd4d164a64254693a60') in 0.000286 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/GridLayoutGroup.cs using Guid(8a8695521f0d02e499659fee002a26c2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd9057d2a83a077cc965f34aac9f3cad7') in 0.000286 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Layout/VerticalLayoutGroupTests.cs using Guid(8a4b6301a5afaec4cb87d21383ceb0b3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '764d9f5327dcd1e587833cacba8f92cf') in 0.000267 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Util/PrivateFieldSetter.cs using Guid(ea944378afa086f438b3352ad7b0e835) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b2d6d61fa0ebd6599c9ff08df91bd58b') in 0.000228 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Util/ExceptionUtils.cs using Guid(0b2706df6fdff50448f84a3f6629b40f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'eab1cd0fd8b81dd8e60d4fe687b0041d') in 0.000241 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/RectMask2DReparentedToDifferentCanvas.cs using Guid(2ba506934dc2ce14591a37f3b00dca92) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '5a831ada194cdd6b6eeeb111f3074dd3') in 0.000222 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/CanvasScalerEditor.cs using Guid(3bce033ee26244e419b3bb3bba95a37d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '83dd977aad8bf43df023c23f2b0ad7cf') in 0.000228 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/InputField/CharacterLimitValidation.cs using Guid(4b8be68229770db4ea3c78ab0d854325) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a31b46dd1c889e14b4570bb52422c8a8') in 0.000219 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Animation/CoroutineTween.cs using Guid(7be84a49bb2cd7e4a9ed097ba22794d0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b0d8c4fca8f323066750e7a4945deb48') in 0.000255 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/MaskUtilities.cs using Guid(7bd96d76711152648a736c4d28d865f2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ee6e1207fde14a5c690978bc1faaadfd') in 0.000250 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/HorizontalOrVerticalLayoutGroupEditor.cs using Guid(cb319974ad8ebd44aa1e1fbb02640b5b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4a0de16b7fbf41d31d312d2f96698893') in 0.000220 seconds
+Start importing Assets/Editor/BuildScript.cs using Guid(cb89140d23b3042d0a04c777a0e29545) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '4ce84f8dd2450cc5b0d984cafddd2100') in 0.000413 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/InputModules/PointerInputModule.cs using Guid(cbab8835092323a4389f2dc7d8f6c781) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'e4a285fe4f4fb467a5f05d1aa2cf69aa') in 0.000275 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/LayoutGroup.cs using Guid(cb7c939a806f03341b682c180dc13f08) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7d52df77e6e57ea8dea7b63442d42cc7') in 0.000268 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/CreateSceneUtility.cs using Guid(db339ef553721e94999125c0b9f909dc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8389e5a054a6b4c61c3d199dfe880e9d') in 0.000217 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/EventHandle.cs using Guid(db7dd43fe1278a9459cd6036f096b91d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'e8f1bc1b139568e22c45757caaa2f6c5') in 0.000214 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/InputModuleTests/PointerEnterCallbackCheck.cs using Guid(eb4fb871430ff484e9ee3850946c504d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '08f5b93ecefef321764cc03a5b244002') in 0.000247 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/RectMask2D/RectTransformPosition.cs using Guid(fb660d86885d89a499a31c6ab6f26269) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '657dcebe36677f5751630bb6582dd196') in 0.000235 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/PropertyDrawers/NavigationDrawer.cs using Guid(fb27f3049fe06c246803a4a4c5b7fda3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '6531edfe1506edbaf996ad2f608b3d98') in 0.000233 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/RaycastSortingTests.cs using Guid(0ca2545d76d1fb34fa45a9f1e432d259) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'dd9d6f4dd00e3916bbeb2986e44e9a96') in 0.000208 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Layout/CanvasScaler.cs using Guid(0cd44c1031e13a943bb63640046fad76) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8f04981e71e8731b76704ae9194bc1c9') in 0.000216 seconds
+Start importing Assets/Scripts/CompanionClient.cs using Guid(0c96d341e184e4c6d94969c2680ba6ce) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '61ba1700ee63041cb4230d83a8a87081') in 0.000459 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Canvas/UISystemProfilerAddMarkerWithNullObjectDoesNotCrash.cs using Guid(0ca81982e37e893498abf804c12a22c7) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '394390861dee5342b9467a3185834186') in 0.000221 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Graphic/ToggleTestImageHook.cs using Guid(5c004b1354944164fb076276c289afc1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'cfd66e9c8088172075afa7bb9fd04043') in 0.000217 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/NoActiveCameraInSceneDoesNotCrashEditor.cs using Guid(9c21cfda3336137438c3001d40564be0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '783c0d4e71035f13596bf8a40a01bf1a') in 0.000270 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Graphic/NavigationTests.cs using Guid(aca0de4e74f6cdf41a449805f345a4f5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7afb57fde5fb090537c7f87dcebb08f2') in 0.000305 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Graphic/RawImageTest.cs using Guid(acfa3573efc38c844be021fdaa8cf8a6) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '0ef52ca30514eef3bb730d64ff57fc2e') in 0.000315 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/SliderEditor.cs using Guid(bc98484caab3b6d4facbcff38be93380) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '103b23a11b9336401d73adefc50e95d1') in 0.000317 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/SelfControllerEditor.cs using Guid(dcf00682bef4d264d84a5c92c8f5a40f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1cc451ec43a5f4abbc06124fa06be878') in 0.000328 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/GraphicRaycaster.cs using Guid(dc42784cf147c0c48a680349fa168899) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b7687e7a35fa9aee9d2ef6ea5ac3fec6') in 0.000308 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/CanvasRenderer/ParentCanvasIsSane.cs using Guid(dcb49b07db5e5f64e876b498105314f1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '86fd43e1ec7d0afe052fe847307ae87f') in 0.000275 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/CanvasSizeCorrectInAwakeAndStart.cs using Guid(ec35c13a8280a8d4e817bc4afd8a95de) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8c57799027e382b2986b6aa61bcd4411') in 0.000216 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/WrapperWindowFixture.cs using Guid(fc31799bd6dc1f74a8adfee1acd05a9b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a956ca45e770fdc0f1bc88877be074a4') in 0.000215 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Slider/SliderTests.cs using Guid(fc34cd6ea308f3940a729e1a44cd0e82) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3989130f63e4e4cb92c7ee6f8d46147e') in 0.000245 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/NestedCanvas.cs using Guid(fc8d686a4c18b8d49bb1db4150de0459) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c13e06e600b84f5881c9dc3dd7bffb33') in 0.000233 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Utility/ReflectionMethodsCache.cs using Guid(fcae021c30eccf74790a4e816ba97c19) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b169e13414673ef488ad00195d51e272') in 0.000227 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/TextEditor/TextEditorTests.cs using Guid(0dc62a5955cf04ec298a2c3ca4b2edf2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '59f0d2d672430020885550cbf9dda1a7') in 0.000226 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Dropdown.cs using Guid(0d0b652f32a2cc243917e4028fa0f046) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '7ca7612a2a6b2a1a8b2b864c62fa9375') in 0.000269 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/InputModules/TouchInputModule.cs using Guid(2d49b7c1bcd2e07499844da127be038d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '2bd0262870387ed4cc2652b7b123a8a8') in 0.000260 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/GraphicRaycasterWorldSpaceCanvasTests.cs using Guid(3d42c4854f9093e409cd90c00ef26de0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a05db5b27cd58e2f740c3572582a4f08') in 0.000258 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Util/ConcreteGraphic.cs using Guid(4d31e19fd539ac54c8d9151da43683e9) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '84483f5ea25904d680df6547e2adb98a') in 0.000242 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/MoveDirection.cs using Guid(4d2250412b81fe34abf39f246e274479) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'dac65865712e58644589324be397fe1c') in 0.000227 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Util/ImageHook.cs using Guid(5da88f348abcbd94585671a69c672781) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'fa93a2d1308d76aa2ec1469d9a01e25a') in 0.000324 seconds
+Start importing Packages/com.unity.ugui/Runtime/Properties/AssemblyInfo.cs using Guid(7d7bd4bcc815cfb44b9990c29dabdb9f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'fd3342071d2c80e7e168e354879c56f0') in 0.000299 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/InputModules/BaseInputModule.cs using Guid(1ea10891dd782154ca0fb67bce9e6f72) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd6f787afe5d11add06cadfdc90fae242') in 0.000324 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Button/ButtonTests.cs using Guid(1ef2923b9c5521948a04299da53ae750) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '80a0ad74d3ca79f1a0d9a0d4ac7f63f3') in 0.000301 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Button.cs using Guid(4e29b1a8efbd4b44bb3f3716e73f07ff) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b2a43fe96c188306b578669fb43378b9') in 0.000375 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/MultipleDisplayUtilities.cs using Guid(5ebeb75bd91642048bb3f6c1939fde66) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '0302882b61d4c20d3793826fe2daeee1') in 0.000331 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/NestedCanvasMaintainsCorrectSize.cs using Guid(be07f70ee67e6d74e851a9333719bbb6) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'e545996af0939dde5ad42c347b8a70c3') in 0.000308 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Layout/AspectRatioFitterTests.cs using Guid(be1b04bc4d8a415469493848e6501020) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '324c1dded66ef4a755bddd532c353aad') in 0.000278 seconds
+Start importing Packages/com.unity.ugui/Tests/Editor/Canvas/AssertionFailureOnOutputVertexCount.cs using Guid(bede4033d9f359b41878c4cda6a910b3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'cbd3bf16a1d03481d6e637139529bad9') in 0.000328 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/IMask.cs using Guid(ceb629fc661813d40986b4abbefe72c6) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'fb22cae3985473a56c9f4160ce1ef932') in 0.000296 seconds
+Start importing Packages/com.unity.ugui/Editor/UI/PropertyDrawers/FontDataDrawer.cs using Guid(fea12beeeb5a7a448b5e60f50e40975d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '36f698c7ff56d464196ea6edfb1ef752') in 0.000323 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Image.cs using Guid(fe87c0e1cc204ed48ad3b37840f39efc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f1588991bb1293c47b13f7def7725b58') in 0.000295 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/ToggleGroup.cs using Guid(2fafe2cfe61f6974895a912c3755e8f1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '14a0cda88318387e9c4dd3ce5b4ce82f') in 0.000329 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/EventTriggerType.cs using Guid(3fa274f26b1574c40b949e114327022e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '08b0fe4134dda0efbc37ccf55a8a7661') in 0.000320 seconds
+Start importing Packages/com.unity.ugui/Runtime/EventSystem/InputModules/StandaloneInputModule.cs using Guid(4f231c4fb786f3946a6b90b886c48677) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c95f919feeac3d790dfcc1c2421f8006') in 0.000290 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Button/TestButton.cs using Guid(4f5ed95515938d14189b094f8654d0bd) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'b9f0e1cf7dece212dc42d2cdf9809e10') in 0.000290 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Text.cs using Guid(5f7201a12d95ffc409449d95f23cf332) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd98f5ec37a322c6f33e4bdd7dd3b4864') in 0.000261 seconds
+Start importing Packages/com.unity.ugui/Editor/EventSystem/EventSystemEditor.cs using Guid(6f72aa6eab9392548b9e9d92eb6b2ef8) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd51e63cb6872892596ff03d4f6d8589d') in 0.000275 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/Physics2DRaycasterTests.cs using Guid(6fb761a492f57d84586a8264df7b3cc0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '29e5358ba7967be8dd062ef51b6d4752') in 0.000218 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/Culling/ClipperRegistry.cs using Guid(9f1026265f8e3d54fb6e9f082c43debf) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'fd94420c8ce3a858520431a3ba2f0950') in 0.000217 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/EventSystem/InputModuleTests/PointerExitCallbackCheck.cs using Guid(af94bd3a805f27e42ab86647265be74e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8302ddb7f313a157d823e895aec5612c') in 0.000225 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/DefaultControls.cs using Guid(bf87e20fb5440ec498f441167b5291f8) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a8b50e5a5c497ea849fbdbdee339dd78') in 0.000244 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/CanvasUpdateRegistry.cs using Guid(bfb788a43e03363419155b8af77da971) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ec6a6e24927c146a9eddd16c509c29a0') in 0.000231 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/VertexModifiers/Shadow.cs using Guid(cfabb0440166ab443bba8876756fdfa9) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a95b4ca3f5df89b9a5816f6f7859ef43') in 0.000228 seconds
+Start importing Packages/com.unity.ugui/Tests/Runtime/Canvas/CanvasSizeCorrectInAwakeAndStartScript.cs using Guid(df1ba932d4ce4534e97a0f10c85cd3c9) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd0188aa775b32f01f0800cc00a4525b1') in 0.000214 seconds
+Start importing Packages/com.unity.modules.ui/package.ModuleCompilationTrigger using Guid(51fa60bb2bd1e5bc74e8cc95a7bfd5b7) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'de6b732927334cdcd0a160fab7e0c0ba') in 0.409367 seconds
+Start importing Packages/com.unity.modules.unitywebrequest/package.ModuleCompilationTrigger using Guid(d2ec2d1228c8e67cdd913cb5609176a2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '172c58f0c21bf4c946e0b186250e1d67') in 0.000372 seconds
+Start importing Packages/com.unity.modules.audio/package.ModuleCompilationTrigger using Guid(042dc296246916648e55a43d0eeb2036) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'be05e67044c0e17bd077fbc81e6daf4f') in 0.000241 seconds
+Start importing Packages/com.unity.modules.jsonserialize/package.ModuleCompilationTrigger using Guid(e6a135e3ea9cb46795d1b0e05ac3e1e5) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9ea15046aca71692d8a4dc5833bcdd5f') in 0.000205 seconds
+Start importing Packages/com.unity.modules.uielements/package.ModuleCompilationTrigger using Guid(8a752aaaadd2410dd9a84e01c1bace9f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'f47c08d8297413b7bb65b64358c8d75a') in 0.000188 seconds
+Start importing Packages/com.unity.modules.animation/package.ModuleCompilationTrigger using Guid(db8e609a39b9b231fccc54e5fa4cbd1b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c19e35bc818eacdec0d71fc29b6f419c') in 0.000166 seconds
+Start importing Packages/com.unity.modules.physics/package.ModuleCompilationTrigger using Guid(5c1ee4056d0ac7ad3c5a16597fcaa38a) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'e7d8d6b430389f69a13032c5a4e700b5') in 0.000161 seconds
+Start importing Packages/com.unity.modules.imgui/package.ModuleCompilationTrigger using Guid(be13c398521e3c1ad21fb9da30ab2ab6) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'fb0254cf6fb92f161fb370419b870ba2') in 0.000171 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Native extension for OSXStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.087 seconds
+Domain Reload Profiling: 160ms
+	BeginReloadAssembly (44ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (2ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (8ms)
+	RebuildCommonClasses (12ms)
+	RebuildNativeTypeToScriptingClass (4ms)
+	initialDomainReloadingComplete (7ms)
+	LoadAllAssembliesAndSetupDomain (6ms)
+		LoadAssemblies (22ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (4ms)
+			TypeCache.Refresh (3ms)
+				TypeCache.ScanAssembly (1ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (87ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (51ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (1ms)
+			SetLoadedEditorAssemblies (2ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (2ms)
+			ProcessInitializeOnLoadAttributes (40ms)
+			ProcessInitializeOnLoadMethodAttributes (5ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (1ms)
+Start importing Library/BuildPlayer.prefs using Guid(00000000000000005000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '1d2399cfa7f39703e94ecc115c6bf35d') in 0.008894 seconds
+Start importing Packages/com.unity.modules.jsonserialize/package.json using Guid(40bf3cec17fa0b49fe04443c8332d638) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9580b3dbb5508c17ba287ef6bcde1881') in 0.000475 seconds
+Start importing Packages/com.unity.ugui/README.md using Guid(e0ae6629cc70b514889df37fccb76832) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '127835ff37b26214b63af60619ac1f3f') in 0.000299 seconds
+Start importing Packages/com.unity.ugui/package.json using Guid(319b8889f363f5947acf209c17a94149) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'ece755b782d99bdc6631594476f6dd26') in 0.000239 seconds
+Start importing Packages/com.unity.modules.imgui/package.json using Guid(42fe78c8fe682715a2cb531422e6ccb3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '5cd169fa2ba2536f7e6340a9829f7ac3') in 0.000231 seconds
+Start importing Packages/com.unity.ugui/CHANGELOG.md using Guid(c851bee4305bddf438cc6ffc515991ce) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '0f52373eb7599a8ef53a47d53b3535ea') in 0.000234 seconds
+Start importing Packages/com.unity.modules.audio/package.json using Guid(e9df95f53f1c1d0c9199e235d6c42b50) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '74041e2e0894baeb359ce0f63e242b0d') in 0.000243 seconds
+Start importing Packages/com.unity.modules.physics/package.json using Guid(1a4266815e998967becf686f9c71f0a6) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3cf6dd838098b7ee713ffcc53b7eaaf9') in 0.000324 seconds
+Start importing Packages/com.unity.ugui/LICENSE.md using Guid(4d3d51749e989f747b2674e0b4d9b3d7) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '63c79248660561cac2f972f941c99088') in 0.000220 seconds
+Start importing Packages/com.unity.modules.animation/package.json using Guid(7ef8348b8ea834d7e1bc214b07f7fb87) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '8a6e815dce8ea89a6e09fde8ba102064') in 0.000214 seconds
+Start importing Packages/com.unity.modules.unitywebrequest/package.json using Guid(3fdd83b151eb8d25c5e2f82fc39dcb04) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9579ee4ff32681411f21070ebc35211a') in 0.000246 seconds
+Start importing Packages/com.unity.modules.uielements/package.json using Guid(4f0f9b9f3ed97ad2b9ba8f1a8e4666c2) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a9fe8c18ea86eb1fb21701f31ed5e951') in 0.000282 seconds
+Start importing Packages/com.unity.modules.ui/package.json using Guid(bfd567a3d1631a761bca9e99fa53d86d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'a982fc6a6205a49d66eb0846a4cfbfe0') in 0.000231 seconds
+Loading style catalogs (6)
+	StyleSheets/Extensions/base/common.uss
+	UIPackageResources/StyleSheets/Default/Variables/Public/common.uss
+	StyleSheets/Northstar/common.uss
+	StyleSheets/Extensions/fonts/inter.uss
+	StyleSheets/Extensions/base/dark.uss
+	UIPackageResources/StyleSheets/Default/Northstar/Palette/dark.uss
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=41190e26a881a4ba6b87b729c1403a1c): Total: 3.642 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=331 (actual=331, local cache=0, cache server=0)
+		Asset DB Process Time: managed=3 ms, native=644 ms
+		Asset DB Callback time: managed=56 ms, native=5 ms
+		Scripting: domain reloads=1, domain reload time=161 ms, compile time=2770 ms, other=1 ms
+		Project Asset Count: scripts=318, non-scripts=13
+		Asset File Changes: new=331, changed=331, moved=0, deleted=0
+		Scan Filter Count: 1
+	InvokeBeforeRefreshCallbacks: 0.149ms
+	ApplyChangesToAssetFolders: 0.021ms
+	Scan: 48.938ms
+	OnSourceAssetsModified: 1.411ms
+	GetAllGuidsForCategorization: 0.016ms
+	CategorizeAssets: 1.337ms
+	ImportOutOfDateAssets: 617.653ms (-2681.984ms without children)
+		ImportManagerImport: 529.777ms (15.943ms without children)
+			ImportInProcess: 513.433ms
+			UpdateCategorizedAssets: 0.401ms
+		CompileScripts: 2769.673ms
+		ReloadNativeAssets: 0.000ms
+		UnloadImportedAssets: 0.037ms
+		ReloadImportedAssets: 0.009ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.045ms
+		InitializingProgressBar: 0.002ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.000ms
+		OnDemandSchedulerStart: 0.094ms
+	PostProcessAllAssets: 72.515ms
+	Hotreload: 0.469ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.008ms
+	UnloadStreamsBegin: 0.025ms
+	PersistCurrentRevisions: 0.126ms
+	UnloadStreamsEnd: 0.002ms
+	GenerateScriptTypeHashes: 0.000ms
+	Untracked: 2899.330ms
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 0.147ms
+Initializing Unity extensions:
+[Licensing::Client] Successfully resolved entitlement details
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-HippocampusShell
+[PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ProgressiveSceneManager::Cancel()
+-- Listing OpenCL platforms(s) --
+ * OpenCL platform 0
+	PROFILE = FULL_PROFILE
+	VERSION = OpenCL 1.2 (Oct  3 2026 15:49:59)
+	NAME = Apple
+	VENDOR = Apple
+-- Listing OpenCL device(s) --
+ * OpenCL platform 0, device 0 
+	DEVICE_TYPE = 4
+	DEVICE_NAME = Apple M5 Max
+	DEVICE_VENDOR = Apple
+	DEVICE_VERSION = OpenCL 1.2 
+	DRIVER_VERSION = 1.2 1.0
+	DEVICE_MAX_COMPUTE_UNITS = 40
+	DEVICE_MAX_CLOCK_FREQUENCY = 1000
+	CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE = 1073741824
+	CL_DEVICE_HOST_UNIFIED_MEMORY = true
+	CL_DEVICE_MAX_MEM_ALLOC_SIZE = 10436771840
+	DEVICE_GLOBAL_MEM_SIZE = 55662788608
+-- GPU Progressive lightmapper will use OpenCL device 'Apple M5 Max' from 'Apple'--
+   use -OpenCL-PlatformAndDeviceIndices <platformIdx> <deviceIdx> as command line arguments if you want to select a specific adapter for OpenCL.
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 14 unused Assets / (369.6 KB). Loaded Objects now: 749.
+Memory consumption went from 92.0 MB to 91.7 MB.
+Total: 1.440750 ms (FindLiveObjects: 0.023708 ms CreateObjectMapping: 0.004209 ms MarkObjects: 1.332708 ms  DeleteObjects: 0.079750 ms)
+
+[PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 0 unused Assets / (0 B). Loaded Objects now: 749.
+Memory consumption went from 91.7 MB to 91.7 MB.
+Total: 1.205875 ms (FindLiveObjects: 0.015333 ms CreateObjectMapping: 0.004333 ms MarkObjects: 1.184917 ms  DeleteObjects: 0.001041 ms)
+
+Launching external process: /Users/orlando/Applications/Unity/Hub/Editor/2022.3.62f3c1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.10 seconds
+Start importing Assets/Materials using Guid(bc7b016698bfe447fa353f4ebe3ce298) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'd93b2977da8e693acbbca156b25b16b1') in 0.000481 seconds
+Start importing Assets/Materials/Peach.mat using Guid(4968a0dba2a0f4ac1b9203fcff6491bc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'cb5d734183512ddb92c9ef306e6c0c61') in 0.000420 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=e908799e7abd14eaebea9fc844dff60e): Total: 0.012 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/Materials/Floor.mat using Guid(b884cb13346a9461d85641de664ab57e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '6dc1319a7880247d01013ba0e963c3c6') in 0.000497 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=c8c61a76f79014dfda5cae00b3a2a2c2): Total: 0.009 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/Materials/Wood.mat using Guid(c86e28969d6e946c297ff3958739c74f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'df9f7f8e25dd4d1f79f89acbcd13030b') in 0.000381 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=aa235106854934a5f8d8605169149a4c): Total: 0.009 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/Materials/Fabric.mat using Guid(41548c07512da47bfa2565d6fab8f5a3) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '9a23e01ee7afaa26ff5d3bb8a0339a9e') in 0.000426 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=9b0ceaad8a23a430ab47dbabcef27ef2): Total: 0.009 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/Materials/Plant.mat using Guid(502cef17a7bb84a409d420be7475427f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '3133d55d512c25d5943a5482a8a99292') in 0.000374 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=bd10c9f250bf54960b3bd96bd8257c16): Total: 0.009 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/Scenes using Guid(97c8b8aeda0564b00a2afcf169ac9de1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'c7ec5166f3f11e35de3295673746f817') in 0.000451 seconds
+Start importing Assets/Scenes/Main.unity using Guid(43c0d61167ef54030a4f76a6de8b35c0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: 'df7550362fe5c9618b204c4b47f97073') in 0.000227 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=6eb745194c2c54b8380233d45a54d040): Total: 0.011 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing ProjectSettings/EditorBuildSettings.asset using Guid(0000000000000000b000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+ -> (artifact id: '38ccc8374fd869b136feb2eda612063a') in 0.000387 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=9cd136ddd5a1e460aa4b30efb9b08ed0): Total: 0.009 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Scene built: Assets/Scenes/Main.unity
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Volumes/jenkins1/sharedspace/ra_2022.3/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Hippocampus.Shell.EditorTools.SceneBuilder:BuildScene () (at Assets/Editor/SceneBuilder.cs:147)
+
+(Filename: Assets/Editor/SceneBuilder.cs Line: 147)
+
+Batchmode quit successfully invoked - shutting down!
+Thread 0x170bfb000 may have been prematurely finalized
+Curl error 42: Callback aborted
+Curl error 42: Callback aborted
+[PhysX] Initialized MultithreadedTaskDispatcher with 18 workers.
+Input System module state changed to: ShutdownInProgress.
+Input System polling thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-orlando-2022.3.62-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-orlando-2022.3.62 channel disconnected successfully.
+Thread 0x16cd03000 may have been prematurely finalized
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+Cleanup mono
+debugger-agent: Unable to listen on 40
+[Performance] Application.InitializeProject                                                                                  :        1 samples, Peak.  7.16 s (1.0x), Avg.  7.16 s, Total. 7.156 s (68.0%)
+[Performance] Application.PackageManager.StartServer                                                                         :        1 samples, Peak.  1.76 ms (1.0x), Avg.  1.76 ms, Total. 1.762 ms (0.0%)
+[Performance] Application.AcquireProjectLock                                                                                 :        1 samples, Peak.  1.05 ms (1.0x), Avg.  1.05 ms, Total. 1.051 ms (0.0%)
+[Performance] Application.InitializeEngineNoGraphics                                                                         :        1 samples, Peak.  18.4 ms (1.0x), Avg.  18.4 ms, Total. 18.42 ms (0.2%)
+[Performance] Application.PackageManager.Initialize                                                                          :        1 samples, Peak.  1.87 s (1.0x), Avg.  1.87 s, Total. 1.873 s (17.8%)
+[Performance] Connecting to Package Manager                                                                                  :      188 samples, Peak.  32.4 us (41.8x), Avg.   775 ns, Total. 145.7 us (0.0%)
+[Performance] PackageManager::Api::RunRequestSynchronously                                                                   :       18 samples, Peak.  6.62 us (2.6x), Avg.  2.54 us, Total. 45.79 us (0.0%)
+[Performance] Application.EngineGraphics.Initialize                                                                          :        1 samples, Peak.  19.5 ms (1.0x), Avg.  19.5 ms, Total. 19.49 ms (0.2%)
+[Performance] Application.GI.Initialize                                                                                      :        1 samples, Peak.  1.33 ms (1.0x), Avg.  1.33 ms, Total. 1.330 ms (0.0%)
+[Performance] Application.LoadAllDefaultResourcesFromEditor                                                                  :        1 samples, Peak.   752 us (1.0x), Avg.   752 us, Total. 752.2 us (0.0%)
+[Performance] Application.LoadMonoAssemblies                                                                                 :        1 samples, Peak.   257 ms (1.0x), Avg.   257 ms, Total. 256.9 ms (2.4%)
+[Performance] RestoreManagedReferences                                                                                       :        2 samples, Peak.  16.4 ms (2.0x), Avg.  8.19 ms, Total. 16.38 ms (0.2%)
+[Performance] InitializeOnLoad DrivenRectTransformUndo                                                                       :        2 samples, Peak.   150 us (1.1x), Avg.   137 us, Total. 274.7 us (0.0%)
+[Performance] InitializeOnLoad SceneSearch                                                                                   :        2 samples, Peak.  44.3 us (1.1x), Avg.  40.6 us, Total. 81.25 us (0.0%)
+[Performance] InitializeOnLoad CloudBuild                                                                                    :        2 samples, Peak.  1.63 us (1.3x), Avg.  1.29 us, Total. 2.583 us (0.0%)
+[Performance] InitializeOnLoad NativeFormatImporterUtility                                                                   :        2 samples, Peak.  1.00 ms (1.3x), Avg.   764 us, Total. 1.529 ms (0.0%)
+[Performance] InitializeOnLoad SearchService                                                                                 :        2 samples, Peak.  36.9 us (1.0x), Avg.  36.0 us, Total. 71.96 us (0.0%)
+[Performance] InitializeOnLoad SettingsService                                                                               :        2 samples, Peak.  3.79 us (1.1x), Avg.  3.35 us, Total. 6.709 us (0.0%)
+[Performance] InitializeOnLoad WindowLayout                                                                                  :        2 samples, Peak.   267 us (1.1x), Avg.   235 us, Total. 470.5 us (0.0%)
+[Performance] InitializeOnLoad AssetStoreContext                                                                             :        2 samples, Peak.  9.76 ms (1.1x), Avg.  8.50 ms, Total. 17.00 ms (0.2%)
+[Performance] InitializeOnLoad PoolManager                                                                                   :        2 samples, Peak.   205 us (1.0x), Avg.   199 us, Total. 398.2 us (0.0%)
+[Performance] InitializeOnLoad MixerEffectDefinitionReloader                                                                 :        2 samples, Peak.   929 us (1.2x), Avg.   784 us, Total. 1.568 ms (0.0%)
+[Performance] InitializeOnLoad ProjectSearch                                                                                 :        2 samples, Peak.  47.7 us (1.5x), Avg.  31.3 us, Total. 62.67 us (0.0%)
+[Performance] InitializeOnLoad UISystemProfilerRenderService                                                                 :        2 samples, Peak.  3.46 us (1.1x), Avg.  3.10 us, Total. 6.208 us (0.0%)
+[Performance] InitializeOnLoad EditMode                                                                                      :        2 samples, Peak.   134 us (1.0x), Avg.   129 us, Total. 258.8 us (0.0%)
+[Performance] InitializeOnLoad UnityConnect                                                                                  :        2 samples, Peak.  15.7 us (1.1x), Avg.  14.6 us, Total. 29.17 us (0.0%)
+[Performance] InitializeOnLoad ManagedDebugger                                                                               :        2 samples, Peak.   194 us (1.1x), Avg.   180 us, Total. 359.7 us (0.0%)
+[Performance] InitializeOnLoad ShortcutIntegration                                                                           :        2 samples, Peak.  18.0 us (1.0x), Avg.  17.2 us, Total. 34.50 us (0.0%)
+[Performance] InitializeOnLoad AddComponentWindow                                                                            :        2 samples, Peak.  37.1 us (1.1x), Avg.  33.5 us, Total. 66.92 us (0.0%)
+[Performance] InitializeOnLoad ManagedDebuggerWindow                                                                         :        2 samples, Peak.  38.9 us (1.0x), Avg.  38.1 us, Total. 76.17 us (0.0%)
+[Performance] InitializeOnLoad CacheServerWindow                                                                             :        2 samples, Peak.  4.08 us (1.3x), Avg.  3.04 us, Total. 6.083 us (0.0%)
+[Performance] InitializeOnLoad PlayModeDownload                                                                              :        2 samples, Peak.  1.78 ms (1.9x), Avg.   927 us, Total. 1.854 ms (0.0%)
+[Performance] InitializeOnLoad MenuItems                                                                                     :        2 samples, Peak.  39.8 us (1.2x), Avg.  34.3 us, Total. 68.67 us (0.0%)
+[Performance] InitializeOnLoad PrefabInstanceChangedListener                                                                 :        2 samples, Peak.  45.2 us (1.0x), Avg.  43.1 us, Total. 86.21 us (0.0%)
+[Performance] InitializeOnLoad ObjectSelectorSearch                                                                          :        2 samples, Peak.  13.6 us (1.2x), Avg.  11.0 us, Total. 22.08 us (0.0%)
+[Performance] InitializeOnLoad EditorMonitor                                                                                 :        2 samples, Peak.   276 us (1.4x), Avg.   203 us, Total. 406.6 us (0.0%)
+[Performance] InitializeOnLoad RetainedMode                                                                                  :        2 samples, Peak.   819 us (1.0x), Avg.   802 us, Total. 1.604 ms (0.0%)
+[Performance] InitializeOnLoad EditorShaderLoader                                                                            :        2 samples, Peak.   381 us (1.4x), Avg.   280 us, Total. 560.2 us (0.0%)
+[Performance] InitializeOnLoad EditorDelegateRegistration                                                                    :        2 samples, Peak.   174 us (1.1x), Avg.   164 us, Total. 327.2 us (0.0%)
+[Performance] InitializeOnLoad UIDocumentHierarchyWatcher                                                                    :        2 samples, Peak.  21.8 us (1.0x), Avg.  21.2 us, Total. 42.33 us (0.0%)
+[Performance] InitializeOnLoad LiveReloadTrackerCreator                                                                      :        2 samples, Peak.  65.3 us (1.1x), Avg.  57.9 us, Total. 115.8 us (0.0%)
+[Performance] InitializeOnLoad UxmlObjectEditorFactories                                                                     :        2 samples, Peak.   186 us (1.1x), Avg.   169 us, Total. 338.5 us (0.0%)
+[Performance] InitializeOnLoad UXMLEditorFactories                                                                           :        2 samples, Peak.  20.0 ms (1.0x), Avg.  19.2 ms, Total. 38.31 ms (0.4%)
+[Performance] InitializeOnLoad PurchasingService                                                                             :        2 samples, Peak.  2.57 ms (1.1x), Avg.  2.38 ms, Total. 4.761 ms (0.0%)
+[Performance] InitializeOnLoad CloudBuildPoller                                                                              :        2 samples, Peak.  34.4 us (1.1x), Avg.  31.3 us, Total. 62.58 us (0.0%)
+[Performance] InitializeOnLoad EditorGameServicesAnalytics                                                                   :        2 samples, Peak.   622 us (1.4x), Avg.   451 us, Total. 902.1 us (0.0%)
+[Performance] InitializeOnLoad AnalyticsService                                                                              :        2 samples, Peak.  53.3 us (1.0x), Avg.  53.2 us, Total. 106.4 us (0.0%)
+[Performance] InitializeOnLoad BuildService                                                                                  :        2 samples, Peak.  45.2 us (1.0x), Avg.  45.0 us, Total. 90.00 us (0.0%)
+[Performance] InitializeOnLoad AdsService                                                                                    :        2 samples, Peak.   117 us (1.0x), Avg.   116 us, Total. 231.6 us (0.0%)
+[Performance] InitializeOnLoad UDPService                                                                                    :        2 samples, Peak.  43.8 us (1.0x), Avg.  41.8 us, Total. 83.54 us (0.0%)
+[Performance] InitializeOnLoad CrashService                                                                                  :        2 samples, Peak.  44.1 us (1.0x), Avg.  42.3 us, Total. 84.67 us (0.0%)
+[Performance] InitializeOnLoad ServicesRepository                                                                            :        2 samples, Peak.   125 ns (1.2x), Avg.   104 ns, Total. 209.0 ns (0.0%)
+[Performance] InitializeOnLoad SearchWindow                                                                                  :        2 samples, Peak.  44.3 us (1.2x), Avg.  38.5 us, Total. 76.92 us (0.0%)
+[Performance] InitializeOnLoad CustomIndexers                                                                                :        2 samples, Peak.  8.34 ms (1.2x), Avg.  6.84 ms, Total. 13.68 ms (0.1%)
+[Performance] VersionControl.Task.Wait                                                                                       :        1 samples, Peak.  12.4 us (1.0x), Avg.  12.4 us, Total. 12.42 us (0.0%)
+[Performance] InitializeOnLoad SearchMonitor                                                                                 :        2 samples, Peak.   612 us (1.4x), Avg.   425 us, Total. 849.9 us (0.0%)
+[Performance] InitializeOnLoad ParameterControllerEditor                                                                     :        2 samples, Peak.  7.08 us (1.1x), Avg.  6.73 us, Total. 13.46 us (0.0%)
+[Performance] InitializeOnLoad LayerSettingsWindow                                                                           :        2 samples, Peak.  10.2 us (1.8x), Avg.  5.79 us, Total. 11.58 us (0.0%)
+[Performance] InitializeOnLoad PackageManagerHookGUIDConverter.RegisterPackagesEventHandler                                  :        2 samples, Peak.   276 us (1.7x), Avg.   165 us, Total. 329.5 us (0.0%)
+[Performance] InitializeOnLoad EditorDragAndDrop.RegisterEditorClient                                                        :        2 samples, Peak.  75.5 us (1.1x), Avg.  68.3 us, Total. 136.5 us (0.0%)
+[Performance] InitializeOnLoad EditorEventCallbacks.InitializeFontAssetResourceChangeCallBacks                               :        2 samples, Peak.   372 us (1.0x), Avg.   366 us, Total. 732.3 us (0.0%)
+[Performance] InitializeOnLoad SceneTemplateService.Init                                                                     :        2 samples, Peak.   552 us (1.1x), Avg.   485 us, Total. 969.1 us (0.0%)
+[Performance] InitializeOnLoad DiagnosticSwitchesConsoleMessage.Init                                                         :        2 samples, Peak.  1.11 ms (1.6x), Avg.   682 us, Total. 1.364 ms (0.0%)
+[Performance] InitializeOnLoad MemoryProfilerCompilationGuard.InjectCompileGuard                                             :        2 samples, Peak.  57.3 us (1.1x), Avg.  51.8 us, Total. 103.7 us (0.0%)
+[Performance] InitializeOnLoad EditorWindow.Initialize                                                                       :        2 samples, Peak.  78.3 us (1.0x), Avg.  76.3 us, Total. 152.7 us (0.0%)
+[Performance] InitializeOnLoad AssetPostprocessingInternal.RefreshCustomDependencies                                         :        2 samples, Peak.  1.05 ms (1.5x), Avg.   714 us, Total. 1.427 ms (0.0%)
+[Performance] InitializeOnLoad SysrootManager.Initialize                                                                     :        2 samples, Peak.   146 us (1.0x), Avg.   139 us, Total. 278.7 us (0.0%)
+[Performance] InitializeOnLoad PackageManagerWindow.EditorInitializedInSafeMode                                              :        2 samples, Peak.  9.88 ms (2.0x), Avg.  4.96 ms, Total. 9.912 ms (0.1%)
+[Performance] InitializeOnLoad ToolShortcutContext.Init                                                                      :        2 samples, Peak.  40.4 us (1.1x), Avg.  36.8 us, Total. 73.54 us (0.0%)
+[Performance] InitializeOnLoad SceneVisibilityManager.Initialize                                                             :        2 samples, Peak.  2.04 ms (1.8x), Avg.  1.14 ms, Total. 2.285 ms (0.0%)
+[Performance] InitializeOnLoad ScopedRegistryAddedPopup.SubscribeToRegistriesAdded                                           :        2 samples, Peak.  2.73 ms (2.0x), Avg.  1.39 ms, Total. 2.775 ms (0.0%)
+[Performance] AssemblyReloadEvents.afterAssemblyReload: UnityEditor.SceneTemplate.SceneTemplateService.AfterAssemblyReload   :        2 samples, Peak.  1.15 ms (1.8x), Avg.   622 us, Total. 1.245 ms (0.0%)
+[Performance] ProcessService.EditorAfterLoadAllAssemblies                                                                    :        2 samples, Peak.   103 us (1.1x), Avg.  91.3 us, Total. 182.5 us (0.0%)
+[Performance] Application.ReadLicenseInfo                                                                                    :        1 samples, Peak.  11.0 ms (1.0x), Avg.  11.0 ms, Total. 10.95 ms (0.1%)
+[Performance] Application.InitialRefresh                                                                                     :        1 samples, Peak.  3.64 s (1.0x), Avg.  3.64 s, Total. 3.642 s (34.6%)
+[Performance] BuilderAssetModificationProcessor.OnWillCreateAsset                                                            :       21 samples, Peak.   334 us (13.1x), Avg.  25.4 us, Total. 533.8 us (0.0%)
+[Performance] ShaderImporter.SourceAssetModified                                                                             :        9 samples, Peak.  2.25 us (3.4x), Avg.   657 ns, Total. 5.917 us (0.0%)
+[Performance] ShaderIncludeImporter.SourceAssetModified                                                                      :        9 samples, Peak.  5.79 us (3.8x), Avg.  1.52 us, Total. 13.71 us (0.0%)
+[Performance] Compiling Scripts                                                                                              :        1 samples, Peak.  2.77 s (1.0x), Avg.  2.77 s, Total. 2.769 s (26.3%)
+[Performance] AssemblyReloadEvents.beforeAssemblyReload: UnityEditor.SceneTemplate.SceneTemplateService.BeforeAssemblyReload :        1 samples, Peak.   171 us (1.0x), Avg.   171 us, Total. 170.8 us (0.0%)
+[Performance] PresetManagerPostProcessor.OnPreprocessAsset                                                                   :      340 samples, Peak.   435 us (120.9x), Avg.  3.60 us, Total. 1.223 ms (0.0%)
+[Performance] CancelSplashScreenOnAssetChange.OnPreprocessAsset                                                              :      340 samples, Peak.   352 us (155.0x), Avg.  2.27 us, Total. 772.2 us (0.0%)
+[Performance] InitializeOnLoad PrefabLayoutRebuilder                                                                         :        1 samples, Peak.  86.5 us (1.0x), Avg.  86.5 us, Total. 86.46 us (0.0%)
+[Performance] DidReloadScriptsAdvancedDropdownWindow.OnScriptReload                                                          :        1 samples, Peak.  64.1 us (1.0x), Avg.  64.1 us, Total. 64.08 us (0.0%)
+[Performance] AssetDatabase.ImportAssets                                                                                     :       12 samples, Peak.  9.48 ms (12.0x), Avg.   790 us, Total. 9.481 ms (0.1%)
+[Performance] BuilderAssetPostprocessor.OnPostprocessAllAssets                                                               :       16 samples, Peak.  4.11 ms (7.9x), Avg.   522 us, Total. 8.351 ms (0.1%)
+[Performance] ArtifactBrowserPostProcessor.OnPostprocessAllAssets                                                            :       16 samples, Peak.   197 us (7.6x), Avg.  25.8 us, Total. 412.1 us (0.0%)
+[Performance] AssetEvents.OnPostprocessAllAssets                                                                             :       32 samples, Peak.  71.9 us (10.8x), Avg.  6.64 us, Total. 212.5 us (0.0%)
+[Performance] AudioMixerPostprocessor.OnPostprocessAllAssets                                                                 :       16 samples, Peak.   123 us (7.5x), Avg.  16.4 us, Total. 261.9 us (0.0%)
+[Performance] StyleCatalogPostProcessor.OnPostprocessAllAssets                                                               :       16 samples, Peak.  41.4 ms (8.0x), Avg.  5.18 ms, Total. 82.82 ms (0.8%)
+[Performance] BuildCatalog                                                                                                   :        1 samples, Peak.  40.9 ms (1.0x), Avg.  40.9 ms, Total. 40.93 ms (0.4%)
+[Performance] EditorResources.Load                                                                                           :        6 samples, Peak.  4.10 ms (3.1x), Avg.  1.34 ms, Total. 8.046 ms (0.1%)
+[Performance] ModelImporterPostProcessor.OnPostprocessAllAssets                                                              :       16 samples, Peak.   747 us (3.6x), Avg.   205 us, Total. 3.277 ms (0.0%)
+[Performance] RetainedModeAssetPostprocessor.OnPostprocessAllAssets                                                          :       16 samples, Peak.   857 us (7.7x), Avg.   112 us, Total. 1.785 ms (0.0%)
+[Performance] AssetChangedListener.OnPostprocessAllAssets                                                                    :       16 samples, Peak.   960 us (7.2x), Avg.   134 us, Total. 2.147 ms (0.0%)
+[Performance] SpeedTreePostProcessor.OnPostprocessAllAssets                                                                  :       16 samples, Peak.   865 us (7.8x), Avg.   111 us, Total. 1.782 ms (0.0%)
+[Performance] TextAssetPostProcessor.OnPostprocessAllAssets                                                                  :       16 samples, Peak.   688 us (7.7x), Avg.  88.9 us, Total. 1.422 ms (0.0%)
+[Performance] SyncVS.PostprocessSyncProject                                                                                  :        8 samples, Peak.   584 us (7.8x), Avg.  75.3 us, Total. 602.1 us (0.0%)
+[Performance] EditorApplication.projectChanged: UnityEditor.Audio.MixerEffectDefinitionReloader.OnProjectChanged             :        7 samples, Peak.   141 us (1.1x), Avg.   126 us, Total. 883.0 us (0.0%)
+[Performance] Application.ImportPackagesAndSetTemplateWhenCreatingProject                                                    :        1 samples, Peak.  13.8 ms (1.0x), Avg.  13.8 ms, Total. 13.83 ms (0.1%)
+[Performance] Application.SyncCurrentColorSpace                                                                              :        1 samples, Peak.   167 ns (1.0x), Avg.   167 ns, Total. 167.0 ns (0.0%)
+[Performance] Application.OnUsbDevicesChanged                                                                                :        1 samples, Peak.   173 us (1.0x), Avg.   173 us, Total. 173.2 us (0.0%)
+[Performance] Application.AssetDatabase.SaveAssets                                                                           :        1 samples, Peak.  1.36 ms (1.0x), Avg.  1.36 ms, Total. 1.364 ms (0.0%)
+[Performance] BuilderAssetModificationProcessor.OnWillSaveAssets                                                             :        4 samples, Peak.   144 us (3.8x), Avg.  37.7 us, Total. 150.9 us (0.0%)
+[Performance] TerrainModificationProcessor.OnWillSaveAssets                                                                  :        4 samples, Peak.   228 us (4.0x), Avg.  57.7 us, Total. 230.7 us (0.0%)
+[Performance] Application.AssetInstanceCacheUpdate                                                                           :        1 samples, Peak.  42.0 ns (1.0x), Avg.  42.0 ns, Total. 42.00 ns (0.0%)
+[Performance] Application.UnityExtensions.Initialize                                                                         :        1 samples, Peak.   213 us (1.0x), Avg.   213 us, Total. 212.7 us (0.0%)
+[Performance] CodeEditorProjectSync.SyncEditorProject                                                                        :        1 samples, Peak.  22.0 us (1.0x), Avg.  22.0 us, Total. 21.96 us (0.0%)
+[Performance] Application.ExecuteStartups                                                                                    :        1 samples, Peak.  11.1 ms (1.0x), Avg.  11.1 ms, Total. 11.08 ms (0.1%)
+[Performance] Menu.RegisterMenuInterface                                                                                     :       26 samples, Peak.   250 ns (3.9x), Avg.  64.2 ns, Total. 1.669 us (0.0%)
+[Performance] Gizmo.RebuildRenderers                                                                                         :        1 samples, Peak.  10.9 ms (1.0x), Avg.  10.9 ms, Total. 10.94 ms (0.1%)
+[Performance] Gizmo.AddGizmoRenderers                                                                                        :       23 samples, Peak.   511 us (15.4x), Avg.  33.3 us, Total. 764.9 us (0.0%)
+[Performance] Application.editorInitializingProject                                                                          :        1 samples, Peak.  12.3 ms (1.0x), Avg.  12.3 ms, Total. 12.32 ms (0.1%)
+[Performance] Application.InitializeMenu                                                                                     :        1 samples, Peak.  15.8 ms (1.0x), Avg.  15.8 ms, Total. 15.80 ms (0.2%)
+[Performance] Menu.RebuildAll                                                                                                :        1 samples, Peak.  15.8 ms (1.0x), Avg.  15.8 ms, Total. 15.80 ms (0.2%)
+[Performance] Menu.BuildRegisteredMenuInterfaces                                                                             :        1 samples, Peak.  15.6 ms (1.0x), Avg.  15.6 ms, Total. 15.59 ms (0.1%)
+[Performance] Menu.FilterMenuItem                                                                                            :      452 samples, Peak.  6.32 ms (448.6x), Avg.  14.1 us, Total. 6.369 ms (0.1%)
+[Performance] UpdateAllMenus                                                                                                 :        1 samples, Peak.   188 us (1.0x), Avg.   188 us, Total. 187.6 us (0.0%)
+[Performance] EditorSceneManager.sceneClosing: UnityEditor.SceneVisibilityManager.EditorSceneManagerOnSceneClosing           :        2 samples, Peak.  90.5 us (2.0x), Avg.  46.0 us, Total. 92.04 us (0.0%)
+[Performance] GUIView.RepaintAll.PlayerLoopController                                                                        :        2 samples, Peak.   542 ns (1.5x), Avg.   354 ns, Total. 708.0 ns (0.0%)
+[Performance] EditorSceneManager.newSceneCreated: UnityEditor.SceneTemplate.SceneTemplateService.OnNewSceneCreated           :        2 samples, Peak.  87.0 us (2.0x), Avg.  43.8 us, Total. 87.50 us (0.0%)
+[Performance] EditorSceneManager.newSceneCreated: UnityEditor.SceneVisibilityManager.EditorSceneManagerOnNewSceneCreated     :        2 samples, Peak.  53.3 us (1.9x), Avg.  27.6 us, Total. 55.21 us (0.0%)
+[Performance] EditorSceneManager.newSceneCreated: UnityEditor.SceneManagement.StageNavigationManager.OnNewSceneCreated       :        2 samples, Peak.  19.0 us (2.0x), Avg.  9.71 us, Total. 19.42 us (0.0%)
+[Performance] Application.InvokeFinishedLoadingProject                                                                       :        1 samples, Peak.   357 us (1.0x), Avg.   357 us, Total. 356.8 us (0.0%)
+[Performance] ProcessService.OnProjectLoaded                                                                                 :        1 samples, Peak.  19.3 us (1.0x), Avg.  19.3 us, Total. 19.33 us (0.0%)
+[Performance] SceneDataContainer.TransformHierarchyChangedSetParentCallback                                                  :       18 samples, Peak.  5.21 us (11.4x), Avg.   456 ns, Total. 8.209 us (0.0%)
+[Performance] SceneVisibilityState.IsFlagSetInParents                                                                        :       27 samples, Peak.   583 ns (6.9x), Avg.  84.9 ns, Total. 2.293 us (0.0%)
+[Performance] EditorSceneManager.sceneSaving: UnityEditor.SceneTemplate.SceneTemplateService.OnSceneSaving                   :        1 samples, Peak.  82.1 us (1.0x), Avg.  82.1 us, Total. 82.13 us (0.0%)
+[Performance] EditorSceneManager.sceneSaving: UnityEditor.SceneVisibilityManager.EditorSceneManagerOnSceneSaving             :        1 samples, Peak.  38.1 us (1.0x), Avg.  38.1 us, Total. 38.08 us (0.0%)
+[Performance] AssetDatabase.ImportAsset                                                                                      :        1 samples, Peak.  11.1 ms (1.0x), Avg.  11.1 ms, Total. 11.05 ms (0.1%)
+[Performance] EditorSceneManager.sceneSaved: UnityEditor.SceneTemplate.SceneTemplateService.OnSceneSaved                     :        1 samples, Peak.  4.18 ms (1.0x), Avg.  4.18 ms, Total. 4.180 ms (0.0%)
+[Performance] EditorSceneManager.sceneSaved: UnityEditor.SceneVisibilityManager.EditorSceneManagerOnSceneSaved               :        1 samples, Peak.  34.6 us (1.0x), Avg.  34.6 us, Total. 34.58 us (0.0%)
+[Performance] EditorApplication.quitting: callback in UnityEditor.TextCore.Text.EditorEventCallbacks                         :        1 samples, Peak.  1.29 ms (1.0x), Avg.  1.29 ms, Total. 1.288 ms (0.0%)
+[Performance] Application.Shutdown.PauseProfilerSession                                                                      :        1 samples, Peak.   201 us (1.0x), Avg.   201 us, Total. 200.7 us (0.0%)
+[Performance] Application.Shutdown.PauseAssetImportWorkers                                                                   :        1 samples, Peak.  34.3 us (1.0x), Avg.  34.3 us, Total. 34.29 us (0.0%)
+[Performance] Application.Shutdown.SaveAssets                                                                                :        1 samples, Peak.   349 us (1.0x), Avg.   349 us, Total. 349.4 us (0.0%)
+[Performance] Application.Shutdown.CleanupRenderPipeline                                                                     :        1 samples, Peak.  1.46 us (1.0x), Avg.  1.46 us, Total. 1.458 us (0.0%)
+[Performance] Application.Shutdown.StopPreloadManager                                                                        :        1 samples, Peak.  10.0 ms (1.0x), Avg.  10.0 ms, Total. 10.04 ms (0.1%)
+[Performance] Application.Shutdown.DestroyWorld                                                                              :        1 samples, Peak.  1.83 ms (1.0x), Avg.  1.83 ms, Total. 1.834 ms (0.0%)
+[Performance] Application.Shutdown.CleanupAfterLoad                                                                          :        1 samples, Peak.  1.18 ms (1.0x), Avg.  1.18 ms, Total. 1.176 ms (0.0%)
+[Performance] Application.Shutdown.Progress                                                                                  :        1 samples, Peak.  2.54 us (1.0x), Avg.  2.54 us, Total. 2.541 us (0.0%)
+[Performance] Application.Shutdown.GICleanupManagers                                                                         :        1 samples, Peak.  1.11 ms (1.0x), Avg.  1.11 ms, Total. 1.111 ms (0.0%)
+[Performance] Application.Shutdown.MenuCleanupClass                                                                          :        1 samples, Peak.  14.7 us (1.0x), Avg.  14.7 us, Total. 14.67 us (0.0%)
+[Performance] Application.Shutdown.ADBSaveStateBeforeShutdown                                                                :        1 samples, Peak.  2.54 us (1.0x), Avg.  2.54 us, Total. 2.541 us (0.0%)
+[Performance] Application.Shutdown.RemoteShutdown                                                                            :        1 samples, Peak.   458 ns (1.0x), Avg.   458 ns, Total. 458.0 ns (0.0%)
+[Performance] Application.Shutdown.CleanupVCProvider                                                                         :        1 samples, Peak.  2.58 us (1.0x), Avg.  2.58 us, Total. 2.583 us (0.0%)
+[Performance] Application.Shutdown.InputShutdown                                                                             :        1 samples, Peak.  23.1 us (1.0x), Avg.  23.1 us, Total. 23.08 us (0.0%)
+[Performance] Application.Shutdown.GizmoManagerDestroy                                                                       :        1 samples, Peak.   150 us (1.0x), Avg.   150 us, Total. 149.9 us (0.0%)
+[Performance] Application.Shutdown.ProfilerSession                                                                           :        1 samples, Peak.  57.0 us (1.0x), Avg.  57.0 us, Total. 57.04 us (0.0%)
+[Performance] Application.Shutdown.ReleaseGfxWindowOnAllGUIViews                                                             :        1 samples, Peak.   250 ns (1.0x), Avg.   250 ns, Total. 250.0 ns (0.0%)
+[Performance] Application.Shutdown.CleanupEngine                                                                             :        1 samples, Peak.   113 ms (1.0x), Avg.   113 ms, Total. 113.1 ms (1.1%)
+[Performance] Application.Shutdown.CleanupAssetDatabase                                                                      :        1 samples, Peak.  1.65 ms (1.0x), Avg.  1.65 ms, Total. 1.647 ms (0.0%)
+[Performance] Application.Shutdown.ScriptCompilationCleanUp                                                                  :        1 samples, Peak.  10.1 us (1.0x), Avg.  10.1 us, Total. 10.13 us (0.0%)
+[Performance] Application.Shutdown.DestroyJobSystem                                                                          :        1 samples, Peak.   127 us (1.0x), Avg.   127 us, Total. 126.5 us (0.0%)
+[Performance] Application.Shutdown.CleanupPersistentManager                                                                  :        1 samples, Peak.   183 us (1.0x), Avg.   183 us, Total. 182.7 us (0.0%)
+[Performance] Application.Shutdown.CleanupAsyncReadManager                                                                   :        1 samples, Peak.  56.1 us (1.0x), Avg.  56.1 us, Total. 56.08 us (0.0%)
+[Performance] Application.Shutdown.CleanupMono                                                                               :        1 samples, Peak.  11.7 ms (1.0x), Avg.  11.7 ms, Total. 11.65 ms (0.1%)
+[Performance] Application.Shutdown.CleanupStdConverters                                                                      :        1 samples, Peak.  19.4 us (1.0x), Avg.  19.4 us, Total. 19.42 us (0.0%)
+[Performance] Application.Shutdown.UnloadAllPlatformSupportModuleNativeDlls                                                  :        1 samples, Peak.   459 ns (1.0x), Avg.   459 ns, Total. 459.0 ns (0.0%)
+[Performance] Application.Shutdown.UnloadAllPlatformSupportNativeLibraries                                                   :        1 samples, Peak.   125 ns (1.0x), Avg.   125 ns, Total. 125.0 ns (0.0%)
+[Performance] Application.Shutdown.CleanupAutoDocumentation                                                                  :        1 samples, Peak.  59.9 us (1.0x), Avg.  59.9 us, Total. 59.87 us (0.0%)
+[Performance] Application.Shutdown.ShaderNameManagerDestroy                                                                  :        1 samples, Peak.  15.4 us (1.0x), Avg.  15.4 us, Total. 15.38 us (0.0%)
+[Performance] Application.Shutdown.CleanupCacheServer                                                                        :        1 samples, Peak.   125 ns (1.0x), Avg.   125 ns, Total. 125.0 ns (0.0%)
+[Performance] Application.Shutdown.Virtualization_Shutdown                                                                   :        1 samples, Peak.   250 ns (1.0x), Avg.   250 ns, Total. 250.0 ns (0.0%)
+[Performance] Application.Shutdown.DevConnections                                                                            :        1 samples, Peak.  59.5 us (1.0x), Avg.  59.5 us, Total. 59.54 us (0.0%)
+Exiting batchmode successfully now!
+[Package Manager] Server::Kill -- Server was shutdown

@@ -1,15 +1,13 @@
-# Companion shell (A0) · 已暂停
+# Companion brain（:6200）
 
-> 2026-11-03 暂停。复盘见 Obsidian `unity使用/`。代码和协议保留。
+只负责记忆、人格、上下文和模型调用。画面在
+[dafeiyu-live](https://github.com/yushui2022/dafeiyu-live)，通过 WebSocket 连这里。
 
-两个进程：
-
-```
-integrations/companion/server.py        大脑服务，WS 6200
-integrations/companion/unity/...        Unity 壳
+```text
+integrations/companion/server.py   大脑服务，WS :6200
 ```
 
-## 启动大脑
+## 启动
 
 ```bash
 cd /Users/orlando/Documents/蓝色大肥鱼/qq-stack
@@ -25,25 +23,30 @@ python integrations/companion/server.py \
   --db ../qq-stack/data/companion/brain.db
 ```
 
-## 启动壳
+需要 `DEEPSEEK_API_KEY`。
 
-```bash
-open integrations/companion/unity/HippocampusShell/Build/HippocampusShell.app
+## 协议
+
+```text
+→ {"type":"hello","user_id":"stream","user_name":"观众","scene":{...}}
+→ {"type":"user_text","text":"在吗"}
+← {"type":"turn","say":[{"text":"..."}],"expression":"happy",
+   "actions":[],"looking_at":""}
 ```
 
-重新编译见 `unity/README.md`。
+画面侧怎么用见 dafeiyu-live 的 `docs/LIVE.md`。
 
-## 当前能力
+## 能力
 
-- VRM 角色（AvatarSample_A），正面站立，会呼吸、眨眼
-- 客厅场景：沙发、电视、窗外风景、地毯、茶几、落地灯、绿植
-- 文字对话，1–2 个气泡
-- 动作：走过去 / 坐下 / 站起来 / 跳 / 看她 / 挥手 / 点头 / 摇头
-- 和 QQ 共用 `self:taozi` 的记忆设计（同一个 Brain 类，独立 DB）
-- 每 60 秒睡眠巩固
+- 记忆：感官门控 → 72 小时暂存 → 睡眠巩固 → 证据门控自我模型
+- 人格：嘴硬心软，对方示弱/难过时先解决问题
+- 回复：最多两个气泡，一次 20 多字
+- 动作：`wave / nod / shake_head / jump / look_at`
+- 自动上网：安静时每 15 秒换页，每 4 页嘟囔一句
 
-## 明确没有
+## 和直播的分工
 
-- TTS / 口型（表情已接 Joy/Sorrow/Angry/Fun）
-- 麦克风输入
-- 多房间 / NavMesh
+| 这里 | dafeiyu-live |
+| --- | --- |
+| 记忆、人格、模型调用 | 画面、动作素材、TTS、弹幕、推流 |
+| `:6200` | `:6210` / `:6211` / `:6220` |
