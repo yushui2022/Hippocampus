@@ -478,9 +478,11 @@ MIT.
 
 ## 直播
 
-把记忆、形象、声音和弹幕拼成一场直播的完整说明在 **[docs/LIVE.md](docs/LIVE.md)**：
-端口、启动顺序、OBS 配置、状态机、环境变量都在那里。
+直播部分已经拆到独立仓库：**[dafeiyu-live](https://github.com/yushui2022/dafeiyu-live)**。
+画面、动作素材、TTS、弹幕桥、B 站开播都在那边。
 
-- 形象动画与素材流水线：`integrations/live2d/taozi_chibi/README.md`
-- 弹幕桥：`integrations/live2d/stream/README.md`
-- B 站弹幕接入：`integrations/bilibili/README.md`
+本仓库只保留记忆系统本身：
+
+- `hippocampus/` — 记忆内核
+- `integrations/companion/` — 大脑服务（`:6200`，直播通过 WebSocket 连它）
+- `integrations/qq_bridge` / `napcat` / `astrbot_plugin_hippocampus` — QQ 侧桥接

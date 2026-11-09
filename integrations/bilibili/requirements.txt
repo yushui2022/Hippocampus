@@ -1,2 +1,0 @@
-aiohttp>=3.9
-blivedm>=2.0
